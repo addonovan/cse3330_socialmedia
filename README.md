@@ -7,10 +7,14 @@ Systems, class at UTA. The goal of this project is to create a simple
 social media site from a set of requirements, letting us learn how to 
 setup and interact with databases.
 
-This project uses PostgreSQL as the RDBMS and Spring MVC via 
-springboot as the webserver.
-
 As usual, this is not meant to be used for anything serious.
+
+## Dependencies
+
+* **Gradle** is the build system
+* **PostgreSQL** is the backing RDBMS
+* **Spring MVC** is the web server running the site 
+* **Pebble Templates** is a templating engine used for the pages
 
 ## Setup 
 
