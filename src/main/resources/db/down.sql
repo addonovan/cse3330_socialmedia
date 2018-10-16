@@ -1,4 +1,6 @@
 -- Drop in reverse order of creation
+REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA "public" FROM "application";
+
 DROP TABLE GroupMessage;
 DROP TABLE GroupMember;
 DROP TABLE "Group";
