@@ -15,6 +15,8 @@ As usual, this is not meant to be used for anything serious.
 * **PostgreSQL** is the backing RDBMS
 * **Spring MVC** is the web server running the site 
 * **Pebble Templates** is a templating engine used for the pages
+  * [Template examples](https://github.com/PebbleTemplates/pebble-example-spring/tree/master/spring-boot/src/main/resources/templates)
+  * [Documentation](https://github.com/PebbleTemplates/pebble/wiki/documentation) 
 
 ## Setup 
 
