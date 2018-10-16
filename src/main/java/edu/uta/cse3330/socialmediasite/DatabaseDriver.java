@@ -39,7 +39,9 @@ public final class DatabaseDriver {
         }));
     }
 
-
+    /**
+     * @return A list of all active profiles.
+     */
     public static List<Profile> listProfiles() {
         List<Profile> profiles = new ArrayList<>();
 
@@ -47,6 +49,9 @@ public final class DatabaseDriver {
             ResultSet results = stmt.executeQuery("SELECT * FROM Profile;");
 
             while (results.next()) {
+                boolean active = results.getBoolean("ProfileActive");
+                if (!active) continue;
+
                 profiles.add(new Profile(
                         results.getInt("ProfileId"),
                         results.getString("FirstName"),
@@ -56,7 +61,7 @@ public final class DatabaseDriver {
                         results.getString("UserName"),
                         results.getString("Password"),
                         results.getDate("CreatedTime"),
-                        results.getBoolean("ProfileActive")
+                        true
                 ));
             }
 
