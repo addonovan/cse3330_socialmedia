@@ -1,0 +1,5 @@
+<ul>
+    {% for profile in profiles %}
+    <li>{{profile.profileId}}: {{profile.lastName}}, {{profile.firstName}}</li>
+    {% endfor %}
+</ul>
