@@ -1,5 +1,5 @@
-<ol>
+<ul>
     {% for profile in profiles %}
-    <li>profile.name</li>
+    <li>{{profile.profileId}}: {{profile.lastName}}, {{profile.firstName}}</li>
     {% endfor %}
-</ol>
+</ul>

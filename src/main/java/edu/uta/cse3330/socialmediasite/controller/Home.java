@@ -10,8 +10,6 @@ public class Home {
 
     @GetMapping("/")
     public String list(Model model) {
-        System.out.println("list() called!");
-
         model.addAttribute("profiles", DatabaseDriver.listProfiles());
         return "profile_list";
     }
