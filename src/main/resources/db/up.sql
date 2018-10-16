@@ -71,6 +71,9 @@ CREATE TABLE GroupMessage (
   CreatedTime         TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Grant permissions
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA "public" TO "application";
+
 -- Insert Testing Data
 
 INSERT INTO Profile
