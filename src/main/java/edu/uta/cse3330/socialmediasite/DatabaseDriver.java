@@ -18,8 +18,8 @@ public final class DatabaseDriver {
 
     static {
         Properties props = new Properties();
-        props.setProperty("user", "oh no");
-        props.setProperty("password", "oh no");
+        props.setProperty("user", "application");
+        props.setProperty("password", "password1"); // oh boy! check that security!
         props.setProperty("ssl", "true");
 
         try {
