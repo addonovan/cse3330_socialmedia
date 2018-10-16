@@ -20,7 +20,6 @@ public final class DatabaseDriver {
         Properties props = new Properties();
         props.setProperty("user", "application");
         props.setProperty("password", "password1"); // oh boy! check that security!
-        props.setProperty("ssl", "true");
 
         try {
             CONNECTION = DriverManager.getConnection(CONNECTION_STRING, props);
