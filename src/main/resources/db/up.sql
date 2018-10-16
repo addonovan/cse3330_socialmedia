@@ -71,4 +71,9 @@ CREATE TABLE GroupMessage (
   CreatedTime         TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- Insert Testing Data (todo)
+-- Insert Testing Data
+
+INSERT INTO Profile
+  (FirstName, LastName, PhoneNumber, Email, UserName, Password)
+  VALUES
+  ('Austin', 'Donovan', '81772999079', 'austin@addonovan.com', 'addonovan', 'password1');
