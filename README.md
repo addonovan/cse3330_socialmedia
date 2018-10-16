@@ -21,7 +21,8 @@ As usual, this is not meant to be used for anything serious.
 ## Setup 
 
 1. Install PostgreSQL 10.5 on your machine.
-    * See [here](https://www.postgresql.org/download/)
+    * See [here](https://www.postgresql.org/download/) for general instructions
+    * Ubuntu: `$ sudo apt install postgresql postgresql-contrib`
 2. Create a new PostgreSQL database called "SocialMedia"
     1. Log into the postgres user account `$ sudo -i -u postgres`
     2. Create the database `$ createdb SocialMedia`
