@@ -17,7 +17,7 @@ apply plugin: 'io.spring.dependency-management'
 
 group = 'edu.uta.cse3330'
 version = '0.1.0'
-sourceCompatibility = 1.8
+sourceCompatibility = 1.11
 
 repositories {
     mavenCentral()
@@ -27,6 +27,9 @@ dependencies {
 
     // pebble is the templating engine
     compile group: 'io.pebbletemplates', name: 'pebble', version: '3.0.5'
+
+    // postgresql JDBC driver
+    compile group: 'postgresql', name: 'postgresql', version: '9.1-901-1.jdbc4'
 
     implementation('org.springframework.boot:spring-boot-starter-web')
     testImplementation('org.springframework.boot:spring-boot-starter-test')

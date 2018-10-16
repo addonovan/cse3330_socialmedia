@@ -1,0 +1,5 @@
+<ol>
+    {% for profile in profiles %}
+    <li>profile.name</li>
+    {% endfor %}
+</ol>
