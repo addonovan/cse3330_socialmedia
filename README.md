@@ -24,17 +24,21 @@ As usual, this is not meant to be used for anything serious.
     * See [here](https://www.postgresql.org/download/) for general instructions
     * Ubuntu: `$ sudo apt install postgresql postgresql-contrib`
 2. Create a new PostgreSQL database called "SocialMedia"
-    1. Log into the postgres user account `$ sudo -i -u postgres`
+    1. Log into the postgres user `$ sudo -i -u postgres`
     2. Create the database `$ createdb SocialMedia`
     3. Log into the database `$ psql SocialMedia`
     4. You can exit the `SocialMedia=#` prompt at any time with `EOF`
        (i.e. `^D`/`ctrl+d` on unix systems)
-3. Run `src/main/resources/db/up.sql` on the SocialMedia db
+3. Create the `application` user
+    1. Log into the postgres account `$ sudo -i -u postgres`
+    2. Create the user "application" `$ createuser createuser application --pwprompt`
+    3. When prompted for the password, enter "password1" for extra security
+4. Run `src/main/resources/db/up.sql` on the SocialMedia db
     1. `$ psql SocialMedia -f "$pathToThisProject/src/main/resources/db/up.sql"`
     2. This will create the db schema and add starting data to the db
     3. This can be undone with the corresponding `down.sql` file
-4. Import the Gradle project with IntelliJ 
-5. Add a new run configuration for running the application
+5. Import the Gradle project with IntelliJ
+6. Add a new run configuration for running the application
     1. Create a new gradle configuration
     2. Name is something like "bootRun"
     3. Select the current project directory as the gradle project

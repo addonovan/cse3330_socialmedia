@@ -15,6 +15,8 @@ public class Profile {
 
     private final String email;
 
+    private final String username;
+
     private final String password;
 
     private final Date createdTime;
@@ -27,6 +29,7 @@ public class Profile {
             String lastName,
             String phoneNumber,
             String email,
+            String username,
             String password,
             Date createdTime,
             boolean profileActive
@@ -36,6 +39,7 @@ public class Profile {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.username = username;
         this.password = password;
         this.createdTime = createdTime;
         this.profileActive = profileActive;
@@ -61,6 +65,10 @@ public class Profile {
         return email;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -72,4 +80,5 @@ public class Profile {
     public boolean isProfileActive() {
         return profileActive;
     }
+
 }
