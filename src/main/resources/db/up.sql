@@ -105,6 +105,11 @@ CREATE TABLE "Group" (
   PictureURL          VARCHAR(2083)   NOT NULL DEFAULT '//media/groups/default.png'
 );
 
+CREATE TABLE GroupMember (
+  GroupId             INTEGER         NOT NULL REFERENCES "Group"(Id),
+  ProfileId           INTEGER         NOT NULL REFERENCES Profile(Id)
+);
+
 CREATE TABLE DirectMessage (
   GroupId             INTEGER         NOT NULL REFERENCES "Group"(Id),
   SenderProfileId     INTEGER         NOT NULL REFERENCES Profile(Id),

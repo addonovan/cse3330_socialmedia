@@ -2,6 +2,7 @@
 REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA "public" FROM "application";
 
 DROP TABLE DirectMessage;
+DROP TABLE GroupMember;
 DROP TABLE "Group";
 DROP TABLE PollAnswers;
 DROP TABLE PollPost;
