@@ -26,7 +26,7 @@ CREATE TABLE Page (
 -- Profile/Page Relationships
 CREATE TABLE PageLike (
   ProfileId           INTEGER         NOT NULL REFERENCES Profile(Id),
-  PageId              INTEGER         NOT NULL REFERENCES Page(Id),
+  PageId              INTEGER         NOT NULL REFERENCES Page(Id)
 );
 
 CREATE TABLE PageAdmin (
@@ -38,7 +38,12 @@ CREATE TABLE PageInvite (
   ProfileId           INTEGER         NOT NULL REFERENCES Profile(Id),
   SenderProfileId     INTEGER         NOT NULL REFERENCES Profile(Id),
   PageId              INTEGER         NOT NULL REFERENCES Page(Id)
-)
+);
+
+CREATE TABLE PageCategory (
+  PageId              INTEGER         NOT NULL REFERENCES Page(Id),
+  Category            VARCHAR(32)     NOT NULL
+);
 
 -- Event
 CREATE TABLE Event (
@@ -48,7 +53,7 @@ CREATE TABLE Event (
   Description         VARCHAR(4096)   NOT NULL DEFAULT '',
   StartTime           TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
   EndTime             TIMESTAMP       NOT NULL,
-  Location            VARCHAR(512)    NOT NULL,
+  Location            VARCHAR(512)    NOT NULL
 );
 
 CREATE TABLE EventInterest (
@@ -64,7 +69,7 @@ CREATE TABLE Post (
   PageId              INTEGER         NOT NULL REFERENCES Page(Id),
   ParentPostId        INTEGER         REFERENCES Post(Id),
   Message             VARCHAR(4096),
-  MediaURL            VARCHAR(2083),
+  MediaURL            VARCHAR(2083)
 );
 
 CREATE TABLE RefEmotion (
@@ -76,24 +81,24 @@ CREATE TABLE RefEmotion (
 CREATE TABLE PostReaction (
   PostId              INTEGER         NOT NULL REFERENCES Post(Id),
   ProfileId           INTEGER         NOT NULL REFERENCES Profile(Id),
-  EmotionId           INTEGER         NOT NULL REFERENCES RefEmotion(Id),
+  EmotionId           INTEGER         NOT NULL REFERENCES RefEmotion(Id)
 );
 
 -- Poll Posts
 CREATE TABLE PollPost (
   PostId              INTEGER         PRIMARY KEY REFERENCES Post(Id),
   Question            VARCHAR(128)    NOT NULL,
-  EndTime             TIMESTAMP       NOT NULL,
+  EndTime             TIMESTAMP       NOT NULL
 );
 
-CREATE TABLE PollAnswers (
+CREATE TABLE PollAnswer (
   Id                  SERIAL          PRIMARY KEY,
   PostId              INTEGER         REFERENCES PollPost(PostId),
   AnswerText          VARCHAR(128)    NOT NULL
 );
 
 CREATE TABLE PollVotes (
-  PollAnswerId        INTEGER         NOT NULL REFERENCES PollAnswers(Id),
+  PollAnswerId        INTEGER         NOT NULL REFERENCES PollAnswer(Id),
   ProfileId           INTEGER         NOT NULL REFERENCES Profile(Id)
 );
 
