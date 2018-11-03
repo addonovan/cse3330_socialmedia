@@ -1,6 +1,7 @@
 package com.addonovan.cse3330
 
 import com.addonovan.cse3330.model.Account
+import com.addonovan.cse3330.model.Profile
 
 import java.sql.*
 import java.util.Properties
@@ -37,25 +38,37 @@ object DatabaseDriver {
         })
     }
 
-    private inline fun <T> execute(query: String, action: (ResultSet) -> T): List<T> {
-        val list = arrayListOf<T>()
-
+    private inline fun <T> createStatement(crossinline action: (Statement) -> T): T {
         try {
             CONNECTION.createStatement().use {
-                val resultSet = it.executeQuery(query)
-                while (resultSet.next()) {
-                    list += action(resultSet)
-                }
+                action(it)
             }
         }
         catch (e: SQLException) {
-            throw RuntimeException("Failed to execute query: ```$query```", e)
+            throw RuntimeException("Failed to execute query!", e)
         }
+    }
 
+    private inline fun <T> query(query: String, crossinline action: (ResultSet) -> T): List<T> {
+        val list = arrayListOf<T>()
+        createStatement {
+            val resultSet = it.executeQuery(query)
+            while (resultSet.next()) {
+                list += action(resultSet)
+            }
+        }
         return list
     }
 
-    fun listAccounts() = execute("SELECT * FROM \"Account\" WHERE IsActive = TRUE;") {
+    private fun insert(query: String): ResultSet {
+        var set: ResultSet? = null
+        createStatement {
+            set = it.executeQuery(query)
+        }
+        return set ?: throw RuntimeException("INSERT failed: $query")
+    }
+
+    fun listAccounts() = query("SELECT * FROM \"Account\" WHERE IsActive = TRUE;") {
         Account(
                 it.getInt("Id"),
                 it.getString("Email"),
@@ -66,6 +79,13 @@ object DatabaseDriver {
                 it.getBoolean("IsActive"),
                 it.getTimestamp("CreatedTime")
         )
+    }
+
+    fun insertProfile(profile: Profile): Profile {
+        val newAccount = profile.account.copy(id = insert(profile.account.insert()).getInt(0))
+        val newProfile = profile.copy(account = newAccount)
+        insert(newProfile.insert())
+        return newProfile
     }
 
 }
