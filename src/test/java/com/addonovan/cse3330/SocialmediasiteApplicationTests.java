@@ -1,4 +1,4 @@
-package edu.uta.cse3330.socialmediasite;
+package com.addonovan.cse3330;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

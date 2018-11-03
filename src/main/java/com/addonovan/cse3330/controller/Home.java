@@ -1,6 +1,6 @@
-package edu.uta.cse3330.socialmediasite.controller;
+package com.addonovan.cse3330.controller;
 
-import edu.uta.cse3330.socialmediasite.DatabaseDriver;
+import com.addonovan.cse3330.DatabaseDriver;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,6 +1,6 @@
-package edu.uta.cse3330.socialmediasite;
+package com.addonovan.cse3330;
 
-import edu.uta.cse3330.socialmediasite.model.Profile;
+import com.addonovan.cse3330.model.Profile;
 
 import java.sql.*;
 import java.util.ArrayList;

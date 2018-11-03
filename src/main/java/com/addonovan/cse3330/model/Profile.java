@@ -1,4 +1,4 @@
-package edu.uta.cse3330.socialmediasite.model;
+package com.addonovan.cse3330.model;
 
 
 import java.sql.Date;
