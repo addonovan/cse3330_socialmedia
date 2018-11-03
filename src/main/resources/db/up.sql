@@ -1,125 +1,149 @@
---
--- Create all Tables
---
-
-CREATE TABLE "Profile" (
-  Id                  SERIAL          PRIMARY KEY,
-  FirstName           VARCHAR(100)    NOT NULL,
-  LastName            VARCHAR(100)    NOT NULL,
-  PhoneNumber         CHAR(12)        NOT NULL,
-  Email               VARCHAR(100)    NOT NULL,
-  UserName            VARCHAR(100)    NOT NULL,
-  Password            VARCHAR(100)    NOT NULL,
-  CreatedTime         TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  Active              BOOL            NOT NULL DEFAULT TRUE
+-- Reference Tables
+CREATE TABLE "RefLanguage" (
+    Id              SERIAL          PRIMARY KEY,
+    LocaleCode      VARCHAR(16)     NOT NULL UNIQUE,
+    Name            VARCHAR(64)     NOT NULL UNIQUE
 );
 
-CREATE TABLE "Page" (
-  Id                  SERIAL          PRIMARY KEY,
-  Name                VARCHAR(100)    NOT NULL,
-  Description         VARCHAR(512)    NOT NULL,
-  HeaderImageURL      VARCHAR(2083)   NOT NULL DEFAULT '//media/pages/default_header.png',
-  ProfileImageURL     VARCHAR(2083)   NOT NULL DEFAULT '//media/pages/default_profile.png',
-  Active              BOOL            NOT NULL DEFAULT TRUE
-);
+CREATE TABLE "RefInterfaceText" (
+    LanguageId      INTEGER         NOT NULL REFERENCES "RefLanguage"(Id),
+    "Key"           VARCHAR(64)     NOT NULL,
+    Format          VARCHAR(2048)   NOT NULL,
 
--- Profile/Page Relationships
-CREATE TABLE "PageLike" (
-  ProfileId           INTEGER         NOT NULL REFERENCES "Profile"(Id),
-  PageId              INTEGER         NOT NULL REFERENCES "Page"(Id)
-);
-
-CREATE TABLE "PageAdmin" (
-  ProfileId           INTEGER         NOT NULL REFERENCES "Profile"(Id),
-  PageId              INTEGER         NOT NULL REFERENCES "Page"(Id)
-);
-
-CREATE TABLE "PageInvite" (
-  ProfileId           INTEGER         NOT NULL REFERENCES "Profile"(Id),
-  SenderProfileId     INTEGER         NOT NULL REFERENCES "Profile"(Id),
-  PageId              INTEGER         NOT NULL REFERENCES "Page"(Id)
-);
-
-CREATE TABLE "PageCategory" (
-  PageId              INTEGER         NOT NULL REFERENCES "Page"(Id),
-  Category            VARCHAR(32)     NOT NULL
-);
-
--- Event
-CREATE TABLE "Event" (
-  Id                  SERIAL          PRIMARY KEY,
-  PageId              INTEGER         NOT NULL REFERENCES "Page"(Id),
-  Name                VARCHAR(100)    NOT NULL,
-  Description         VARCHAR(4096)   NOT NULL DEFAULT '',
-  StartTime           TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  EndTime             TIMESTAMP       NOT NULL,
-  Location            VARCHAR(512)    NOT NULL
-);
-
-CREATE TABLE "EventInterest" (
-  EventId             INTEGER         NOT NULL REFERENCES "Event"(Id),
-  ProfileId           INTEGER         NOT NULL REFERENCES "Profile"(Id),
-  Attending           BOOL            NOT NULL
-);
-
--- Posts
-CREATE TABLE "Post" (
-  Id                  SERIAL          PRIMARY KEY,
-  PosterId            INTEGER         REFERENCES "Profile"(Id),
-  PageId              INTEGER         NOT NULL REFERENCES "Page"(Id),
-  ParentPostId        INTEGER         REFERENCES "Post"(Id),
-  Message             VARCHAR(4096),
-  MediaURL            VARCHAR(2083)
+    PRIMARY KEY (LanguageId, "Key")
 );
 
 CREATE TABLE "RefEmotion" (
-  Id                  SERIAL          PRIMARY KEY,
-  Name                VARCHAR(32)     NOT NULL,
-  Image               VARCHAR(2083)   NOT NULL
+    Id              SERIAL          PRIMARY KEY,
+    Name            VARCHAR(64)     NOT NULL,
+    ImageURL        VARCHAR(2083)   NOT NULL
 );
 
-CREATE TABLE "PostReaction" (
-  PostId              INTEGER         NOT NULL REFERENCES "Post"(Id),
-  ProfileId           INTEGER         NOT NULL REFERENCES "Profile"(Id),
-  EmotionId           INTEGER         NOT NULL REFERENCES "RefEmotion"(Id)
+-- Accounts
+CREATE TABLE "Account" (
+    Id              SERIAL          PRIMARY KEY,
+    Email           VARCHAR(128)    NOT NULL,
+    PhoneNumber     CHAR(10),
+    ProfileImageURL VARCHAR(2083)   NOT NULL DEFAULT '/media/profiles/default.png',
+    HeaderImageURL  VARCHAR(2083)   NOT NULL DEFAULT '/media/headers/default.png',
+    IsPrivate       BOOLEAN         NOT NULL,
+    IsActive        BOOLEAN         NOT NULL DEFAULT TRUE,
+    CreatedTime     TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- Poll Posts
-CREATE TABLE "PollPost" (
-  PostId              INTEGER         PRIMARY KEY REFERENCES "Post"(Id),
-  Question            VARCHAR(128)    NOT NULL,
-  EndTime             TIMESTAMP       NOT NULL
+CREATE TABLE "Profile" (
+    AccountId       INTEGER         PRIMARY KEY REFERENCES "Account"(Id),
+    FirstName       VARCHAR(32)     NOT NULL,
+    LastName        VARCHAR(32)     NOT NULL,
+    Username        VARCHAR(32)     NOT NULL,
+    Password        VARCHAR(32)     NOT NULL,
+    LanguageId      INTEGER         NOT NULL REFERENCES "RefLanguage"(Id)
+);
+
+CREATE TABLE "Page" (
+    AccountId       INTEGER         PRIMARY KEY REFERENCES "Account"(Id),
+    Name            VARCHAR(64)     NOT NULL,
+    Description     VARCHAR(512)    NOT NULL,
+    ViewCount       INTEGER         NOT NULL DEFAULT 0
+);
+
+-- Content
+CREATE TABLE "Event" (
+    Id              SERIAL          PRIMARY KEY,
+    HostId          INTEGER         NOT NULL REFERENCES "Account"(Id),
+    Name            VARCHAR(128)    NOT NULL,
+    Description     VARCHAR(128)    NOT NULL,
+    StartTime       TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    EndTime         TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    Location        VARCHAR(512)
+);
+
+CREATE TABLE "Post" (
+    Id              SERIAL          PRIMARY KEY,
+    PosterId        INTEGER         NOT NULL REFERENCES "Account"(Id),
+    Message         VARCHAR(4096),
+    MediaURL        VARCHAR(2083),
+    PollQuestion    VARCHAR(128),
+    PollEndTime     TIMESTAMP,
+    ParentPostId    INTEGER         REFERENCES "Post"(Id),
+    CreateTime      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT post_has_content CHECK (
+        Message IS NOT NULL
+        OR MediaURL IS NOT NULL
+        OR PollQuestion IS NOT NULL
+    ),
+
+    CONSTRAINT poll_post_has_entities CHECK (
+        (PollQuestion IS NULL) = (PollEndTime IS NULL)
+    )
 );
 
 CREATE TABLE "PollAnswer" (
-  Id                  SERIAL          PRIMARY KEY,
-  PostId              INTEGER         NOT NULL REFERENCES "PollPost"(PostId),
-  AnswerText          VARCHAR(128)    NOT NULL
+    Id              SERIAL          PRIMARY KEY,
+    PostId          INTEGER         NOT NULL REFERENCES "Post"(Id),
+    Text            VARCHAR(32)     NOT NULL
 );
 
-CREATE TABLE "PollVotes" (
-  PollAnswerId        INTEGER         NOT NULL REFERENCES "PollAnswer"(Id),
-  ProfileId           INTEGER         NOT NULL REFERENCES "Profile"(Id)
-);
-
--- Group & GMs
+-- Groups & Messaging
 CREATE TABLE "Group" (
-  Id                  SERIAL          PRIMARY KEY,
-  Name                VARCHAR(64)     NOT NULL,
-  Description         VARCHAR(256)    NOT NULL DEFAULT '',
-  PictureURL          VARCHAR(2083)   NOT NULL DEFAULT '//media/groups/default.png'
+    Id              SERIAL          PRIMARY KEY,
+    Name            VARCHAR(128)    NOT NULL,
+    Description     VARCHAR(512),
+    PictureURL      VARCHAR(2083)   NOT NULL DEFAULT '/media/groups/default.png'
 );
 
+CREATE TABLE "GroupMessage" (
+    Id              SERIAL          PRIMARY KEY,
+    SenderId        INTEGER         NOT NULL REFERENCES "Profile"(AccountId),
+    GroupId         INTEGER         NOT NULL REFERENCES "Group"(Id),
+    Message         VARCHAR(4096),
+    MediaURL        VARCHAR(2083),
+    SendTime        TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT group_message_has_content CHECK (
+        Message IS NOT NULL
+        OR MediaURL IS NOT NULL
+    )
+);
+
+-- Relations
 CREATE TABLE "GroupMember" (
-  GroupId             INTEGER         NOT NULL REFERENCES "Group"(Id),
-  ProfileId           INTEGER         NOT NULL REFERENCES "Profile"(Id)
+    ProfileId       INTEGER         NOT NULL REFERENCES "Profile"(AccountId),
+    GroupId         INTEGER         NOT NULL REFERENCES "Group"(Id)
 );
 
-CREATE TABLE "DirectMessage" (
-  GroupId             INTEGER         NOT NULL REFERENCES "Group"(Id),
-  SenderProfileId     INTEGER         NOT NULL REFERENCES "Profile"(Id),
-  Message             VARCHAR(4096),
-  MediaURL            VARCHAR(2083)
+CREATE TABLE "PollVote" (
+    PollId          INTEGER         NOT NULL REFERENCES "Post"(Id),
+    PollAnswerId    INTEGER         NOT NULL REFERENCES "PollAnswer"(Id),
+    ProfileId       INTEGER         NOT NULL REFERENCES "Profile"(AccountId)
+);
+
+CREATE TABLE "PostReaction" (
+    PostId          INTEGER         NOT NULL REFERENCES "Post"(Id),
+    ProfileId       INTEGER         NOT NULL REFERENCES "Profile"(AccountId),
+    EmotionId       INTEGER         NOT NULL REFERENCES "RefEmotion"(Id)
+);
+
+CREATE TABLE "EventInterest" (
+    EventId         INTEGER         NOT NULL REFERENCES "Event"(Id),
+    ProfileId       INTEGER         NOT NULL REFERENCES "Profile"(AccountId),
+    IsAttending     BOOLEAN         NOT NULL
+);
+
+CREATE TABLE "PageAdmin" (
+    PageId          INTEGER         NOT NULL REFERENCES "Page"(AccountId),
+    ProfileId       INTEGER         NOT NULL REFERENCES "Profile"(AccountId)
+);
+
+CREATE TABLE "FollowRequest" (
+    FollowerId      INTEGER         NOT NULL REFERENCES "Profile"(AccountId),
+    FolloweeId      INTEGER         NOT NULL REFERENCES "Profile"(AccountId)
+);
+
+CREATE TABLE "Follow" (
+    FollowerId      INTEGER         NOT NULL REFERENCES "Profile"(AccountId),
+    FolloweeId      INTEGER         NOT NULL REFERENCES "Profile"(AccountId)
 );
 
 --
