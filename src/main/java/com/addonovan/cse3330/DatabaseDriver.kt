@@ -37,27 +37,35 @@ object DatabaseDriver {
         })
     }
 
-    fun listAccounts(): List<Account> {
-        val accounts = arrayListOf<Account>()
+    private inline fun <T> execute(query: String, action: (ResultSet) -> T): List<T> {
+        val list = arrayListOf<T>()
 
-        CONNECTION.createStatement().use {
-            it.executeQuery("SELECT * FROM \"Account\" WHERE IsActive = TRUE;").run {
-                while (next()) {
-                    accounts += Account(
-                            getInt("Id"),
-                            getString("Email"),
-                            getString("PhoneNumber"),
-                            getString("ProfileImageURL"),
-                            getString("HeaderImageURL"),
-                            getBoolean("IsPrivate"),
-                            getBoolean("IsActive"),
-                            getTimestamp("CreatedTime")
-                    )
+        try {
+            CONNECTION.createStatement().use {
+                val resultSet = it.executeQuery(query)
+                while (resultSet.next()) {
+                    list += action(resultSet)
                 }
             }
         }
+        catch (e: SQLException) {
+            throw RuntimeException("Failed to execute query: ```$query```", e)
+        }
 
-        return accounts
+        return list
+    }
+
+    fun listAccounts() = execute("SELECT * FROM \"Account\" WHERE IsActive = TRUE;") {
+        Account(
+                it.getInt("Id"),
+                it.getString("Email"),
+                it.getString("PhoneNumber"),
+                it.getString("ProfileImageURL"),
+                it.getString("HeaderImageURL"),
+                it.getBoolean("IsPrivate"),
+                it.getBoolean("IsActive"),
+                it.getTimestamp("CreatedTime")
+        )
     }
 
 }
