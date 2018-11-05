@@ -2,6 +2,8 @@ package com.addonovan.cse3330
 
 import com.addonovan.cse3330.model.Account
 import com.addonovan.cse3330.model.Profile
+import com.addonovan.cse3330.sql.set
+import com.addonovan.cse3330.sql.setAll
 import org.intellij.lang.annotations.Language
 
 import java.sql.*
@@ -50,7 +52,7 @@ object DbEngine {
         }
     }
 
-    private inline fun <T> query(query: String, crossinline action: (ResultSet) -> T): List<T> {
+    private inline fun <T> query(@Language("PostgreSQL") query: String, crossinline action: (ResultSet) -> T): List<T> {
         val list = arrayListOf<T>()
         createStatement {
             val resultSet = it.executeQuery(query)
@@ -61,12 +63,14 @@ object DbEngine {
         return list
     }
 
-    private fun insert(@Language("PostgreSQL") query: String): ResultSet {
-        var set: ResultSet? = null
-        createStatement {
-            set = it.executeQuery(query)
+    private inline fun <T> prepareCall(@Language("PostgreSQL") name: String, block: (PreparedStatement) -> T): T {
+        try {
+            CONNECTION.prepareCall(name).use {
+                return block(it)
+            }
+        } catch (e: SQLException) {
+            throw RuntimeException("Failed to execute query!", e)
         }
-        return set ?: throw RuntimeException("INSERT failed: $query")
     }
 
     fun listAccounts() = query("""SELECT * FROM "Account" WHERE IsActive = TRUE;""") {
@@ -86,7 +90,22 @@ object DbEngine {
         return profiles.firstOrNull()
     }
 
-    fun createProfile(profile: Profile): Boolean = false
+    fun createProfile(profile: Profile) = prepareCall("SELECT CreateProfile(?, ?, ?, ?, ?, ?)") {
+        it.setAll(
+                profile.email,
+                profile.phoneNumber,
+                profile.firstName,
+                profile.lastName,
+                profile.username,
+                profile.password
+        )
+
+        if (!it.execute())
+            throw RuntimeException("No result returned from CreateProfile!")
+
+        val newId = it.resultSet.getInt(1)
+        getProfileById(newId)!!
+    }
 
     fun getAccountById(id: Int) = query("""SELECT * FROM "Account" WHERE Id = $id""") {
         Account().apply { fromRow(it) }
