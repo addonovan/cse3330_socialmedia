@@ -1,7 +1,9 @@
 package com.addonovan.cse3330
 
 import com.addonovan.cse3330.model.Profile
+import com.addonovan.cse3330.sql.call
 import com.addonovan.cse3330.sql.executeWith
+import com.addonovan.cse3330.sql.set
 import org.intellij.lang.annotations.Language
 import java.sql.*
 import java.util.*
@@ -59,19 +61,6 @@ object DbEngine {
         return list
     }
 
-    private inline fun <T> prepareCall(
-            @Language("PostgreSQL") name: String,
-            block: PreparedStatement.() -> T
-    ): T {
-        try {
-            CONNECTION.prepareCall(name).use {
-                return block(it)
-            }
-        } catch (e: SQLException) {
-            throw RuntimeException("Failed to execute query!", e)
-        }
-    }
-
     fun getProfileById(id: Int): Profile? {
         val profiles = query("""
             |SELECT *
@@ -85,17 +74,18 @@ object DbEngine {
         return profiles.firstOrNull()
     }
 
-    fun createProfile(profile: Profile) = prepareCall("SELECT CreateProfile(?, ?, ?, ?, ?, ?)") {
-        val resultSet = executeWith(
-                profile.email,
-                profile.phoneNumber,
-                profile.firstName,
-                profile.lastName,
-                profile.username,
-                profile.password
-        )
+    fun createProfile(profile: Profile) = call("CreateProfile")
+            .supply(profile.email)
+            .supply(profile.phoneNumber)
+            .supply(profile.firstName)
+            .supply(profile.lastName)
+            .supply(profile.username)
+            .supply(profile.password)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("No result from CreateProfile call!")
 
-        getProfileById(resultSet.getInt(1))!!
-    }
+                getProfileById(it.getInt(1))!!
+            }
 
 }
