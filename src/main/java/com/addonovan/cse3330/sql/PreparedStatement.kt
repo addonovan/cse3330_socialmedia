@@ -1,20 +1,6 @@
 package com.addonovan.cse3330.sql
 
-import org.intellij.lang.annotations.Language
 import java.sql.*
-
-fun Connection.execute(@Language("PostgreSQL") sql: String, vararg params: Any?): ResultSet {
-    try {
-        val statement = this.prepareStatement(sql)
-        for ((i, value) in params.withIndex()) {
-            statement.set(i + 1, value)
-        }
-        statement.executeQuery()
-        return statement.resultSet
-    } catch (e: SQLException) {
-        throw RuntimeException("Failed to execute query: $sql", e)
-    }
-}
 
 fun PreparedStatement.executeWith(vararg params: Any): ResultSet {
     setAll(*params)
