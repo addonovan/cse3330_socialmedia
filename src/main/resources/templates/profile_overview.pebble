@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link type="text/css" rel="stylesheet" href="/style/profile.css">
+</head>
+
+<body>
+<div id="Account">
+    <img id="headerImage" src="{{profile.account.headerImageURL}}"/>
+    <span id="AccountInfo">
+        <img class="profileImage" src="{{profile.account.profileImageURL}}"/>
+        {{profile.firstName}} {{profile.lastName}}
+    </span>
+</div>
+</body>
+</html>
