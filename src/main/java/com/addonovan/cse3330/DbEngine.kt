@@ -2,6 +2,7 @@ package com.addonovan.cse3330
 
 import com.addonovan.cse3330.model.Account
 import com.addonovan.cse3330.model.Profile
+import com.addonovan.cse3330.sql.invokeWith
 import com.addonovan.cse3330.sql.set
 import com.addonovan.cse3330.sql.setAll
 import org.intellij.lang.annotations.Language
@@ -63,7 +64,10 @@ object DbEngine {
         return list
     }
 
-    private inline fun <T> prepareCall(@Language("PostgreSQL") name: String, block: (PreparedStatement) -> T): T {
+    private inline fun <T> prepareCall(
+            @Language("PostgreSQL") name: String,
+            block: PreparedStatement.() -> T
+    ): T {
         try {
             CONNECTION.prepareCall(name).use {
                 return block(it)
@@ -91,7 +95,7 @@ object DbEngine {
     }
 
     fun createProfile(profile: Profile) = prepareCall("SELECT CreateProfile(?, ?, ?, ?, ?, ?)") {
-        it.setAll(
+        val resultSet = invokeWith(
                 profile.email,
                 profile.phoneNumber,
                 profile.firstName,
@@ -100,11 +104,7 @@ object DbEngine {
                 profile.password
         )
 
-        if (!it.execute() || !it.resultSet.next())
-            throw RuntimeException("No result returned from CreateProfile!")
-
-        val newId = it.resultSet.getInt(1)
-        getProfileById(newId)!!
+        getProfileById(resultSet.getInt(1))!!
     }
 
     fun getAccountById(id: Int) = query("""SELECT * FROM "Account" WHERE Id = $id""") {

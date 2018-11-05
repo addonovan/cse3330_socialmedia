@@ -17,6 +17,14 @@ fun Connection.execute(@Language("PostgreSQL") sql: String, vararg params: Any?)
     }
 }
 
+fun PreparedStatement.invokeWith(vararg params: Any): ResultSet {
+    setAll(params)
+    if (!execute() || !resultSet.next())
+        throw RuntimeException("PreparedStatement returned no values!")
+
+    return resultSet
+}
+
 fun <T> PreparedStatement.set(index: Int, value: T) {
     when (value) {
         is String -> setString(index, value)
