@@ -24,18 +24,4 @@ class Profile : Account() {
         password = row.getString("Password")
         languageId = row.getInt("LanguageId")
     }
-
-    override fun insertInto(connection: Connection): Boolean {
-        // insert the base account first, which affects the value of the id
-        // attribute
-        super.insertInto(connection)
-
-        connection.execute("""
-            |INSERT INTO "Profile" (AccountId, FirstName, LastName, Username, Password, LanguageId)
-            |VALUES (?, ?, ?, ?, ?, ?)
-            |RETURNING AccountId
-        """.trimMargin(), id, firstName, lastName, username, password, languageId)
-
-        return true
-    }
 }

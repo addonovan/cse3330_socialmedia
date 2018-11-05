@@ -86,7 +86,7 @@ object DbEngine {
         return profiles.firstOrNull()
     }
 
-    fun createProfile(profile: Profile): Boolean = profile.insertInto(CONNECTION)
+    fun createProfile(profile: Profile): Boolean = false
 
     fun getAccountById(id: Int) = query("""SELECT * FROM "Account" WHERE Id = $id""") {
         Account().apply { fromRow(it) }

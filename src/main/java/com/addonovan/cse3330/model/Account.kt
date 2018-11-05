@@ -33,15 +33,4 @@ open class Account  : SqlEntity {
         createdTime = row.getTimestamp("CreatedTime")
     }
 
-    override fun insertInto(connection: Connection): Boolean {
-        val result = connection.execute("""
-            |INSERT INTO "Account" (Email, PhoneNumber, IsPrivate)
-            |VALUES (?, ?, ?)
-            |RETURNING Id
-        """.trimMargin(), email, phoneNumber, isPrivate)
-
-        id = result.getInt(1)
-        return true
-    }
-
 }
