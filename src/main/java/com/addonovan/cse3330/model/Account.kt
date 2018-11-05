@@ -3,31 +3,35 @@ package com.addonovan.cse3330.model
 import java.sql.ResultSet
 import java.sql.Timestamp
 
-data class Account(
-        val id: Int?,
-        val email: String,
-        val phoneNumber: String,
-        val profileImageURL: String?,
-        val headerImageURL: String?,
-        val isPrivate: Boolean = true,
-        val isActive: Boolean = true,
-        val createdTime: Timestamp?
-) {
+open class Account {
+    var id: Int = 0
 
-    companion object {
-        fun fromRow(row: ResultSet) = Account(
-                row.getInt("Id"),
-                row.getString("Email"),
-                row.getString("PhoneNumber"),
-                row.getString("ProfileImageURL"),
-                row.getString("HeaderImageURL"),
-                row.getBoolean("IsPrivate"),
-                row.getBoolean("IsActive"),
-                row.getTimestamp("CreatedTime")
-        )
+    lateinit var email: String
+
+    lateinit var phoneNumber: String
+
+    lateinit var profileImageURL: String
+
+    lateinit var headerImageURL: String
+
+    var isPrivate: Boolean = true
+
+    var isActive: Boolean = true
+
+    lateinit var createdTime: Timestamp
+
+    open fun fromRow(row: ResultSet) {
+        id = row.getInt("Id")
+        email = row.getString("Email")
+        phoneNumber = row.getString("PhoneNumber")
+        profileImageURL = row.getString("ProfileImageURL")
+        headerImageURL = row.getString("HeaderImageURL")
+        isPrivate = row.getBoolean("IsPrivate")
+        isActive = row.getBoolean("IsActive")
+        createdTime = row.getTimestamp("CreatedTime")
     }
 
-    fun insert(): String =
+    open fun insert(): String =
             """
             INSERT INTO "Account"
                 (Email, PhoneNumber, ProfileImageURL, HeaderImageURL, IsPrivate, IsActive)
