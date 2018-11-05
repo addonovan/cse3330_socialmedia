@@ -100,7 +100,7 @@ object DbEngine {
                 profile.password
         )
 
-        if (!it.execute())
+        if (!it.execute() || !it.resultSet.next())
             throw RuntimeException("No result returned from CreateProfile!")
 
         val newId = it.resultSet.getInt(1)
