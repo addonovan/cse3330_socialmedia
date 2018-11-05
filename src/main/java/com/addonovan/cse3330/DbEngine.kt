@@ -61,18 +61,16 @@ object DbEngine {
         return list
     }
 
-    fun getProfileById(id: Int): Profile? {
-        val profiles = query("""
-            |SELECT *
-            |FROM "Profile" p
-            |INNER JOIN "Account" a
-            |ON a.Id = p.AccountId
-            |WHERE Id = $id
-            """.trimMargin()) {
-            Profile().apply { fromRow(it) }
-        }
-        return profiles.firstOrNull()
-    }
+    fun getProfileById(id: Int) = call("FindProfileById")
+            .supply(id)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("No result from FindProfileById call!")
+
+                Profile().apply {
+                    fromRow(it)
+                }
+            }
 
     fun createProfile(profile: Profile) = call("CreateProfile")
             .supply(profile.email)
