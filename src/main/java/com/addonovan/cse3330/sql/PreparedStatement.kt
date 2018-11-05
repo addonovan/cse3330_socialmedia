@@ -12,6 +12,7 @@ fun PreparedStatement.executeWith(vararg params: Any): ResultSet {
 
 fun <T> PreparedStatement.set(index: Int, value: T) {
     when (value) {
+        is Int -> setInt(index, value)
         is String -> setString(index, value)
         is Boolean -> setBoolean(index, value)
         is Timestamp -> setTimestamp(index, value)
