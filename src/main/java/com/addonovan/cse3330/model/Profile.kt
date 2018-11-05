@@ -23,7 +23,7 @@ class Profile : Account() {
         languageId = row.getInt("LanguageId")
     }
 
-    override fun insert(): String =
+    override fun asInsert(): String =
             """
             INSERT INTO "Profile"
                 (AccountId, FirstName, LastName, Username, Password, LanguageId)

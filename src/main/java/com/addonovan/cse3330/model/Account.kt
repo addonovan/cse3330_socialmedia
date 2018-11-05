@@ -3,7 +3,7 @@ package com.addonovan.cse3330.model
 import java.sql.ResultSet
 import java.sql.Timestamp
 
-open class Account {
+open class Account  : SqlEntity {
     var id: Int = 0
 
     lateinit var email: String
@@ -20,7 +20,7 @@ open class Account {
 
     lateinit var createdTime: Timestamp
 
-    open fun fromRow(row: ResultSet) {
+    override fun fromRow(row: ResultSet) {
         id = row.getInt("Id")
         email = row.getString("Email")
         phoneNumber = row.getString("PhoneNumber")
@@ -31,7 +31,7 @@ open class Account {
         createdTime = row.getTimestamp("CreatedTime")
     }
 
-    open fun insert(): String =
+    override fun asInsert(): String =
             """
             INSERT INTO "Account"
                 (Email, PhoneNumber, ProfileImageURL, HeaderImageURL, IsPrivate, IsActive)
