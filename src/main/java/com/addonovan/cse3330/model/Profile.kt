@@ -1,33 +1,27 @@
 package com.addonovan.cse3330.model
 
+import com.addonovan.cse3330.sql.execute
+import java.sql.Connection
 import java.sql.ResultSet
 
+class Profile : Account() {
 
-data class Profile(
-        val account: Account,
-        val firstName: String,
-        val lastName: String,
-        val username: String,
-        val password: String,
-        val languageId: Int
-) {
+    lateinit var firstName: String
 
-    companion object {
-        fun fromRow(row: ResultSet) = Profile(
-                Account.fromRow(row),
-                row.getString("FirstName"),
-                row.getString("LastName"),
-                row.getString("Username"),
-                row.getString("Password"),
-                row.getInt("LanguageId")
-        )
+    lateinit var lastName: String
+
+    lateinit var username: String
+
+    lateinit var password: String
+
+    var languageId: Int = 0
+
+    override fun fromRow(row: ResultSet) {
+        super.fromRow(row)
+        firstName = row.getString("FirstName")
+        lastName = row.getString("LastName")
+        username = row.getString("Username")
+        password = row.getString("Password")
+        languageId = row.getInt("LanguageId")
     }
-
-    fun insert(): String =
-            """
-            INSERT INTO "Profile"
-                (AccountId, FirstName, LastName, Username, Password, LanguageId)
-            VALUES
-                (${account.id}, $firstName, $lastName, $username, $password, $languageId);
-            """.trimIndent()
 }

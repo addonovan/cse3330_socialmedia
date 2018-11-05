@@ -1,6 +1,6 @@
 package com.addonovan.cse3330.controller
 
-import com.addonovan.cse3330.DatabaseDriver
+import com.addonovan.cse3330.DbEngine
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -11,7 +11,7 @@ open class ProfileController {
 
     @GetMapping(value = ["/{id}"])
     fun profileOverview(@PathVariable("id") id: Int, model: Model): String {
-        val profile = DatabaseDriver.getProfileById(id)
+        val profile = DbEngine.getProfileById(id)
 
         return when (profile) {
             null -> "no_profile"

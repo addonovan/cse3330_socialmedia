@@ -9,7 +9,7 @@ public class Application {
     public static void main(String[] args) {
         // force the database connection open before so any failure is immediate
         // and not delayed until the first time the class is
-        forceInit(DatabaseDriver.class);
+        forceInit(DbEngine.class);
 
         SpringApplication.run(Application.class, args);
     }
