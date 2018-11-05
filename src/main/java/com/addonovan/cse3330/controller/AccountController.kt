@@ -20,11 +20,10 @@ open class AccountController {
     }
 
     @PostMapping("/register")
-    fun registrationSubmit(@ModelAttribute profile: Profile): String {
-        return if (DbEngine.createProfile(profile))
-            "profile_overview"
-        else
-            "create_account"
+    fun registrationSubmit(model: Model, @ModelAttribute profile: Profile): String {
+        val newProfile = DbEngine.createProfile(profile)
+        model.addAttribute("profile", newProfile)
+        return "profile_overview"
     }
 
 }
