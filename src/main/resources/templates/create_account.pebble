@@ -1,0 +1,31 @@
+<form>
+    <label>
+        Email:
+        <input name="Email" type="text">
+    </label>
+
+    <label>
+        Phone number:
+        <input name="PhoneNumber" type="text">
+    </label>
+
+    <label>
+        First name:
+        <input name="FirstName" type="text">
+    </label>
+
+    <label>
+        Last name:
+        <input name="LastName" type="text">
+    </label>
+
+    <label>
+        Username:
+        <input name="Username" type="text">
+    </label>
+
+    <label>
+        Password:
+        <input name="Password" type="password">
+    </label>
+</form>
