@@ -21,7 +21,7 @@ class FunctionCall(private val name: String) {
 
             connection.prepareStatement(query).use {
                 for ((i, param) in parameters.withIndex()) {
-                    it.set(i, param)
+                    it.set(i + 1, param)
                 }
                 it.execute()
                 return block(it.resultSet)
