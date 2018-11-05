@@ -28,4 +28,6 @@
         Password:
         <input name="Password" type="password">
     </label>
+
+    <button name="register" type="submit">Register</button>
 </form>

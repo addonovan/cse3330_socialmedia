@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RequestMapping("/account")
 open class AccountController {
 
-    @GetMapping("createAccount")
-    fun createAccount() = "create_account"
+    @GetMapping("create")
+    fun create() = "create_account"
 
 }
