@@ -3,10 +3,10 @@
 }
 
 span#AccountInfo {
-
+    font-size: 24pt;
 }
 
-span#AccountInfo p.profileImage {
+span#AccountInfo img.profileImage {
     width: 150px;
     height: 150px;
 }
