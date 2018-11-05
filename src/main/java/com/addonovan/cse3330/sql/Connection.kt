@@ -1,7 +1,6 @@
 package com.addonovan.cse3330.sql
 
 import org.intellij.lang.annotations.Language
-import java.lang.RuntimeException
 import java.sql.*
 
 fun Connection.execute(@Language("PostgreSQL") sql: String, vararg params: Any?): ResultSet {

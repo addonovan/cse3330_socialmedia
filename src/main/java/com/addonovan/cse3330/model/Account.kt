@@ -1,11 +1,9 @@
 package com.addonovan.cse3330.model
 
-import com.addonovan.cse3330.sql.execute
-import java.sql.Connection
 import java.sql.ResultSet
 import java.sql.Timestamp
 
-open class Account  : SqlEntity {
+open class Account : SqlEntity {
     var id: Int = 0
 
     lateinit var email: String

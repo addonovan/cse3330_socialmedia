@@ -1,12 +1,10 @@
 package com.addonovan.cse3330
 
-import com.addonovan.cse3330.model.Account
 import com.addonovan.cse3330.model.Profile
 import com.addonovan.cse3330.sql.executeWith
 import org.intellij.lang.annotations.Language
-
 import java.sql.*
-import java.util.Properties
+import java.util.*
 
 object DbEngine {
 
@@ -45,8 +43,7 @@ object DbEngine {
             CONNECTION.createStatement().use {
                 return action(it)
             }
-        }
-        catch (e: SQLException) {
+        } catch (e: SQLException) {
             throw RuntimeException("Failed to execute query!", e)
         }
     }
@@ -75,10 +72,6 @@ object DbEngine {
         }
     }
 
-    fun listAccounts() = query("""SELECT * FROM "Account" WHERE IsActive = TRUE;""") {
-        Account().apply { fromRow(it) }
-    }
-
     fun getProfileById(id: Int): Profile? {
         val profiles = query("""
             |SELECT *
@@ -103,10 +96,6 @@ object DbEngine {
         )
 
         getProfileById(resultSet.getInt(1))!!
-    }
-
-    fun getAccountById(id: Int) = query("""SELECT * FROM "Account" WHERE Id = $id""") {
-        Account().apply { fromRow(it) }
     }
 
 }

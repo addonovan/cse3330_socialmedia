@@ -1,7 +1,5 @@
 package com.addonovan.cse3330.model
 
-import com.addonovan.cse3330.sql.execute
-import java.sql.Connection
 import java.sql.ResultSet
 
 class Profile : Account() {
