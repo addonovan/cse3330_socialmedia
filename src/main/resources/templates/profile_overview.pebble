@@ -1,7 +1,16 @@
-<img src="{{profile.account.headerImageURL}}"/>
+<!DOCTYPE html>
+<html>
+<head>
+    <link type="text/css" href="/style/profile.css">
+</head>
 
-<h1>{{profile.firstName}} {{profile.lastName}}</h1>
-
-<img src="{{profile.account.profileImageURL}}"/>
-
-Hello world!
+<body>
+<div id="Account">
+    <img id="headerImage" src="{{profile.account.headerImageURL}}"/>
+    <span id="AccountInfo">
+        <img class="profileImage" src="{{profile.account.profileImageURL}}"/>
+        {{profile.firstName}} {{profile.lastName}}
+    </span>
+</div>
+</body>
+</html>

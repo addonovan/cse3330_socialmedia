@@ -1,0 +1,12 @@
+#Account {
+
+}
+
+span#AccountInfo {
+
+}
+
+span#AccountInfo p.profileImage {
+    width: 150px;
+    height: 150px;
+}
