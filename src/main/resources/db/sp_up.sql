@@ -17,13 +17,13 @@ AS $$
         INSERT INTO "Account"
           (email, phonenumber, isprivate)
         VALUES
-          (@Email, @PhoneNumber, FALSE)
+          (Email, PhoneNumber, FALSE)
         RETURNING Id INTO account_id;
 
         INSERT INTO "Profile"
-          (accountid, firstname, lastname, username, password, languageid)
+          (accountid, firstname, lastname, username, Password, languageid)
         VALUES
-          (@account_id, @FirstName, @LastName, @Username, @Password, 1);
+          (account_id, FirstName, LastName, Username, Password, 1);
 
         RETURN account_id;
 
