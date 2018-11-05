@@ -163,5 +163,3 @@ VALUES
     ('Anger', '//media/reactions/anger.png'),
     ('Dislike', '//media/reactions/dislike.png'),
     ('Love', '//media/reactions/love.png');
-
-
