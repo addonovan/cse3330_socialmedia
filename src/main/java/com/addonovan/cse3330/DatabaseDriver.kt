@@ -70,7 +70,7 @@ object DatabaseDriver {
     }
 
     fun listAccounts() = query("""SELECT * FROM "Account" WHERE IsActive = TRUE;""") {
-        Account.fromRow(it)
+        Account().apply { fromRow(it) }
     }
 
     fun getProfileById(id: Int): Profile? {
@@ -81,20 +81,13 @@ object DatabaseDriver {
             |ON a.Id = p.AccountId
             |WHERE Id = $id
             """.trimMargin()) {
-            Profile.fromRow(it)
+            Profile().apply { fromRow(it) }
         }
         return profiles.firstOrNull()
     }
 
     fun getAccountById(id: Int) = query("""SELECT * FROM "Account" WHERE Id = $id""") {
-        Account.fromRow(it)
-    }
-
-    fun insertProfile(profile: Profile): Profile {
-        val newAccount = profile.account.copy(id = insert(profile.account.insert()).getInt(0))
-        val newProfile = profile.copy(account = newAccount)
-        insert(newProfile.insert())
-        return newProfile
+        Account().apply { fromRow(it) }
     }
 
 }
