@@ -1,5 +1,7 @@
 package com.addonovan.cse3330.model
 
+import com.addonovan.cse3330.sql.execute
+import java.sql.Connection
 import java.sql.ResultSet
 import java.sql.Timestamp
 
@@ -31,13 +33,14 @@ open class Account  : SqlEntity {
         createdTime = row.getTimestamp("CreatedTime")
     }
 
-    override fun asInsert(): String =
-            """
-            INSERT INTO "Account"
-                (Email, PhoneNumber, ProfileImageURL, HeaderImageURL, IsPrivate, IsActive)
-            VALUES
-                ($email, $phoneNumber, $profileImageURL, $headerImageURL, $isPrivate, $isActive)
-            RETURNING Id;
-            """.trimIndent()
+    override fun insertInto(connection: Connection): Boolean {
+        val result = connection.execute("""
+            |INSERT INTO "Account" (Email, PhoneNumber, IsPrivate)
+            |VALUES (?, ?, ?)
+        """.trimMargin(), email, phoneNumber, isPrivate)
+
+        id = result.getInt(1)
+        return true
+    }
 
 }

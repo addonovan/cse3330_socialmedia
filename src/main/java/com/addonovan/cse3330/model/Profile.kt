@@ -1,5 +1,7 @@
 package com.addonovan.cse3330.model
 
+import com.addonovan.cse3330.sql.execute
+import java.sql.Connection
 import java.sql.ResultSet
 
 class Profile : Account() {
@@ -23,11 +25,16 @@ class Profile : Account() {
         languageId = row.getInt("LanguageId")
     }
 
-    override fun asInsert(): String =
-            """
-            INSERT INTO "Profile"
-                (AccountId, FirstName, LastName, Username, Password, LanguageId)
-            VALUES
-                ($id, $firstName, $lastName, $username, $password, $languageId);
-            """.trimIndent()
+    override fun insertInto(connection: Connection): Boolean {
+        // insert the base account first, which affects the value of the id
+        // attribute
+        super.insertInto(connection)
+
+        connection.execute("""
+            |INSERT INTO "Profile" (AccountId, FirstName, LastName, Username, Password, LanguageId)
+            |VALUES (?, ?, ?, ?, ?, ?)
+        """.trimMargin(), id, firstName, lastName, username, password, languageId)
+
+        return true
+    }
 }

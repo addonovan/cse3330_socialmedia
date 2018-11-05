@@ -20,7 +20,6 @@ open class AccountController {
 
     @PostMapping("/register")
     fun registrationSubmit(@ModelAttribute profile: Profile): String {
-
         return "profile_overview"
     }
 
