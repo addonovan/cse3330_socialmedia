@@ -2,9 +2,7 @@ package com.addonovan.cse3330
 
 import com.addonovan.cse3330.model.Account
 import com.addonovan.cse3330.model.Profile
-import com.addonovan.cse3330.sql.invokeWith
-import com.addonovan.cse3330.sql.set
-import com.addonovan.cse3330.sql.setAll
+import com.addonovan.cse3330.sql.executeWith
 import org.intellij.lang.annotations.Language
 
 import java.sql.*
@@ -95,7 +93,7 @@ object DbEngine {
     }
 
     fun createProfile(profile: Profile) = prepareCall("SELECT CreateProfile(?, ?, ?, ?, ?, ?)") {
-        val resultSet = invokeWith(
+        val resultSet = executeWith(
                 profile.email,
                 profile.phoneNumber,
                 profile.firstName,
