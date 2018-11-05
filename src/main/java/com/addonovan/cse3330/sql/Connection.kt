@@ -17,7 +17,7 @@ fun Connection.execute(@Language("PostgreSQL") sql: String, vararg params: Any?)
 }
 
 fun PreparedStatement.executeWith(vararg params: Any): ResultSet {
-    setAll(params)
+    setAll(*params)
     if (!execute() || !resultSet.next())
         throw RuntimeException("PreparedStatement returned no values!")
 
