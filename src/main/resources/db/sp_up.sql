@@ -1,3 +1,19 @@
+CREATE OR REPLACE FUNCTION FindProfileById(
+    AccountId   "Account".Id%TYPE
+) RETURNS "Account"
+LANGUAGE plpgsql
+AS $$
+    BEGIN
+
+        SELECT *
+        FROM "Profile" p
+        INNER JOIN "Account" a
+        ON p.accountid = a.id
+        WHERE p.accountid = AccountId;
+
+    END
+$$;
+
 CREATE OR REPLACE FUNCTION CreateProfile(
     Email       "Account".Email%TYPE,
     PhoneNumber "Account".PhoneNumber%TYPE,
