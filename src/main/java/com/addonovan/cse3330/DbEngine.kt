@@ -7,7 +7,7 @@ import org.intellij.lang.annotations.Language
 import java.sql.*
 import java.util.Properties
 
-object DatabaseDriver {
+object DbEngine {
 
     /** A URL used to open a connection to the SocialMedia database.  */
     private val CONNECTION_STRING = "jdbc:postgresql://localhost/SocialMedia"

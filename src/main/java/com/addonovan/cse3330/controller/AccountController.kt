@@ -1,6 +1,6 @@
 package com.addonovan.cse3330.controller
 
-import com.addonovan.cse3330.DatabaseDriver
+import com.addonovan.cse3330.DbEngine
 import com.addonovan.cse3330.model.Profile
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -21,7 +21,7 @@ open class AccountController {
 
     @PostMapping("/register")
     fun registrationSubmit(@ModelAttribute profile: Profile): String {
-        return if (DatabaseDriver.createProfile(profile))
+        return if (DbEngine.createProfile(profile))
             "profile_overview"
         else
             "create_account"

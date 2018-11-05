@@ -10,7 +10,8 @@ fun Connection.execute(@Language("PostgreSQL") sql: String, vararg params: Any?)
         for ((i, value) in params.withIndex()) {
             statement.set(i + 1, value)
         }
-        return statement.executeQuery()
+        statement.executeQuery()
+        return statement.resultSet
     } catch (e: SQLException) {
         throw RuntimeException("Failed to execute query: $sql", e)
     }
