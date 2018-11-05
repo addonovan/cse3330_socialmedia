@@ -2,6 +2,7 @@ package com.addonovan.cse3330
 
 import com.addonovan.cse3330.model.Account
 import com.addonovan.cse3330.model.Profile
+import org.intellij.lang.annotations.Language
 
 import java.sql.*
 import java.util.Properties
@@ -41,7 +42,7 @@ object DatabaseDriver {
     private inline fun <T> createStatement(crossinline action: (Statement) -> T): T {
         try {
             CONNECTION.createStatement().use {
-                action(it)
+                return action(it)
             }
         }
         catch (e: SQLException) {
@@ -60,7 +61,7 @@ object DatabaseDriver {
         return list
     }
 
-    private fun insert(query: String): ResultSet {
+    private fun insert(@Language("PostgreSQL") query: String): ResultSet {
         var set: ResultSet? = null
         createStatement {
             set = it.executeQuery(query)
@@ -68,17 +69,25 @@ object DatabaseDriver {
         return set ?: throw RuntimeException("INSERT failed: $query")
     }
 
-    fun listAccounts() = query("SELECT * FROM \"Account\" WHERE IsActive = TRUE;") {
-        Account(
-                it.getInt("Id"),
-                it.getString("Email"),
-                it.getString("PhoneNumber"),
-                it.getString("ProfileImageURL"),
-                it.getString("HeaderImageURL"),
-                it.getBoolean("IsPrivate"),
-                it.getBoolean("IsActive"),
-                it.getTimestamp("CreatedTime")
-        )
+    fun listAccounts() = query("""SELECT * FROM "Account" WHERE IsActive = TRUE;""") {
+        Account.fromRow(it)
+    }
+
+    fun getProfileById(id: Int): Profile? {
+        val profiles = query("""
+            |SELECT *
+            |FROM "Profile" p
+            |INNER JOIN "Account" a
+            |ON a.Id = p.AccountId
+            |WHERE Id = $id
+            """.trimMargin()) {
+            Profile.fromRow(it)
+        }
+        return profiles.firstOrNull()
+    }
+
+    fun getAccountById(id: Int) = query("""SELECT * FROM "Account" WHERE Id = $id""") {
+        Account.fromRow(it)
     }
 
     fun insertProfile(profile: Profile): Profile {

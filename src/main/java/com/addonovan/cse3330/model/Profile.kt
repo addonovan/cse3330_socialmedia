@@ -1,5 +1,7 @@
 package com.addonovan.cse3330.model
 
+import java.sql.ResultSet
+
 
 data class Profile(
         val account: Account,
@@ -9,6 +11,17 @@ data class Profile(
         val password: String,
         val languageId: Int
 ) {
+
+    companion object {
+        fun fromRow(row: ResultSet) = Profile(
+                Account.fromRow(row),
+                row.getString("FirstName"),
+                row.getString("LastName"),
+                row.getString("Username"),
+                row.getString("Password"),
+                row.getInt("LanguageId")
+        )
+    }
 
     fun insert(): String =
             """
