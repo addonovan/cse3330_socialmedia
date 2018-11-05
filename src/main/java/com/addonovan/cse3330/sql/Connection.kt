@@ -4,7 +4,7 @@ import org.intellij.lang.annotations.Language
 import java.lang.RuntimeException
 import java.sql.*
 
-fun Connection.prepare(@Language("PostgreSQL") sql: String, vararg params: Any?): ResultSet {
+fun Connection.execute(@Language("PostgreSQL") sql: String, vararg params: Any?): ResultSet {
     try {
         val statement = this.prepareStatement(sql)
         for ((i, value) in params.withIndex()) {
