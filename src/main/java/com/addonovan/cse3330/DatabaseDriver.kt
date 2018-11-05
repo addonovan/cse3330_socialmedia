@@ -86,6 +86,8 @@ object DatabaseDriver {
         return profiles.firstOrNull()
     }
 
+    fun createProfile(profile: Profile): Boolean = profile.insertInto(CONNECTION)
+
     fun getAccountById(id: Int) = query("""SELECT * FROM "Account" WHERE Id = $id""") {
         Account().apply { fromRow(it) }
     }

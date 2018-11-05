@@ -33,6 +33,7 @@ class Profile : Account() {
         connection.execute("""
             |INSERT INTO "Profile" (AccountId, FirstName, LastName, Username, Password, LanguageId)
             |VALUES (?, ?, ?, ?, ?, ?)
+            |RETURNING AccountId
         """.trimMargin(), id, firstName, lastName, username, password, languageId)
 
         return true

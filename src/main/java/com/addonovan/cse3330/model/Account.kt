@@ -37,6 +37,7 @@ open class Account  : SqlEntity {
         val result = connection.execute("""
             |INSERT INTO "Account" (Email, PhoneNumber, IsPrivate)
             |VALUES (?, ?, ?)
+            |RETURNING Id
         """.trimMargin(), email, phoneNumber, isPrivate)
 
         id = result.getInt(1)
