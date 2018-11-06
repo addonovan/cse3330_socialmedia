@@ -10,7 +10,7 @@ import java.util.*
 object DbEngine {
 
     /** A URL used to open a connection to the SocialMedia database.  */
-    private val CONNECTION_STRING = "jdbc:postgresql://localhost/SocialMedia"
+    private const val CONNECTION_STRING = "jdbc:postgresql://localhost/SocialMedia"
 
     /** The actual database connection.  */
     private val CONNECTION: Connection
