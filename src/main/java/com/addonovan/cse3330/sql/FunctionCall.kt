@@ -1,9 +1,10 @@
 package com.addonovan.cse3330.sql
 
-import java.lang.RuntimeException
 import java.sql.Connection
 import java.sql.ResultSet
 import java.sql.SQLException
+import java.sql.Types
+import kotlin.reflect.jvm.jvmName
 
 class FunctionCall(private val name: String) {
 
@@ -14,6 +15,21 @@ class FunctionCall(private val name: String) {
         return this
     }
 
+    fun supplyNull(sqlType: Int): FunctionCall {
+        parameters.add(NullParameter(sqlType))
+        return this
+    }
+
+    inline fun <reified T> supplyNull() = supplyNull(
+            when (T::class) {
+                Int::class -> Types.INTEGER
+                String::class -> Types.VARCHAR
+
+                else ->
+                    throw RuntimeException("Invalid type: ${T::class.jvmName}")
+            }
+    )
+
     fun <T> executeOn(connection: Connection, block: (ResultSet) -> T): T {
         try {
             val functionParameters = "?, ".repeat(parameters.size).removeSuffix(", ")
@@ -21,7 +37,11 @@ class FunctionCall(private val name: String) {
 
             connection.prepareStatement(query).use {
                 for ((i, param) in parameters.withIndex()) {
-                    it.set(i + 1, param)
+                    if (param is NullParameter) {
+                        it.setNull(i + 1, param.type)
+                    } else {
+                        it.set(i + 1, param)
+                    }
                 }
                 it.execute()
                 return block(it.resultSet)
@@ -30,6 +50,8 @@ class FunctionCall(private val name: String) {
             throw RuntimeException("Failed to invoke function call: $name", e)
         }
     }
+
+    private data class NullParameter(val type: Int)
 
 }
 
