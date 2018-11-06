@@ -1,17 +1,37 @@
 CREATE OR REPLACE FUNCTION FindProfileById(
-    AccountId   "Account".Id%TYPE
-) RETURNS "Account"
+    DesiredId   "Account".Id%TYPE
+) RETURNS TABLE (
+    FirstName           "Profile".FirstName%TYPE,
+    LastName            "Profile".LastName%TYPE,
+    Username            "Profile".Username%TYPE,
+    Password            "Profile".Password%TYPE,
+    LanguageId          "Profile".LanguageId%TYPE,
+    Id                  "Account".Id%TYPE,
+    Email               "Account".Email%TYPE,
+    PhoneNumber         "Account".PhoneNumber%TYPE,
+    ProfileImageURL     "Account".ProfileImageURL%TYPE,
+    HeaderImageURL      "Account".HeaderImageURL%TYPE,
+    IsPrivate           BOOLEAN,
+    CreatedTime         TIMESTAMP
+)
 LANGUAGE plpgsql
 AS $$
-    BEGIN
+BEGIN
 
-        SELECT *
+    RETURN QUERY
+        SELECT
+            p.firstname, p.lastname, p.username, p.password, p.languageid,
+            a.id, a.email, a.phonenumber, a.profileimageurl, a.headerimageurl,
+            a.isprivate, a.createdtime
         FROM "Profile" p
-        INNER JOIN "Account" a
-        ON p.accountid = a.id
-        WHERE p.accountid = AccountId;
+        INNER JOIN "Account" a ON p.accountid = a.id
+        WHERE
+            p.accountid = DesiredId
+            AND
+            a.isactive = TRUE;
 
-    END
+
+END
 $$;
 
 CREATE OR REPLACE FUNCTION CreateProfile(
