@@ -99,6 +99,18 @@ BEGIN
 END
 $$;
 
+CREATE OR REPLACE FUNCTION ViewPage(
+    PageId          INTEGER
+) RETURNS VOID
+LANGUAGE plpgsql
+AS $$
+
+BEGIN
+    UPDATE "Page" p
+    SET viewcount = p.viewcount + 1
+    WHERE p.accountid = PageId;
+END
+$$;
 
 CREATE OR REPLACE FUNCTION CreateProfile(
     Email       "Account".Email%TYPE,
