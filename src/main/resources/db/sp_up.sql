@@ -11,6 +11,7 @@ CREATE OR REPLACE FUNCTION FindProfileById(
     PhoneNumber         "Account".PhoneNumber%TYPE,
     ProfileImageURL     "Account".ProfileImageURL%TYPE,
     HeaderImageURL      "Account".HeaderImageURL%TYPE,
+    IsActive            BOOLEAN,
     IsPrivate           BOOLEAN,
     CreatedTime         TIMESTAMP
 )
@@ -22,7 +23,7 @@ BEGIN
         SELECT
             p.firstname, p.lastname, p.username, p.password, p.languageid,
             a.id, a.email, a.phonenumber, a.profileimageurl, a.headerimageurl,
-            a.isprivate, a.createdtime
+            a.isactive, a.isprivate, a.createdtime
         FROM "Profile" p
         INNER JOIN "Account" a ON p.accountid = a.id
         WHERE
