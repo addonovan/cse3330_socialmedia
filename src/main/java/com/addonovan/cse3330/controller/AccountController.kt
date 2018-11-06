@@ -5,10 +5,7 @@ import com.addonovan.cse3330.model.Page
 import com.addonovan.cse3330.model.Profile
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
 
 @Controller
@@ -40,10 +37,10 @@ open class AccountController {
     @PostMapping("/createPage")
     fun pageCreationSubmit(
             response: HttpServletResponse,
-            @ModelAttribute accountId: Int,
+            @RequestParam("adminId") adminId: Int,
             @ModelAttribute page: Page
     ) {
-        val newId = DbEngine.createPage(accountId, page).id
+        val newId = DbEngine.createPage(adminId, page).id
         response.sendRedirect("/page/$newId")
     }
 
