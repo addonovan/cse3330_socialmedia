@@ -39,7 +39,7 @@ object DbEngine {
         })
     }
 
-    fun getProfileById(id: Int) = call("FindProfileById")
+    fun getProfileById(id: Int) = call("FindProfile")
             .supply(id)
             .supplyNull<String>()
             .executeOn(CONNECTION) {
