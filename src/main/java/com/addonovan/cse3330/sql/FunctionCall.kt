@@ -10,10 +10,16 @@ class FunctionCall(private val name: String) {
 
     private val parameters = ArrayList<Any>()
 
-    fun supply(parameter: Any): FunctionCall {
+    fun supplyValue(parameter: Any): FunctionCall {
         parameters.add(parameter)
         return this
     }
+
+    inline fun <reified T> supply(parameter: T) =
+        if (parameter == null)
+            supplyNull<T>()
+        else
+            supplyValue(parameter)
 
     fun supplyNull(sqlType: Int): FunctionCall {
         parameters.add(NullParameter(sqlType))
