@@ -1,5 +1,6 @@
 package com.addonovan.cse3330
 
+import com.addonovan.cse3330.model.Page
 import com.addonovan.cse3330.model.Profile
 import com.addonovan.cse3330.sql.call
 import java.sql.Connection
@@ -55,6 +56,15 @@ object DbEngine {
             .executeOn(CONNECTION) {
                 if (it.next())
                     Profile().apply { fromRow(it) }
+                else
+                    null
+            }
+
+    fun getPageById(id: Int) = call("FindPage")
+            .supply(id)
+            .executeOn(CONNECTION) {
+                if (it.next())
+                    Page().apply { fromRow(it) }
                 else
                     null
             }
