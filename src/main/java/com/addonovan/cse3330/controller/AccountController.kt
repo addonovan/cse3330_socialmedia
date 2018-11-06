@@ -18,7 +18,7 @@ open class AccountController {
     @GetMapping("/register")
     fun registrationForm(model: Model): String {
         model.addAttribute("profile", Profile())
-        return "create_account"
+        return "create_profile"
     }
 
     @PostMapping("/register")
