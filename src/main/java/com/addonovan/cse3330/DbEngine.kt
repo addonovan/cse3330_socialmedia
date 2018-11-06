@@ -2,10 +2,9 @@ package com.addonovan.cse3330
 
 import com.addonovan.cse3330.model.Profile
 import com.addonovan.cse3330.sql.call
-import com.addonovan.cse3330.sql.executeWith
-import com.addonovan.cse3330.sql.set
-import org.intellij.lang.annotations.Language
-import java.sql.*
+import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.SQLException
 import java.util.*
 
 object DbEngine {
@@ -43,11 +42,10 @@ object DbEngine {
     fun getProfileById(id: Int) = call("FindProfileById")
             .supply(id)
             .executeOn(CONNECTION) {
-                if (!it.next())
-                    throw RuntimeException("No result from FindProfileById call!")
-
-                Profile().apply {
+                if (it.next()) Profile().apply {
                     fromRow(it)
+                } else {
+                    null
                 }
             }
 
@@ -62,7 +60,7 @@ object DbEngine {
                 if (!it.next())
                     throw RuntimeException("No result from CreateProfile call!")
 
-                getProfileById(it.getInt(1))
+                getProfileById(it.getInt(1))!!
             }
 
 }
