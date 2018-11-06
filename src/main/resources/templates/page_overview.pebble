@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link type="text/css" rel="stylesheet" href="/style/page.css">
+</head>
+
+<body>
+<div id="Account">
+    <img id="headerImage" src="{{page.headerImageURL}}"/>
+    <span id="AccountInfo">
+        <img class="profileImage" src="{{page.profileImageURL}}"/>
+        {{page.name}}
+    </span>
+
+    <p>
+        {{page.description}}
+    </p>
+    <p>
+        Page Views: {{page.viewCount}}
+    </p>
+</div>
+</body>
+</html>

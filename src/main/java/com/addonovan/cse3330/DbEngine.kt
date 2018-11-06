@@ -1,5 +1,6 @@
 package com.addonovan.cse3330
 
+import com.addonovan.cse3330.model.Page
 import com.addonovan.cse3330.model.Profile
 import com.addonovan.cse3330.sql.call
 import java.sql.Connection
@@ -59,6 +60,19 @@ object DbEngine {
                     null
             }
 
+    fun getPageById(id: Int) = call("FindPage")
+            .supply(id)
+            .executeOn(CONNECTION) {
+                if (it.next())
+                    Page().apply { fromRow(it) }
+                else
+                    null
+            }
+
+    fun viewPage(id: Int) = call("ViewPage")
+            .supply(id)
+            .executeOn(CONNECTION) {}
+
     fun createProfile(profile: Profile) = call("CreateProfile")
             .supply(profile.email)
             .supply(profile.phoneNumber)
@@ -71,6 +85,19 @@ object DbEngine {
                     throw RuntimeException("No result from CreateProfile call!")
 
                 getProfileById(it.getInt(1))!!
+            }
+
+    fun createPage(profileId: Int, page: Page) = call("CreatePage")
+            .supply(profileId)
+            .supply(page.email)
+            .supply(page.phoneNumber)
+            .supply(page.name)
+            .supply(page.description)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("No result from CreatePage call!")
+
+                getPageById(it.getInt(1))!!
             }
 
 }

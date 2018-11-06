@@ -36,6 +36,88 @@ BEGIN
 END
 $$;
 
+CREATE OR REPLACE FUNCTION FindPage(
+    PageId INTEGER
+) RETURNS TABLE (
+    Name                "Page".Name%TYPE,
+    Description         "Page".Description%TYPE,
+    ViewCount           "Page".ViewCount%TYPE,
+    Id                  "Account".Id%TYPE,
+    Email               "Account".Email%TYPE,
+    PhoneNumber         "Account".PhoneNumber%TYPE,
+    ProfileImageURL     "Account".ProfileImageURL%TYPE,
+    HeaderImageURL      "Account".HeaderImageURL%TYPE,
+    IsActive            BOOLEAN,
+    IsPrivate           BOOLEAN,
+    CreatedTime         TIMESTAMP
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    RETURN QUERY
+    SELECT
+            p.name, p.description, p.viewcount,
+            a.id, a.email, a.phonenumber, a.profileimageurl, a.headerimageurl,
+            a.isactive, a.isprivate, a.createdtime
+    FROM "Page" p
+    INNER JOIN "Account" a ON p.accountid = a.id
+    WHERE
+      p.accountid = PageId;
+
+
+END
+$$;
+
+CREATE OR REPLACE FUNCTION CreatePage(
+    AdminId     INTEGER,
+    Email       "Account".Email%TYPE,
+    PhoneNumber "Account".PhoneNumber%TYPE,
+    Name        "Page".Name%TYPE,
+    Description "Page".Description%TYPE
+) RETURNS INTEGER
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    account_id INTEGER := -1;
+
+BEGIN
+
+    INSERT INTO "Account"
+        (email, phonenumber, isprivate)
+    VALUES
+        (Email, PhoneNumber, FALSE)
+    RETURNING Id INTO account_id;
+
+    INSERT INTO "Page"
+        (accountid, name, description)
+    VALUES
+        (account_id, name, description);
+
+    INSERT INTO "PageAdmin"
+        (pageid, profileid)
+    VALUES
+        (account_id, AdminId);
+
+    RETURN account_id;
+
+END
+$$;
+
+CREATE OR REPLACE FUNCTION ViewPage(
+    PageId          INTEGER
+) RETURNS VOID
+LANGUAGE plpgsql
+AS $$
+
+BEGIN
+    UPDATE "Page" p
+    SET viewcount = p.viewcount + 1
+    WHERE p.accountid = PageId;
+END
+$$;
+
 CREATE OR REPLACE FUNCTION CreateProfile(
     Email       "Account".Email%TYPE,
     PhoneNumber "Account".PhoneNumber%TYPE,
