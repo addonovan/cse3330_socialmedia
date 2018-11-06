@@ -40,27 +40,6 @@ object DbEngine {
         })
     }
 
-    private inline fun <T> createStatement(crossinline action: (Statement) -> T): T {
-        try {
-            CONNECTION.createStatement().use {
-                return action(it)
-            }
-        } catch (e: SQLException) {
-            throw RuntimeException("Failed to execute query!", e)
-        }
-    }
-
-    private inline fun <T> query(@Language("PostgreSQL") query: String, crossinline action: (ResultSet) -> T): List<T> {
-        val list = arrayListOf<T>()
-        createStatement {
-            val resultSet = it.executeQuery(query)
-            while (resultSet.next()) {
-                list += action(resultSet)
-            }
-        }
-        return list
-    }
-
     fun getProfileById(id: Int) = call("FindProfileById")
             .supply(id)
             .executeOn(CONNECTION) {
