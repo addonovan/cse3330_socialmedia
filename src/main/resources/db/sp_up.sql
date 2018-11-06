@@ -70,6 +70,7 @@ END
 $$;
 
 CREATE OR REPLACE FUNCTION CreatePage(
+    AdminId     INTEGER,
     Email       "Account".Email%TYPE,
     PhoneNumber "Account".PhoneNumber%TYPE,
     Name        "Page".Name%TYPE,
@@ -93,6 +94,11 @@ BEGIN
         (accountid, name, description)
     VALUES
         (account_id, name, description);
+
+    INSERT INTO "PageAdmin"
+        (pageid, profileid)
+    VALUES
+        (account_id, AdminId);
 
     RETURN account_id;
 
