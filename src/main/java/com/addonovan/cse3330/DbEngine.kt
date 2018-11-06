@@ -42,11 +42,10 @@ object DbEngine {
     fun getProfileById(id: Int) = call("FindProfileById")
             .supply(id)
             .executeOn(CONNECTION) {
-                if (it.next()) Profile().apply {
-                    fromRow(it)
-                } else {
+                if (it.next())
+                    Profile().apply { fromRow(it) }
+                else
                     null
-                }
             }
 
     fun createProfile(profile: Profile) = call("CreateProfile")
