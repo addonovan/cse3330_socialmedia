@@ -8,7 +8,7 @@ open class Account : SqlEntity {
 
     lateinit var email: String
 
-    lateinit var phoneNumber: String
+    var phoneNumber: String? = null
 
     lateinit var profileImageURL: String
 
