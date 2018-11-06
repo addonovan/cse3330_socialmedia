@@ -17,7 +17,7 @@ class FunctionCall(private val name: String) {
     fun <T> executeOn(connection: Connection, block: (ResultSet) -> T): T {
         try {
             val functionParameters = "?, ".repeat(parameters.size).removeSuffix(", ")
-            val query = "SELECT $name($functionParameters)"
+            val query = "SELECT * FROM $name($functionParameters)"
 
             connection.prepareStatement(query).use {
                 for ((i, param) in parameters.withIndex()) {
