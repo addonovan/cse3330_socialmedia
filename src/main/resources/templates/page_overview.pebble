@@ -15,6 +15,9 @@
     <p>
         {{page.description}}
     </p>
+    <p>
+        Page Views: {{page.viewCount}}
+    </p>
 </div>
 </body>
 </html>
