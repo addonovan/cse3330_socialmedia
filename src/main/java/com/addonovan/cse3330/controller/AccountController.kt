@@ -30,7 +30,6 @@ open class AccountController {
     @GetMapping("/createPage")
     fun pageCreationForm(model: Model): String {
         model.addAttribute("page", Page())
-        model.addAttribute("accountId", 1) // TODO unhardcode this?
         return "create_page"
     }
 
