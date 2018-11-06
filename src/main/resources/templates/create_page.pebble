@@ -1,4 +1,4 @@
-<form method="post" action="/account/register">
+<form method="post" action="/account/createPage">
     <label>
         Admin Id:
         <input name="adminId" type="number">
