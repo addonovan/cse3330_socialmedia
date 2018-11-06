@@ -41,6 +41,17 @@ object DbEngine {
 
     fun getProfileById(id: Int) = call("FindProfileById")
             .supply(id)
+            .supplyNull<String>()
+            .executeOn(CONNECTION) {
+                if (it.next())
+                    Profile().apply { fromRow(it) }
+                else
+                    null
+            }
+
+    fun getProfileByUsername(username: String) = call("FindProfile")
+            .supplyNull<Int>()
+            .supply(username)
             .executeOn(CONNECTION) {
                 if (it.next())
                     Profile().apply { fromRow(it) }
