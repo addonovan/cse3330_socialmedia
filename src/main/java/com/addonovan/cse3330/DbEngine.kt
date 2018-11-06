@@ -1,18 +1,16 @@
 package com.addonovan.cse3330
 
-import com.addonovan.cse3330.model.Account
 import com.addonovan.cse3330.model.Profile
-import com.addonovan.cse3330.sql.set
-import com.addonovan.cse3330.sql.setAll
-import org.intellij.lang.annotations.Language
-
-import java.sql.*
-import java.util.Properties
+import com.addonovan.cse3330.sql.call
+import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.SQLException
+import java.util.*
 
 object DbEngine {
 
     /** A URL used to open a connection to the SocialMedia database.  */
-    private val CONNECTION_STRING = "jdbc:postgresql://localhost/SocialMedia"
+    private const val CONNECTION_STRING = "jdbc:postgresql://localhost/SocialMedia"
 
     /** The actual database connection.  */
     private val CONNECTION: Connection
@@ -41,74 +39,27 @@ object DbEngine {
         })
     }
 
-    private inline fun <T> createStatement(crossinline action: (Statement) -> T): T {
-        try {
-            CONNECTION.createStatement().use {
-                return action(it)
+    fun getProfileById(id: Int) = call("FindProfileById")
+            .supply(id)
+            .executeOn(CONNECTION) {
+                if (it.next())
+                    Profile().apply { fromRow(it) }
+                else
+                    null
             }
-        }
-        catch (e: SQLException) {
-            throw RuntimeException("Failed to execute query!", e)
-        }
-    }
 
-    private inline fun <T> query(@Language("PostgreSQL") query: String, crossinline action: (ResultSet) -> T): List<T> {
-        val list = arrayListOf<T>()
-        createStatement {
-            val resultSet = it.executeQuery(query)
-            while (resultSet.next()) {
-                list += action(resultSet)
+    fun createProfile(profile: Profile) = call("CreateProfile")
+            .supply(profile.email)
+            .supply(profile.phoneNumber)
+            .supply(profile.firstName)
+            .supply(profile.lastName)
+            .supply(profile.username)
+            .supply(profile.password)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("No result from CreateProfile call!")
+
+                getProfileById(it.getInt(1))!!
             }
-        }
-        return list
-    }
-
-    private inline fun <T> prepareCall(@Language("PostgreSQL") name: String, block: (PreparedStatement) -> T): T {
-        try {
-            CONNECTION.prepareCall(name).use {
-                return block(it)
-            }
-        } catch (e: SQLException) {
-            throw RuntimeException("Failed to execute query!", e)
-        }
-    }
-
-    fun listAccounts() = query("""SELECT * FROM "Account" WHERE IsActive = TRUE;""") {
-        Account().apply { fromRow(it) }
-    }
-
-    fun getProfileById(id: Int): Profile? {
-        val profiles = query("""
-            |SELECT *
-            |FROM "Profile" p
-            |INNER JOIN "Account" a
-            |ON a.Id = p.AccountId
-            |WHERE Id = $id
-            """.trimMargin()) {
-            Profile().apply { fromRow(it) }
-        }
-        return profiles.firstOrNull()
-    }
-
-    fun createProfile(profile: Profile) = prepareCall("SELECT CreateProfile(?, ?, ?, ?, ?, ?)") {
-        it.setAll(
-                profile.email,
-                profile.phoneNumber,
-                profile.firstName,
-                profile.lastName,
-                profile.username,
-                profile.password
-        )
-
-        if (!it.execute() || !it.resultSet.next())
-            throw RuntimeException("No result returned from CreateProfile!")
-
-        val newId = it.resultSet.getInt(1)
-        getProfileById(newId)!!
-    }
-
-    fun getAccountById(id: Int) = query("""SELECT * FROM "Account" WHERE Id = $id""") {
-        Account().apply { fromRow(it) }
-    }
 
 }

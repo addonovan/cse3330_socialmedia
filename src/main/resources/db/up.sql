@@ -157,18 +157,9 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA "public" TO "application";
 --
 
 INSERT INTO RefEmotion
-  (Name, Image)
-  VALUES
-  ('Like', '//media/reactions/like.png'),
-  ('Anger', '//media/reactions/anger.png'),
-  ('Dislike', '//media/reactions/dislike.png'),
-  ('Love', '//media/reactions/love.png');
-
-INSERT INTO Profile
-  (FirstName, LastName, PhoneNumber, Email, UserName, Password)
-  VALUES
-  ('Austin', 'Donovan', '8179911052', '', 'addonovan', 'password1'),
-  ('Giannina', 'Pachas', '8179911052', '', 'giannapachas', 'password2'),
-  ('Emily', 'Knowles', '8179911052', '', 'elknowles', 'password3'),
-  ('Joseph', 'Brewster', '8179911052', '', 'jojettison', 'password4');
-
+    (Name, Image)
+VALUES
+    ('Like', '//media/reactions/like.png'),
+    ('Anger', '//media/reactions/anger.png'),
+    ('Dislike', '//media/reactions/dislike.png'),
+    ('Love', '//media/reactions/love.png');

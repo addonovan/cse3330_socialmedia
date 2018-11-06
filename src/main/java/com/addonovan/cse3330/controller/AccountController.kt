@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import javax.servlet.http.HttpServletResponse
 
 @Controller
 @RequestMapping("/account")
@@ -20,10 +21,12 @@ open class AccountController {
     }
 
     @PostMapping("/register")
-    fun registrationSubmit(model: Model, @ModelAttribute profile: Profile): String {
-        val newProfile = DbEngine.createProfile(profile)
-        model.addAttribute("profile", newProfile)
-        return "profile_overview"
+    fun registrationSubmit(
+            response: HttpServletResponse,
+            @ModelAttribute profile: Profile
+    ) {
+        val newId = DbEngine.createProfile(profile).id
+        response.sendRedirect("/profile/$newId")
     }
 
 }
