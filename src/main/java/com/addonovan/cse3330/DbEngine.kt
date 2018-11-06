@@ -83,7 +83,7 @@ object DbEngine {
                 if (!it.next())
                     throw RuntimeException("No result from CreateProfile call!")
 
-                getProfileById(it.getInt(1))!!
+                getProfileById(it.getInt(1))
             }
 
 }
