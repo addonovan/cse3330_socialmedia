@@ -69,6 +69,37 @@ BEGIN
 END
 $$;
 
+CREATE OR REPLACE FUNCTION CreatePage(
+    Email       "Account".Email%TYPE,
+    PhoneNumber "Account".PhoneNumber%TYPE,
+    Name        "Page".Name%TYPE,
+    Description "Page".Description%TYPE
+) RETURNS INTEGER
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    account_id INTEGER := -1;
+
+BEGIN
+
+    INSERT INTO "Account"
+        (email, phonenumber, isprivate)
+    VALUES
+        (Email, PhoneNumber, FALSE)
+    RETURNING Id INTO account_id;
+
+    INSERT INTO "Page"
+        (accountid, name, description)
+    VALUES
+        (account_id, name, description);
+
+    RETURN account_id;
+
+END
+$$;
+
+
 CREATE OR REPLACE FUNCTION CreateProfile(
     Email       "Account".Email%TYPE,
     PhoneNumber "Account".PhoneNumber%TYPE,
