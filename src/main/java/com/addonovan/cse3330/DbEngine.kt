@@ -69,6 +69,10 @@ object DbEngine {
                     null
             }
 
+    fun viewPage(id: Int) = call("ViewPage")
+            .supply(id)
+            .executeOn(CONNECTION) {}
+
     fun createProfile(profile: Profile) = call("CreateProfile")
             .supply(profile.email)
             .supply(profile.phoneNumber)

@@ -14,6 +14,8 @@ open class PageController {
     @GetMapping("{id:[0-9]+}")
     fun pageOverview(@PathVariable("id") id: Int, model: Model): String {
         val page = DbEngine.getPageById(id) ?: return "no_page"
+        DbEngine.viewPage(page.id)
+
         model.addAttribute("page", page)
         return "page_overview"
     }
