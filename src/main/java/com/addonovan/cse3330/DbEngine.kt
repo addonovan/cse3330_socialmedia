@@ -87,4 +87,17 @@ object DbEngine {
                 getProfileById(it.getInt(1))!!
             }
 
+    fun createPage(profileId: Int, page: Page) = call("CreatePage")
+            .supply(profileId)
+            .supply(page.email)
+            .supply(page.phoneNumber)
+            .supply(page.name)
+            .supply(page.description)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("No result from CreatePage call!")
+
+                getPageById(it.getInt(1))!!
+            }
+
 }

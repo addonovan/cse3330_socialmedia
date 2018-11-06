@@ -33,15 +33,17 @@ open class AccountController {
     @GetMapping("/createPage")
     fun pageCreationForm(model: Model): String {
         model.addAttribute("page", Page())
+        model.addAttribute("accountId", 1) // TODO unhardcode this?
         return "create_page"
     }
 
     @PostMapping("/createPage")
     fun pageCreationSubmit(
             response: HttpServletResponse,
+            @ModelAttribute accountId: Int,
             @ModelAttribute page: Page
     ) {
-        val newId = DbEngine.createPage(page).id
+        val newId = DbEngine.createPage(accountId, page).id
         response.sendRedirect("/page/$newId")
     }
 
