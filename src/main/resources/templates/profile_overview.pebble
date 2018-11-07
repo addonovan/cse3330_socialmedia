@@ -12,5 +12,26 @@
         {{profile.firstName}} {{profile.lastName}}
     </span>
 </div>
+
+<div id="PostSubmission">
+    <form method="post" action="/post/submit">
+        <label>
+            Poster Id:
+            <input name="posterId" type="number">
+        </label>
+
+        <label>
+            Comment:
+            <input name="text" type="text">
+        </label>
+
+        <button name="register" type="submit" value="Submit">Post</button>
+    </form>
+</div>
+
+<div id="Overview">
+    Put overview items here
+</div>
+
 </body>
 </html>
