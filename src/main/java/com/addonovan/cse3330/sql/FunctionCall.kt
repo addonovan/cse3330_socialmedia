@@ -99,4 +99,10 @@ class FunctionCall(private val name: String) {
 
 }
 
+/**
+ * A nicer, more functional way to start off a call chain to specify a
+ * [FunctionCall] fully.
+ *
+ * @see [FunctionCall]
+ */
 fun call(name: String) = FunctionCall(name)
