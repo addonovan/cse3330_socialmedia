@@ -1,3 +1,27 @@
+CREATE OR REPLACE FUNCTION CreatePost(
+    AccountId           INTEGER,
+    WallId              INTEGER,
+    Message             "Post".Message%TYPE,
+    MediaURL            "Post".MediaURL%TYPE,
+    PollQuestion        "Post".PollQuestion%TYPE,
+    PollEndTime         "Post".PollEndTime%TYPE,
+    ParentPostId        INTEGER
+) RETURNS INTEGER
+LANGUAGE plpgsql
+AS $$
+
+BEGIN
+
+    INSERT INTO "Post"
+        (PosterId, WallId, Message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
+    VALUES
+       (AccountId, WallId, Message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
+    RETURNING "Post".Id;
+
+
+END
+$$;
+
 CREATE OR REPLACE FUNCTION FindWallOverviewFor(
     AccountId           INTEGER
 ) RETURNS SETOF "Post"
