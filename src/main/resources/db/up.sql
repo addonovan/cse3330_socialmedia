@@ -164,3 +164,10 @@ VALUES
     ('Anger', '//media/reactions/anger.png'),
     ('Dislike', '//media/reactions/dislike.png'),
     ('Love', '//media/reactions/love.png');
+
+INSERT INTO "RefLanguage"
+    (LocaleCode, Name)
+VALUES
+    ('en_us', 'English (United States)'),
+    ('de_de', 'Deutsch (Deutschland)'),
+    ('en_tx', 'English (Texas)');
