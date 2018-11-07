@@ -2,6 +2,10 @@ package com.addonovan.cse3330.sql
 
 import java.sql.*
 
+/**
+ * Sets the parameter at the given `index` to the given `value`. This will
+ * deduce the correct function to call from the given type, [T].
+ */
 fun <T> PreparedStatement.set(index: Int, value: T) {
     when (value) {
         is Int -> setInt(index, value)
@@ -9,11 +13,5 @@ fun <T> PreparedStatement.set(index: Int, value: T) {
         is Boolean -> setBoolean(index, value)
         is Timestamp -> setTimestamp(index, value)
         else -> throw RuntimeException("Unsupported type!")
-    }
-}
-
-fun PreparedStatement.setAll(vararg values: Any) {
-    for ((i, param) in values.withIndex()) {
-        set(i + 1, param)
     }
 }
