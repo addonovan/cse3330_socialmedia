@@ -64,7 +64,7 @@ BEGIN
 
     RETURN QUERY
     SELECT
-        prof.firstname, prof.lastname, prof.username, prof.profassword, prof.languageid,
+        prof.firstname, prof.lastname, prof.username, prof.password, prof.languageid,
         p.name, p.description, p.viewcount,
         a.id, a.email, a.phonenumber, a.profileimageurl, a.headerimageurl,
         a.isactive, a.isprivate, a.createdtime
