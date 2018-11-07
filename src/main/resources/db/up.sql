@@ -35,7 +35,7 @@ CREATE TABLE "Profile" (
     AccountId       INTEGER         PRIMARY KEY REFERENCES "Account"(Id),
     FirstName       VARCHAR(32)     NOT NULL,
     LastName        VARCHAR(32)     NOT NULL,
-    Username        VARCHAR(32)     NOT NULL,
+    Username        VARCHAR(32)     NOT NULL UNIQUE,
     Password        VARCHAR(32)     NOT NULL,
     LanguageId      INTEGER         NOT NULL REFERENCES "RefLanguage"(Id)
 );
@@ -61,6 +61,7 @@ CREATE TABLE "Event" (
 CREATE TABLE "Post" (
     Id              SERIAL          PRIMARY KEY,
     PosterId        INTEGER         NOT NULL REFERENCES "Account"(Id),
+    WallId          INTEGER         NOT NULL REFERENCES "Account"(Id),
     Message         VARCHAR(4096),
     MediaURL        VARCHAR(2083),
     PollQuestion    VARCHAR(128),
@@ -156,10 +157,17 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA "public" TO "application";
 -- Insert Testing Data
 --
 
-INSERT INTO RefEmotion
-    (Name, Image)
+INSERT INTO "RefEmotion"
+    (Name, ImageURL)
 VALUES
     ('Like', '//media/reactions/like.png'),
     ('Anger', '//media/reactions/anger.png'),
     ('Dislike', '//media/reactions/dislike.png'),
     ('Love', '//media/reactions/love.png');
+
+INSERT INTO "RefLanguage"
+    (LocaleCode, Name)
+VALUES
+    ('en_us', 'English (United States)'),
+    ('de_de', 'Deutsch (Deutschland)'),
+    ('en_tx', 'English (Texas)');

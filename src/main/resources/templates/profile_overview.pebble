@@ -12,5 +12,33 @@
         {{profile.firstName}} {{profile.lastName}}
     </span>
 </div>
+
+<div id="PostSubmission">
+    <form method="post" action="/post/submit">
+        <input name="wallId" type="number" class="hidden" value="{{profile.id}}">
+
+        <label>
+            Poster Id:
+            <input name="posterId" type="number">
+        </label><br/>
+
+        <label>
+            Comment:
+            <input name="text" type="text">
+        </label><br/>
+
+        <button name="register" type="submit" value="Submit">Post</button>
+    </form>
+</div>
+
+<div id="Overview">
+    {% for post in overview %}
+    <p> <b>Posted by: </b> {{post.posterId}} </p>
+    <p>
+        {{post.text.body}}
+    </p>
+    {% endfor %}
+</div>
+
 </body>
 </html>

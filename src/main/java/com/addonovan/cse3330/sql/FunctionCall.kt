@@ -1,9 +1,6 @@
 package com.addonovan.cse3330.sql
 
-import java.sql.Connection
-import java.sql.ResultSet
-import java.sql.SQLException
-import java.sql.Types
+import java.sql.*
 import kotlin.reflect.jvm.jvmName
 
 class FunctionCall(private val name: String) {
@@ -30,6 +27,7 @@ class FunctionCall(private val name: String) {
             when (T::class) {
                 Int::class -> Types.INTEGER
                 String::class -> Types.VARCHAR
+                Timestamp::class -> Types.TIMESTAMP
 
                 else ->
                     throw RuntimeException("Invalid type: ${T::class.jvmName}")

@@ -1,8 +1,11 @@
 package com.addonovan.cse3330
 
+import com.addonovan.cse3330.model.Account
 import com.addonovan.cse3330.model.Page
+import com.addonovan.cse3330.model.Post
 import com.addonovan.cse3330.model.Profile
 import com.addonovan.cse3330.sql.call
+import com.addonovan.cse3330.sql.map
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
@@ -40,7 +43,16 @@ object DbEngine {
         })
     }
 
-    fun getProfileById(id: Int) = call("FindProfile")
+    fun getAccountById(id: Int) = call("FindAccount")
+            .supply(id)
+            .executeOn(CONNECTION) {
+                if (it.next())
+                    Account().apply { fromRow(it) }
+                else
+                    null
+            }
+
+    fun getProfileById(id: Int) = call("FindAccount")
             .supply(id)
             .supplyNull<String>()
             .executeOn(CONNECTION) {
@@ -50,7 +62,7 @@ object DbEngine {
                     null
             }
 
-    fun getProfileByUsername(username: String) = call("FindProfile")
+    fun getProfileByUsername(username: String) = call("FindAccount")
             .supplyNull<Int>()
             .supply(username)
             .executeOn(CONNECTION) {
@@ -72,6 +84,29 @@ object DbEngine {
     fun viewPage(id: Int) = call("ViewPage")
             .supply(id)
             .executeOn(CONNECTION) {}
+
+    fun wallOverview(account: Account) = call("FindWallOverviewFor")
+            .supply(account.id)
+            .executeOn(CONNECTION) {
+                it.map {
+                    Post().apply { fromRow(it) }
+                }
+            }
+
+    fun createPost(account: Account, wallId: Int, post: Post) = call("CreatePost")
+            .supply(account.id)
+            .supply(wallId)
+            .supply(post.text?.body)
+            .supply(post.media?.url)
+            .supply(post.poll?.question)
+            .supply(post.poll?.endTime)
+            .supply(post.parentPostId)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("No result from CreatePost call!")
+
+                it.getInt(1)
+            }
 
     fun createProfile(profile: Profile) = call("CreateProfile")
             .supply(profile.email)

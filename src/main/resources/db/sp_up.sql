@@ -1,4 +1,47 @@
-CREATE OR REPLACE FUNCTION FindProfile(
+CREATE OR REPLACE FUNCTION CreatePost(
+    AccountId           INTEGER,
+    WallId              INTEGER,
+    Message             "Post".Message%TYPE,
+    MediaURL            "Post".MediaURL%TYPE,
+    PollQuestion        "Post".PollQuestion%TYPE,
+    PollEndTime         "Post".PollEndTime%TYPE,
+    ParentPostId        INTEGER
+) RETURNS INTEGER
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    post_id INTEGER;
+
+BEGIN
+
+    INSERT INTO "Post"
+        (PosterId, WallId, Message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
+    VALUES
+        (AccountId, WallId, Message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
+    RETURNING "Post".Id INTO post_id;
+
+    RETURN post_id;
+
+
+END
+$$;
+
+CREATE OR REPLACE FUNCTION FindWallOverviewFor(
+    AccountId           INTEGER
+) RETURNS SETOF "Post"
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    RETURN QUERY
+        SELECT * FROM "Post" p
+        WHERE p.wallid = AccountId;
+
+END
+$$;
+
+CREATE OR REPLACE FUNCTION FindAccount(
     DesiredId       INTEGER,
     DesiredUsername VARCHAR(32)
 ) RETURNS TABLE (
@@ -7,38 +50,6 @@ CREATE OR REPLACE FUNCTION FindProfile(
     Username            "Profile".Username%TYPE,
     Password            "Profile".Password%TYPE,
     LanguageId          "Profile".LanguageId%TYPE,
-    Id                  "Account".Id%TYPE,
-    Email               "Account".Email%TYPE,
-    PhoneNumber         "Account".PhoneNumber%TYPE,
-    ProfileImageURL     "Account".ProfileImageURL%TYPE,
-    HeaderImageURL      "Account".HeaderImageURL%TYPE,
-    IsActive            BOOLEAN,
-    IsPrivate           BOOLEAN,
-    CreatedTime         TIMESTAMP
-)
-LANGUAGE plpgsql
-AS $$
-BEGIN
-
-    RETURN QUERY
-        SELECT
-            p.firstname, p.lastname, p.username, p.password, p.languageid,
-            a.id, a.email, a.phonenumber, a.profileimageurl, a.headerimageurl,
-            a.isactive, a.isprivate, a.createdtime
-        FROM "Profile" p
-        INNER JOIN "Account" a ON p.accountid = a.id
-        WHERE
-          (DesiredId IS NULL OR p.accountid = DesiredId)
-            AND
-          (DesiredUsername IS NULL OR p.username = DesiredUsername);
-
-
-END
-$$;
-
-CREATE OR REPLACE FUNCTION FindPage(
-    PageId INTEGER
-) RETURNS TABLE (
     Name                "Page".Name%TYPE,
     Description         "Page".Description%TYPE,
     ViewCount           "Page".ViewCount%TYPE,
@@ -57,13 +68,17 @@ BEGIN
 
     RETURN QUERY
     SELECT
-            p.name, p.description, p.viewcount,
-            a.id, a.email, a.phonenumber, a.profileimageurl, a.headerimageurl,
-            a.isactive, a.isprivate, a.createdtime
-    FROM "Page" p
-    INNER JOIN "Account" a ON p.accountid = a.id
+        prof.firstname, prof.lastname, prof.username, prof.password, prof.languageid,
+        page.name, page.description, page.viewcount,
+        a.id, a.email, a.phonenumber, a.profileimageurl, a.headerimageurl,
+        a.isactive, a.isprivate, a.createdtime
+    FROM "Account" a
+    LEFT JOIN "Profile" prof ON prof.accountid = a.id
+    LEFT JOIN "Page" page ON page.accountid = a.id
     WHERE
-      p.accountid = PageId;
+      (DesiredId IS NULL OR a.id = DesiredId)
+      AND
+      (DesiredUsername IS NULL OR prof.username = DesiredUsername);
 
 
 END
