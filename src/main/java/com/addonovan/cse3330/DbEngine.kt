@@ -20,8 +20,7 @@ import java.util.*
  * functions (whose contents are available in
  * `/src/main/resources/db/sp_up.sql`) which are stored on the database.
  *
- * ## See Also
- * [FunctionCall][com.addonovan.cse3330.sql.FunctionCall]
+ * @see [FunctionCall][com.addonovan.cse3330.sql.FunctionCall]
  */
 object DbEngine {
 
@@ -62,10 +61,9 @@ object DbEngine {
      * account (i.e. its name and profile * picture but have no use for the
      * other information).
      *
-     * ## See Also
-     * * [getProfileById]
-     * * [getProfileByUsername]
-     * * [getPageById]
+     * @see [getProfileById]
+     * @see [getProfileByUsername]
+     * @see [getPageById]
      */
     fun getAccountById(id: Int) = call("FindAccount")
             .supply(id)
@@ -80,13 +78,11 @@ object DbEngine {
     /**
      * Gets the [Profile][com.addonovan.cse3330.model.Profile] by the given `id`.
      *
-     * ## Returns
-     * `null` if no profile has the given `id`, which may mean the account does
-     * not exist, is inactive, or is a page instead.
+     * @return `null` if no profile has the given `id`, which may mean the
+     * account does not exist, is inactive, or is a page instead.
      *
-     * ## See Also
-     * * [getAccountById]
-     * * [getProfileByUsername]
+     * @see [getAccountById]
+     * @see [getProfileByUsername]
      */
     fun getProfileById(id: Int) = call("FindAccount")
             .supply(id)
@@ -101,13 +97,11 @@ object DbEngine {
     /**
      * Gets the [Profile] with the given `username`.
      *
-     * ## Returns
-     * `null` if no profile has the given `username`, which may mean that the
-     * pofile does not exist or is inactive.
+     * @return `null` if no profile has the given `username`, which may mean
+     * that the profile does not exist or is inactive.
      *
-     * ## See also
-     * * [getAccountById]
-     * * [getProfileById]
+     * @see [getAccountById]
+     * @see [getProfileById]
      */
     fun getProfileByUsername(username: String) = call("FindAccount")
             .supplyNull<Int>()
@@ -124,13 +118,11 @@ object DbEngine {
      * function for finding a page by its name, as the page names are not
      * required to be unique.
      *
-     * ## Returns
-     * `null` if no page with the given `id` existed, which may mean the account
-     * does not exist, is inactive, or is a page instead.
+     * @return `null` if no page with the given `id` existed, which may mean the
+     * account does not exist, is inactive, or is a page instead.
      *
-     * ## See Also
-     * * [getAccountById]
-     * * [viewPage]
+     * @see [getAccountById]
+     * @see [viewPage]
      */
     fun getPageById(id: Int) = call("FindPage")
             .supply(id)
@@ -144,8 +136,7 @@ object DbEngine {
     /**
      * Views the page as to increment the number of page views.
      *
-     * ## See Also
-     * * [getPageById]
+     * @see [getPageById]
      */
     fun viewPage(id: Int) = call("ViewPage")
             .supply(id)
@@ -157,8 +148,7 @@ object DbEngine {
      * that this is *anything* that the query deems relevant; therefore, the
      * posts returned might not even be on the *wall* for the given account.
      *
-     * ## See Also
-     * * [createPost]
+     * @see [createPost]
      */
     fun wallOverview(account: Account) = call("FindWallOverviewFor")
             .supply(account.id)
