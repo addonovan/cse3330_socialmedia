@@ -2,6 +2,7 @@ package com.addonovan.cse3330
 
 import com.addonovan.cse3330.model.Account
 import com.addonovan.cse3330.model.Page
+import com.addonovan.cse3330.model.Post
 import com.addonovan.cse3330.model.Profile
 import com.addonovan.cse3330.sql.call
 import java.sql.Connection
@@ -82,6 +83,20 @@ object DbEngine {
     fun viewPage(id: Int) = call("ViewPage")
             .supply(id)
             .executeOn(CONNECTION) {}
+
+    fun createPost(account: Account, post: Post) = call("CreatePost")
+            .supply(account.id)
+            .supply(post.text?.body)
+            .supply(post.media?.url)
+            .supply(post.poll?.question)
+            .supply(post.poll?.endTime)
+            .supply(post.parentPostId)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("No result from CreatePost call!")
+
+                it.getInt(1)
+            }
 
     fun createProfile(profile: Profile) = call("CreateProfile")
             .supply(profile.email)
