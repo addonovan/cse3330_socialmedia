@@ -16,12 +16,13 @@ open class PostController {
     @PostMapping("/submit")
     fun submitPost(
             @RequestParam("posterId") posterId: Int,
+            @RequestParam("wallId") wallId: Int,
             @ModelAttribute post: Post
     ) {
         val account = Account().apply {
             id = posterId
         }
-        DbEngine.createPost(account, post)
+        DbEngine.createPost(account, wallId, post)
     }
 
 }

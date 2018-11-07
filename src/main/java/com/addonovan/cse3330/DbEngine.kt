@@ -93,8 +93,9 @@ object DbEngine {
                 }
             }
 
-    fun createPost(account: Account, post: Post) = call("CreatePost")
+    fun createPost(account: Account, wallId: Int, post: Post) = call("CreatePost")
             .supply(account.id)
+            .supply(wallId)
             .supply(post.text?.body)
             .supply(post.media?.url)
             .supply(post.poll?.question)

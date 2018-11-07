@@ -15,6 +15,8 @@
 
 <div id="PostSubmission">
     <form method="post" action="/post/submit">
+        <input name="wallId" type="number" class="hidden" value="{{profile.id}}">
+
         <label>
             Poster Id:
             <input name="posterId" type="number">
