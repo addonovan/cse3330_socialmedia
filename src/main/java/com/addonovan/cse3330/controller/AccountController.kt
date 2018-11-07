@@ -39,7 +39,7 @@ open class AccountController {
             @ModelAttribute profile: Profile
     ) {
         val newId = DbEngine.createProfile(profile).id
-        response.sendRedirect("/profile/$newId")
+        response.sendRedirect("/account/$newId")
     }
 
     /**
@@ -61,7 +61,7 @@ open class AccountController {
             @ModelAttribute page: Page
     ) {
         val newId = DbEngine.createPage(adminId, page).id
-        response.sendRedirect("/page/$newId")
+        response.sendRedirect("/account/$newId")
     }
 
     //
