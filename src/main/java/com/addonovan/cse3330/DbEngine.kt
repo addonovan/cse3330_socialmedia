@@ -11,6 +11,17 @@ import java.sql.DriverManager
 import java.sql.SQLException
 import java.util.*
 
+/**
+ * The main facade around JDBC.
+ *
+ * This singleton opens and maintains a connection to the PostgreSQL 10.5
+ * database server running the SocialMedia database. The `DbEngine` instance
+ * allows for access to the database through simple functions that invoke
+ * functions (whose contents are available in
+ * `/src/main/resources/db/sp_up.sql`) which are stored on the database.
+ *
+ * @see [FunctionCall][com.addonovan.cse3330.sql.FunctionCall]
+ */
 object DbEngine {
 
     /** A URL used to open a connection to the SocialMedia database.  */
@@ -43,8 +54,20 @@ object DbEngine {
         })
     }
 
+    /**
+     * Generalization of the [getProfileById] and [getPageById], this will find
+     * any [Account][com.addonovan.cse3330.model.Account] by the Id. This is
+     * useful when you just need to display *some* of the information of the
+     * account (i.e. its name and profile * picture but have no use for the
+     * other information).
+     *
+     * @see [getProfileById]
+     * @see [getProfileByUsername]
+     * @see [getPageById]
+     */
     fun getAccountById(id: Int) = call("FindAccount")
             .supply(id)
+            .supplyNull<String>()
             .executeOn(CONNECTION) {
                 if (it.next())
                     Account().apply { fromRow(it) }
@@ -52,6 +75,15 @@ object DbEngine {
                     null
             }
 
+    /**
+     * Gets the [Profile][com.addonovan.cse3330.model.Profile] by the given `id`.
+     *
+     * @return `null` if no profile has the given `id`, which may mean the
+     * account does not exist, is inactive, or is a page instead.
+     *
+     * @see [getAccountById]
+     * @see [getProfileByUsername]
+     */
     fun getProfileById(id: Int) = call("FindAccount")
             .supply(id)
             .supplyNull<String>()
@@ -62,6 +94,15 @@ object DbEngine {
                     null
             }
 
+    /**
+     * Gets the [Profile] with the given `username`.
+     *
+     * @return `null` if no profile has the given `username`, which may mean
+     * that the profile does not exist or is inactive.
+     *
+     * @see [getAccountById]
+     * @see [getProfileById]
+     */
     fun getProfileByUsername(username: String) = call("FindAccount")
             .supplyNull<Int>()
             .supply(username)
@@ -72,6 +113,17 @@ object DbEngine {
                     null
             }
 
+    /**
+     * Gets the [Page] with the given `id`. Note that there is not corresponding
+     * function for finding a page by its name, as the page names are not
+     * required to be unique.
+     *
+     * @return `null` if no page with the given `id` existed, which may mean the
+     * account does not exist, is inactive, or is a page instead.
+     *
+     * @see [getAccountById]
+     * @see [viewPage]
+     */
     fun getPageById(id: Int) = call("FindPage")
             .supply(id)
             .executeOn(CONNECTION) {
@@ -81,10 +133,23 @@ object DbEngine {
                     null
             }
 
+    /**
+     * Views the page as to increment the number of page views.
+     *
+     * @see [getPageById]
+     */
     fun viewPage(id: Int) = call("ViewPage")
             .supply(id)
             .executeOn(CONNECTION) {}
 
+    /**
+     * Constructs a wall overview (i.e. a list of
+     * [Posts][com.addonovan.cse3330.model.Post]) of the given `account`. Note
+     * that this is *anything* that the query deems relevant; therefore, the
+     * posts returned might not even be on the *wall* for the given account.
+     *
+     * @see [createPost]
+     */
     fun wallOverview(account: Account) = call("FindWallOverviewFor")
             .supply(account.id)
             .executeOn(CONNECTION) {
@@ -93,6 +158,10 @@ object DbEngine {
                 }
             }
 
+    /**
+     * Creates a new `post` on the wall with the given `wallID`, authored by
+     * the given `account`.
+     */
     fun createPost(account: Account, wallId: Int, post: Post) = call("CreatePost")
             .supply(account.id)
             .supply(wallId)
@@ -108,6 +177,11 @@ object DbEngine {
                 it.getInt(1)
             }
 
+    /**
+     * Inserts the new [profile][com.addonovan.cse3330.model.Profile] into the
+     * database and returns the model built from querying the database with its
+     * id after insertion.
+     */
     fun createProfile(profile: Profile) = call("CreateProfile")
             .supply(profile.email)
             .supply(profile.phoneNumber)
@@ -122,6 +196,11 @@ object DbEngine {
                 getProfileById(it.getInt(1))!!
             }
 
+    /**
+     * Inserts the new [page][com.addonovan.cse3330.model.Page] into the
+     * database and returns the model built from querying the database with its
+     * id after insertion.
+     */
     fun createPage(profileId: Int, page: Page) = call("CreatePage")
             .supply(profileId)
             .supply(page.email)

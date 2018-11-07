@@ -4,20 +4,30 @@ import java.lang.IllegalStateException
 import java.sql.ResultSet
 import java.sql.Timestamp
 
+/**
+ * The class model representing the SQL `Post` entity.
+ */
 class Post : SqlEntity {
 
+    /** The unique identifier for this post. */
     var id: Int = 0
 
+    /** The account ID of the account which posted this. */
     var posterId: Int = 0
 
+    /** The text of this post, if any. */
     var text: TextBody? = null
 
+    /** The media of this post, if any. */
     var media: MediaBody? = null
 
+    /** The poll of this post, if any. */
     var poll: PollBody? = null
 
+    /** The ID of the post this is a reply to (or `null` if it's a top-level comment) */
     var parentPostId: Int? = null
 
+    /** When this post was written. */
     lateinit var createTime: Timestamp
 
     //
@@ -67,10 +77,20 @@ class Post : SqlEntity {
     // Body classes
     //
 
+    /**
+     * A wrapper around the [body] text of this post.
+     */
     data class TextBody(val body: String)
 
+    /**
+     * A wrapper around the media [url] of this post.
+     */
     data class MediaBody(val url: String)
 
+    /**
+     * A wrapper around the poll-related columns ([question], [endTime]) of this
+     * post.
+     */
     data class PollBody(val question: String, val endTime: Timestamp)
 
 }
