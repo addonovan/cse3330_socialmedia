@@ -1,5 +1,6 @@
 package com.addonovan.cse3330
 
+import com.addonovan.cse3330.model.Account
 import com.addonovan.cse3330.model.Page
 import com.addonovan.cse3330.model.Profile
 import com.addonovan.cse3330.sql.call
@@ -39,6 +40,15 @@ object DbEngine {
             }
         })
     }
+
+    fun getAccountById(id: Int) = call("FindAccount")
+            .supply(id)
+            .executeOn(CONNECTION) {
+                if (it.next())
+                    Account().apply { fromRow(it) }
+                else
+                    null
+            }
 
     fun getProfileById(id: Int) = call("FindProfile")
             .supply(id)
