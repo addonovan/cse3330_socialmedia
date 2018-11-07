@@ -157,7 +157,7 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA "public" TO "application";
 -- Insert Testing Data
 --
 
-INSERT INTO RefEmotion
+INSERT INTO "RefEmotion"
     (Name, Image)
 VALUES
     ('Like', '//media/reactions/like.png'),
