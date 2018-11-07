@@ -52,7 +52,7 @@ object DbEngine {
                     null
             }
 
-    fun getProfileById(id: Int) = call("FindProfile")
+    fun getProfileById(id: Int) = call("FindAccount")
             .supply(id)
             .supplyNull<String>()
             .executeOn(CONNECTION) {
@@ -62,7 +62,7 @@ object DbEngine {
                     null
             }
 
-    fun getProfileByUsername(username: String) = call("FindProfile")
+    fun getProfileByUsername(username: String) = call("FindAccount")
             .supplyNull<Int>()
             .supply(username)
             .executeOn(CONNECTION) {
