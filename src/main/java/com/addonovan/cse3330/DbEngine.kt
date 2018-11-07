@@ -84,6 +84,18 @@ object DbEngine {
             .supply(id)
             .executeOn(CONNECTION) {}
 
+    fun wallOverview(account: Account) = call("FindWallOverviewFor")
+            .supply(account.id)
+            .executeOn(CONNECTION) {
+                val list = ArrayList<Post>()
+
+                while (it.next()) {
+                    list += Post().apply { fromRow(it) }
+                }
+
+                list
+            }
+
     fun createPost(account: Account, post: Post) = call("CreatePost")
             .supply(account.id)
             .supply(post.text?.body)
