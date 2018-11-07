@@ -86,13 +86,13 @@ open class AccountController {
      * Updates the [model] with the given [profile] information, then returns
      * the name of the relevant template file.
      */
-    private fun pageOverview(model: Model, profile: Account?) = when (profile) {
+    private fun pageOverview(model: Model, account: Account?) = when (account) {
         null -> "no_profile"
 
         else -> {
-            val overview = DbEngine.wallOverview(profile)
+            val overview = DbEngine.wallOverview(account)
 
-            model.addAttribute("profile", profile)
+            model.addAttribute("account", account)
             model.addAttribute("overview", overview)
             "account_overview"
         }
