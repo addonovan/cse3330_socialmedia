@@ -31,7 +31,6 @@ BEGIN
 
     RETURN QUERY
         SELECT * FROM "Post" p
-        INNER JOIN "Account" a ON a.id = p.posterid
         WHERE p.wallid = AccountId;
 
 END
