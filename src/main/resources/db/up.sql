@@ -61,6 +61,7 @@ CREATE TABLE "Event" (
 CREATE TABLE "Post" (
     Id              SERIAL          PRIMARY KEY,
     PosterId        INTEGER         NOT NULL REFERENCES "Account"(Id),
+    AccountId       INTEGER         NOT NULL REFERENCES "Account"(Id),
     Message         VARCHAR(4096),
     MediaURL        VARCHAR(2083),
     PollQuestion    VARCHAR(128),
