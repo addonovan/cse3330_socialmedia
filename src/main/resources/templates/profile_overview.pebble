@@ -18,12 +18,12 @@
         <label>
             Poster Id:
             <input name="posterId" type="number">
-        </label>
+        </label><br/>
 
         <label>
             Comment:
             <input name="text" type="text">
-        </label>
+        </label><br/>
 
         <button name="register" type="submit" value="Submit">Post</button>
     </form>
