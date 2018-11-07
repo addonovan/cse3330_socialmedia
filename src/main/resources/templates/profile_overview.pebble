@@ -32,7 +32,12 @@
 </div>
 
 <div id="Overview">
-    Put overview items here
+    {% for post in overview %}
+    <p> <b>Posted by: </b> {{post.posterId}} </p>
+    <p>
+        {{post.text.body}}
+    </p>
+    {% endfor %}
 </div>
 
 </body>
