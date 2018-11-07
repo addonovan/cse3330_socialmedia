@@ -158,7 +158,7 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA "public" TO "application";
 --
 
 INSERT INTO "RefEmotion"
-    (Name, Image)
+    (Name, ImageURL)
 VALUES
     ('Like', '//media/reactions/like.png'),
     ('Anger', '//media/reactions/anger.png'),
