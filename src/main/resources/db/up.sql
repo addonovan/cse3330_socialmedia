@@ -35,7 +35,7 @@ CREATE TABLE "Profile" (
     AccountId       INTEGER         PRIMARY KEY REFERENCES "Account"(Id),
     FirstName       VARCHAR(32)     NOT NULL,
     LastName        VARCHAR(32)     NOT NULL,
-    Username        VARCHAR(32)     NOT NULL,
+    Username        VARCHAR(32)     NOT NULL UNIQUE,
     Password        VARCHAR(32)     NOT NULL,
     LanguageId      INTEGER         NOT NULL REFERENCES "RefLanguage"(Id)
 );
