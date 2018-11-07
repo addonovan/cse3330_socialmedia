@@ -129,8 +129,9 @@ object DbEngine {
      * @see [getAccountById]
      * @see [viewPage]
      */
-    fun getPageById(id: Int) = call("FindPage")
+    fun getPageById(id: Int) = call("FindAccount")
             .supply(id)
+            .supplyNull<String>()
             .executeOn(CONNECTION) {
                 if (it.next())
                     Page().apply { fromRow(it) }
