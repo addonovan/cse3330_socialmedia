@@ -1,3 +1,18 @@
+CREATE OR REPLACE FUNCTION FindWallOverviewFor(
+    AccountId           INTEGER
+) RETURNS SETOF "Post"
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    RETURN QUERY
+        SELECT * FROM "Post" p
+        INNER JOIN "Account" a ON a.id = p.posterid
+        WHERE p.wallid = AccountId;
+
+END
+$$;
+
 CREATE OR REPLACE FUNCTION FindProfile(
     DesiredId       INTEGER,
     DesiredUsername VARCHAR(32)
