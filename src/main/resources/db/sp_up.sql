@@ -10,13 +10,18 @@ CREATE OR REPLACE FUNCTION CreatePost(
 LANGUAGE plpgsql
 AS $$
 
+DECLARE
+    post_id INTEGER;
+
 BEGIN
 
     INSERT INTO "Post"
         (PosterId, WallId, Message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
     VALUES
-       (AccountId, WallId, Message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
-    RETURNING "Post".Id;
+        (AccountId, WallId, Message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
+    RETURNING "Post".Id INTO post_id;
+
+    RETURN post_id;
 
 
 END
