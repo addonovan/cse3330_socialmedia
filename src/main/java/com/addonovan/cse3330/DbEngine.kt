@@ -5,6 +5,7 @@ import com.addonovan.cse3330.model.Page
 import com.addonovan.cse3330.model.Post
 import com.addonovan.cse3330.model.Profile
 import com.addonovan.cse3330.sql.call
+import com.addonovan.cse3330.sql.map
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
@@ -87,13 +88,9 @@ object DbEngine {
     fun wallOverview(account: Account) = call("FindWallOverviewFor")
             .supply(account.id)
             .executeOn(CONNECTION) {
-                val list = ArrayList<Post>()
-
-                while (it.next()) {
-                    list += Post().apply { fromRow(it) }
+                it.map {
+                    Post().apply { fromRow(it) }
                 }
-
-                list
             }
 
     fun createPost(account: Account, post: Post) = call("CreatePost")
