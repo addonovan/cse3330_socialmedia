@@ -6,16 +6,16 @@
 
 <body>
 <div id="Account">
-    <img id="headerImage" src="{{profile.headerImageURL}}"/>
+    <img id="headerImage" src="{{account.headerImageURL}}"/>
     <span id="AccountInfo">
-        <img class="profileImage" src="{{profile.profileImageURL}}"/>
-        {{profile.firstName}} {{profile.lastName}}
+        <img class="profileImage" src="{{account.profileImageURL}}"/>
+        {{account.name}}
     </span>
 </div>
 
 <div id="PostSubmission">
     <form method="post" action="/post/submit">
-        <input name="wallId" type="number" class="hidden" value="{{profile.id}}">
+        <input name="wallId" type="number" style="visibility: hidden" value="{{account.id}}">
 
         <label>
             Poster Id:
