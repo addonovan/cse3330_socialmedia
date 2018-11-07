@@ -1,5 +1,6 @@
 package com.addonovan.cse3330.model
 
+import java.lang.IllegalStateException
 import java.sql.ResultSet
 import java.sql.Timestamp
 
@@ -47,5 +48,16 @@ open class Account : SqlEntity {
         isActive = row.getBoolean("IsActive")
         createdTime = row.getTimestamp("CreatedTime")
     }
+
+    /**
+     * Computes the display name for this account, if this account has that
+     * information.
+     */
+    val Account.name: String
+        get() = when (this) {
+            is Profile -> "$firstName $lastName"
+            is Page -> name
+            else -> throw IllegalStateException("Account does not have enough information to find its name")
+        }
 
 }
