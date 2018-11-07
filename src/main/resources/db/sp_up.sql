@@ -65,7 +65,7 @@ BEGIN
     RETURN QUERY
     SELECT
         prof.firstname, prof.lastname, prof.username, prof.password, prof.languageid,
-        p.name, p.description, p.viewcount,
+        page.name, page.description, page.viewcount,
         a.id, a.email, a.phonenumber, a.profileimageurl, a.headerimageurl,
         a.isactive, a.isprivate, a.createdtime
     FROM "Account" a
