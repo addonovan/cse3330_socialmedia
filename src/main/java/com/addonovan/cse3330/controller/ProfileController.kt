@@ -24,7 +24,10 @@ open class ProfileController {
         null -> "no_profile"
 
         else -> {
+            val overview = DbEngine.wallOverview(profile)
+
             model.addAttribute("profile", profile)
+            model.addAttribute("overview", overview)
             "profile_overview"
         }
     }
