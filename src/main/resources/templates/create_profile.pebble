@@ -1,33 +1,33 @@
-<form method="post" action="/account/register">
+<form method="post" action="/account/register/profile">
     <label>
         Email:
         <input name="Email" type="text">
-    </label>
+    </label><br/>
 
     <label>
         Phone number:
         <input name="PhoneNumber" type="text">
-    </label>
+    </label><br/>
 
     <label>
         First name:
         <input name="FirstName" type="text">
-    </label>
+    </label><br/>
 
     <label>
         Last name:
         <input name="LastName" type="text">
-    </label>
+    </label><br/>
 
     <label>
         Username:
         <input name="Username" type="text">
-    </label>
+    </label><br/>
 
     <label>
         Password:
         <input name="Password" type="password">
-    </label>
+    </label><br/>
 
     <button name="register" type="submit" value="Submit">Register</button>
 </form>
