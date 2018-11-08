@@ -17,7 +17,7 @@ DECLARE
 BEGIN
 
     INSERT INTO "Post"
-        (PosterId, WallId, message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
+        (PosterId, WallId, PostMessage, MediaURL, PollQuestion, PollEndTime, ParentPostId)
     VALUES
         (AccountId, WallId, message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
     RETURNING "Post".PostId INTO post_id;
@@ -51,8 +51,8 @@ CREATE OR REPLACE FUNCTION FindAccount(
     Username            "Profile".Username%TYPE,
     Password            "Profile".Password%TYPE,
     LanguageId          "Profile".LanguageId%TYPE,
-    Name                "Page".Name%TYPE,
-    Description         "Page".Description%TYPE,
+    Name                "Page".PageName%TYPE,
+    Description         "Page".PageDesc%TYPE,
     ViewCount           "Page".ViewCount%TYPE,
     Id                  "Account".AccountId%TYPE,
     Email               "Account".Email%TYPE,
@@ -70,7 +70,7 @@ BEGIN
     RETURN QUERY
     SELECT
            prof.firstname, prof.lastname, prof.username, prof.password, prof.languageid,
-           page.name, page.description, page.viewcount,
+           page.pagename, page.pagedesc, page.viewcount,
            a.AccountId, a.email, a.phonenumber, a.profileimageurl, a.headerimageurl,
            a.isactive, a.isprivate, a.createdtime
     FROM "Account" a
@@ -89,8 +89,8 @@ CREATE OR REPLACE FUNCTION CreatePage(
     AdminId     INTEGER,
     Email       "Account".Email%TYPE,
     PhoneNumber "Account".PhoneNumber%TYPE,
-    Name        "Page".Name%TYPE,
-    Description "Page".Description%TYPE
+    Name        "Page".PageName%TYPE,
+    Description "Page".PageDesc%TYPE
 ) RETURNS INTEGER
 LANGUAGE plpgsql
 AS $$

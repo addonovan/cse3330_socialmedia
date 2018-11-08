@@ -19,8 +19,8 @@ class Page : Account() {
 
     override fun fromRow(row: ResultSet) {
         super.fromRow(row)
-        name = row.getString("Name")
-        description = row.getString("Description")
+        name = row.getString("PageName")
+        description = row.getString("PageDesc")
         viewCount = row.getInt("ViewCount")
     }
 

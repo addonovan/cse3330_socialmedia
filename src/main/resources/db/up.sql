@@ -42,8 +42,8 @@ CREATE TABLE "Profile" (
 
 CREATE TABLE "Page" (
     AccountId       INTEGER         PRIMARY KEY REFERENCES "Account"(AccountId),
-    Name            VARCHAR(64)     NOT NULL,
-    Description     VARCHAR(512)    NOT NULL,
+    PageName        VARCHAR(64)     NOT NULL,
+    PageDesc        VARCHAR(512)    NOT NULL,
     ViewCount       INTEGER         NOT NULL DEFAULT 0
 );
 

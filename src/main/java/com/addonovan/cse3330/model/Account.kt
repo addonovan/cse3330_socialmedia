@@ -39,7 +39,7 @@ open class Account : SqlEntity {
     lateinit var createdTime: Timestamp
 
     override fun fromRow(row: ResultSet) {
-        id = row.getInt("Id")
+        id = row.getInt("AccountId")
         email = row.getString("Email")
         phoneNumber = row.getString("PhoneNumber")
         profileImageURL = row.getString("ProfileImageURL")
