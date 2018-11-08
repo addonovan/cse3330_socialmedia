@@ -6,7 +6,7 @@ CREATE TABLE "RefLanguage" (
 );
 
 CREATE TABLE "RefInterfaceText" (
-    LanguageId      INTEGER         NOT NULL REFERENCES "RefLanguage"(Id),
+    LanguageId      INTEGER         NOT NULL REFERENCES "RefLanguage"(languageid),
     "Key"           VARCHAR(64)     NOT NULL,
     Format          VARCHAR(2048)   NOT NULL,
 
@@ -32,16 +32,16 @@ CREATE TABLE "Account" (
 );
 
 CREATE TABLE "Profile" (
-    AccountId       INTEGER         PRIMARY KEY REFERENCES "Account"(Id),
+    AccountId       INTEGER         PRIMARY KEY REFERENCES "Account"(AccountId),
     FirstName       VARCHAR(32)     NOT NULL,
     LastName        VARCHAR(32)     NOT NULL,
     Username        VARCHAR(32)     NOT NULL UNIQUE,
     Password        VARCHAR(32)     NOT NULL,
-    LanguageId      INTEGER         NOT NULL REFERENCES "RefLanguage"(Id)
+    LanguageId      INTEGER         NOT NULL REFERENCES "RefLanguage"(languageid)
 );
 
 CREATE TABLE "Page" (
-    AccountId       INTEGER         PRIMARY KEY REFERENCES "Account"(Id),
+    AccountId       INTEGER         PRIMARY KEY REFERENCES "Account"(AccountId),
     Name            VARCHAR(64)     NOT NULL,
     Description     VARCHAR(512)    NOT NULL,
     ViewCount       INTEGER         NOT NULL DEFAULT 0
@@ -50,7 +50,7 @@ CREATE TABLE "Page" (
 -- Content
 CREATE TABLE "Event" (
     Id              SERIAL          PRIMARY KEY,
-    HostId          INTEGER         NOT NULL REFERENCES "Account"(Id),
+    HostId          INTEGER         NOT NULL REFERENCES "Account"(AccountId),
     Name            VARCHAR(128)    NOT NULL,
     Description     VARCHAR(128)    NOT NULL,
     StartTime       TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -60,13 +60,13 @@ CREATE TABLE "Event" (
 
 CREATE TABLE "Post" (
     Id              SERIAL          PRIMARY KEY,
-    PosterId        INTEGER         NOT NULL REFERENCES "Account"(Id),
-    WallId          INTEGER         NOT NULL REFERENCES "Account"(Id),
+    PosterId        INTEGER         NOT NULL REFERENCES "Account"(AccountId),
+    WallId          INTEGER         NOT NULL REFERENCES "Account"(AccountId),
     Message         VARCHAR(4096),
     MediaURL        VARCHAR(2083),
     PollQuestion    VARCHAR(128),
     PollEndTime     TIMESTAMP,
-    ParentPostId    INTEGER         REFERENCES "Post"(Id),
+    ParentPostId    INTEGER         REFERENCES "Post"(postid),
     CreateTime      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT post_has_content CHECK (
@@ -82,7 +82,7 @@ CREATE TABLE "Post" (
 
 CREATE TABLE "PollAnswer" (
     Id              SERIAL          PRIMARY KEY,
-    PostId          INTEGER         NOT NULL REFERENCES "Post"(Id),
+    PostId          INTEGER         NOT NULL REFERENCES "Post"(postid),
     Text            VARCHAR(32)     NOT NULL
 );
 
@@ -97,7 +97,7 @@ CREATE TABLE "Group" (
 CREATE TABLE "GroupMessage" (
     Id              SERIAL          PRIMARY KEY,
     SenderId        INTEGER         NOT NULL REFERENCES "Profile"(AccountId),
-    GroupId         INTEGER         NOT NULL REFERENCES "Group"(Id),
+    GroupId         INTEGER         NOT NULL REFERENCES "Group"(groupid),
     Message         VARCHAR(4096),
     MediaURL        VARCHAR(2083),
     SendTime        TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -111,23 +111,23 @@ CREATE TABLE "GroupMessage" (
 -- Relations
 CREATE TABLE "GroupMember" (
     ProfileId       INTEGER         NOT NULL REFERENCES "Profile"(AccountId),
-    GroupId         INTEGER         NOT NULL REFERENCES "Group"(Id)
+    GroupId         INTEGER         NOT NULL REFERENCES "Group"(groupid)
 );
 
 CREATE TABLE "PollVote" (
-    PollId          INTEGER         NOT NULL REFERENCES "Post"(Id),
+    PollId          INTEGER         NOT NULL REFERENCES "Post"(postid),
     PollAnswerId    INTEGER         NOT NULL REFERENCES "PollAnswer"(Id),
     ProfileId       INTEGER         NOT NULL REFERENCES "Profile"(AccountId)
 );
 
 CREATE TABLE "PostReaction" (
-    PostId          INTEGER         NOT NULL REFERENCES "Post"(Id),
+    PostId          INTEGER         NOT NULL REFERENCES "Post"(postid),
     ProfileId       INTEGER         NOT NULL REFERENCES "Profile"(AccountId),
-    EmotionId       INTEGER         NOT NULL REFERENCES "RefEmotion"(Id)
+    EmotionId       INTEGER         NOT NULL REFERENCES "RefEmotion"(emotionid)
 );
 
 CREATE TABLE "EventInterest" (
-    EventId         INTEGER         NOT NULL REFERENCES "Event"(Id),
+    EventId         INTEGER         NOT NULL REFERENCES "Event"(eventid),
     ProfileId       INTEGER         NOT NULL REFERENCES "Profile"(AccountId),
     IsAttending     BOOLEAN         NOT NULL
 );
@@ -158,7 +158,7 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA "public" TO "application";
 --
 
 INSERT INTO "RefEmotion"
-    (Name, ImageURL)
+    (emotionname, emotionimageurl)
 VALUES
     ('Like', '//media/reactions/like.png'),
     ('Anger', '//media/reactions/anger.png'),
@@ -166,7 +166,7 @@ VALUES
     ('Love', '//media/reactions/love.png');
 
 INSERT INTO "RefLanguage"
-    (LocaleCode, Name)
+    (LocaleCode, languagename)
 VALUES
     ('en_us', 'English (United States)'),
     ('de_de', 'Deutsch (Deutschland)'),

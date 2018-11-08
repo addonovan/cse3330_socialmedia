@@ -16,13 +16,12 @@ DECLARE
 BEGIN
 
     INSERT INTO "Post"
-        (PosterId, WallId, Message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
+        (PosterId, WallId, message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
     VALUES
-        (AccountId, WallId, Message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
+        (AccountId, WallId, message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
     RETURNING "Post".Id INTO post_id;
 
     RETURN post_id;
-
 
 END
 $$;
@@ -54,7 +53,7 @@ CREATE OR REPLACE FUNCTION FindAccount(
     Name                "Page".Name%TYPE,
     Description         "Page".Description%TYPE,
     ViewCount           "Page".ViewCount%TYPE,
-    Id                  "Account".Id%TYPE,
+    Id                  "Account".AccountId%TYPE,
     Email               "Account".Email%TYPE,
     PhoneNumber         "Account".PhoneNumber%TYPE,
     ProfileImageURL     "Account".ProfileImageURL%TYPE,
@@ -68,18 +67,18 @@ AS $$
 BEGIN
 
     RETURN QUERY
-    SELECT
-        prof.firstname, prof.lastname, prof.username, prof.password, prof.languageid,
-        page.name, page.description, page.viewcount,
-        a.id, a.email, a.phonenumber, a.profileimageurl, a.headerimageurl,
-        a.isactive, a.isprivate, a.createdtime
-    FROM "Account" a
-    LEFT JOIN "Profile" prof ON prof.accountid = a.id
-    LEFT JOIN "Page" page ON page.accountid = a.id
-    WHERE
-      (DesiredId IS NULL OR a.id = DesiredId)
-      AND
-      (DesiredUsername IS NULL OR prof.username = DesiredUsername);
+        SELECT
+            prof.firstname, prof.lastname, prof.username, prof.password, prof.languageid,
+            page.name, page.description, page.viewcount,
+            a.AccountId, a.email, a.phonenumber, a.profileimageurl, a.headerimageurl,
+            a.isactive, a.isprivate, a.createdtime
+        FROM "Account" a
+        LEFT JOIN "Profile" prof ON prof.accountid = a.AccountId
+        LEFT JOIN "Page" page ON page.accountid = a.AccountId
+        WHERE
+            (DesiredId IS NULL OR a.AccountId = DesiredId)
+            AND
+            (DesiredUsername IS NULL OR prof.username = DesiredUsername);
 
 
 END
@@ -145,23 +144,25 @@ CREATE OR REPLACE FUNCTION CreateProfile(
 LANGUAGE plpgsql
 AS $$
 
-    DECLARE
-        account_id INTEGER := -1;
+DECLARE
+    account_id INTEGER := -1;
 
-    BEGIN
+BEGIN
 
-        INSERT INTO "Account"
-          (email, phonenumber, isprivate)
-        VALUES
-          (Email, PhoneNumber, FALSE)
-        RETURNING Id INTO account_id;
+    INSERT INTO "Account"
+        (email, phonenumber, isprivate)
+    VALUES
+        (Email, PhoneNumber, FALSE)
+    RETURNING Id INTO account_id;
 
-        INSERT INTO "Profile"
-          (accountid, firstname, lastname, username, Password, languageid)
-        VALUES
-          (account_id, FirstName, LastName, Username, Password, 1);
+    INSERT INTO "Profile"
+        (accountid, firstname, lastname, username, Password, languageid)
+    VALUES
+        (account_id, FirstName, LastName, Username, Password, 1);
 
-        RETURN account_id;
+    RETURN account_id;
 
-    END
+END
 $$;
+
+
