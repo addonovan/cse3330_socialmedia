@@ -1,8 +1,9 @@
+
 CREATE OR REPLACE FUNCTION CreatePost(
     AccountId           INTEGER,
     WallId              INTEGER,
-    Message             "Post".Message%TYPE,
-    MediaURL            "Post".MediaURL%TYPE,
+    Message             "Post".PostMessage%TYPE,
+    MediaURL            "Post".PostMediaURL%TYPE,
     PollQuestion        "Post".PollQuestion%TYPE,
     PollEndTime         "Post".PollEndTime%TYPE,
     ParentPostId        INTEGER
@@ -19,7 +20,7 @@ BEGIN
         (PosterId, WallId, message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
     VALUES
         (AccountId, WallId, message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
-    RETURNING "Post".Id INTO post_id;
+    RETURNING "Post".PostId INTO post_id;
 
     RETURN post_id;
 
@@ -36,7 +37,7 @@ BEGIN
     RETURN QUERY
     SELECT * FROM "Post" p
     WHERE p.wallid = AccountId
-    ORDER BY p.createtime DESC;
+    ORDER BY p.createdtime DESC;
 
 END
 $$;
@@ -67,18 +68,18 @@ AS $$
 BEGIN
 
     RETURN QUERY
-        SELECT
-            prof.firstname, prof.lastname, prof.username, prof.password, prof.languageid,
-            page.name, page.description, page.viewcount,
-            a.AccountId, a.email, a.phonenumber, a.profileimageurl, a.headerimageurl,
-            a.isactive, a.isprivate, a.createdtime
-        FROM "Account" a
-        LEFT JOIN "Profile" prof ON prof.accountid = a.AccountId
-        LEFT JOIN "Page" page ON page.accountid = a.AccountId
-        WHERE
-            (DesiredId IS NULL OR a.AccountId = DesiredId)
-            AND
-            (DesiredUsername IS NULL OR prof.username = DesiredUsername);
+    SELECT
+           prof.firstname, prof.lastname, prof.username, prof.password, prof.languageid,
+           page.name, page.description, page.viewcount,
+           a.AccountId, a.email, a.phonenumber, a.profileimageurl, a.headerimageurl,
+           a.isactive, a.isprivate, a.createdtime
+    FROM "Account" a
+    LEFT JOIN "Profile" prof ON prof.accountid = a.AccountId
+    LEFT JOIN "Page" page ON page.accountid = a.AccountId
+    WHERE
+        (DesiredId IS NULL OR a.AccountId = DesiredId)
+        AND
+        (DesiredUsername IS NULL OR prof.username = DesiredUsername);
 
 
 END
@@ -103,7 +104,7 @@ BEGIN
         (email, phonenumber, isprivate)
     VALUES
         (Email, PhoneNumber, FALSE)
-    RETURNING Id INTO account_id;
+    RETURNING AccountId INTO account_id;
 
     INSERT INTO "Page"
         (accountid, name, description)
@@ -153,7 +154,7 @@ BEGIN
         (email, phonenumber, isprivate)
     VALUES
         (Email, PhoneNumber, FALSE)
-    RETURNING Id INTO account_id;
+    RETURNING AccountId INTO account_id;
 
     INSERT INTO "Profile"
         (accountid, firstname, lastname, username, Password, languageid)
