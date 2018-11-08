@@ -1,4 +1,3 @@
-
 CREATE OR REPLACE FUNCTION CreatePost(
     AccountId           INTEGER,
     WallId              INTEGER,
@@ -51,10 +50,10 @@ CREATE OR REPLACE FUNCTION FindAccount(
     Username            "Profile".Username%TYPE,
     Password            "Profile".Password%TYPE,
     LanguageId          "Profile".LanguageId%TYPE,
-    Name                "Page".PageName%TYPE,
-    Description         "Page".PageDesc%TYPE,
+    PageName            "Page".PageName%TYPE,
+    PageDesc            "Page".PageDesc%TYPE,
     ViewCount           "Page".ViewCount%TYPE,
-    Id                  "Account".AccountId%TYPE,
+    AccountId           "Account".AccountId%TYPE,
     Email               "Account".Email%TYPE,
     PhoneNumber         "Account".PhoneNumber%TYPE,
     ProfileImageURL     "Account".ProfileImageURL%TYPE,
