@@ -35,8 +35,9 @@ AS $$
 BEGIN
 
     RETURN QUERY
-        SELECT * FROM "Post" p
-        WHERE p.wallid = AccountId;
+    SELECT * FROM "Post" p
+    WHERE p.wallid = AccountId
+    ORDER BY p.createtime DESC;
 
 END
 $$;
