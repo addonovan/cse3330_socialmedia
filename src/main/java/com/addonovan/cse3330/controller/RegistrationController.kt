@@ -3,6 +3,7 @@ package com.addonovan.cse3330.controller
 import com.addonovan.cse3330.DbEngine
 import com.addonovan.cse3330.model.Page
 import com.addonovan.cse3330.model.Profile
+import com.addonovan.cse3330.signIn
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -29,8 +30,9 @@ open class RegistrationController {
             response: HttpServletResponse,
             @ModelAttribute profile: Profile
     ) {
-        val newId = DbEngine.createProfile(profile).id
-        response.sendRedirect("/account/$newId")
+        val newProfile = DbEngine.createProfile(profile)
+        response.signIn(newProfile)
+        response.sendRedirect("/")
     }
 
     /**
