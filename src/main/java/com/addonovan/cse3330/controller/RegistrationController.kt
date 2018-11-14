@@ -18,7 +18,7 @@ open class RegistrationController {
     @GetMapping("/profile")
     fun profileRegistrationForm(model: Model): String {
         model.addAttribute("profile", Profile())
-        return "create_profile"
+        return "register/profile"
     }
 
     /**
@@ -39,7 +39,7 @@ open class RegistrationController {
     @GetMapping("/page")
     fun pageRegistrationForm(model: Model): String {
         model.addAttribute("page", Page())
-        return "create_page"
+        return "register/page"
     }
 
     /**
