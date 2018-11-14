@@ -143,7 +143,6 @@ object DbEngine {
                     .supply(follower.id)
                     .supply(followee.id)
                     .supply(following)
-                    .supply(followee.isPrivate)
                     .executeOn(CONNECTION) {}
 
     /**
