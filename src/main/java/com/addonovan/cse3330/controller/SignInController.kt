@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse
 open class SignInController {
 
     @GetMapping("/signin")
-    fun signInForm() = "signin/login.pebble"
+    fun signInForm() = "signin/login"
 
     @PostMapping("/signin")
     fun signIn(
@@ -28,13 +28,13 @@ open class SignInController {
         // if the signin failed, just send 'em back to the login screen
         if (user == null || user.password != password) {
             model.addAttribute("errorReason", "Invalid username or password!")
-            return "signin/login.pebble"
+            return "signin/login"
         }
 
         // otherwise, log the user in, then send them to the homepage
         response.signIn(user)
         response.sendRedirect("/")
-        return "signin/success.pebble"
+        return "signin/success"
     }
 
     @PostMapping("/signout")
