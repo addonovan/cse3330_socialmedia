@@ -1,0 +1,13 @@
+<form method="post" action="/signin">
+    <label>
+        Username:
+        <input name="username" type="text">
+    </label><br/>
+
+    <label>
+        Password
+        <input name="password" type="password">
+    </label><br/>
+
+    <input type="submit" value="Login">
+</form>
