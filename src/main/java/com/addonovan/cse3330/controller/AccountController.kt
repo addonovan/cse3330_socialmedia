@@ -21,48 +21,6 @@ open class AccountController {
     // Registration
     //
 
-    /**
-     * Provides the form to register a new profile.
-     */
-    @GetMapping("/register/profile")
-    fun registrationForm(model: Model): String {
-        model.addAttribute("profile", Profile())
-        return "create_profile"
-    }
-
-    /**
-     * Handles the submission of a profile registration request.
-     */
-    @PostMapping("/register/profile")
-    fun registrationSubmit(
-            response: HttpServletResponse,
-            @ModelAttribute profile: Profile
-    ) {
-        val newId = DbEngine.createProfile(profile).id
-        response.sendRedirect("/account/$newId")
-    }
-
-    /**
-     * Provides the form to create a new page.
-     */
-    @GetMapping("/register/page")
-    fun pageCreationForm(model: Model): String {
-        model.addAttribute("page", Page())
-        return "create_page"
-    }
-
-    /**
-     * Handles the submission of a page creation request.
-     */
-    @PostMapping("/register/page")
-    fun pageCreationSubmit(
-            response: HttpServletResponse,
-            @RequestParam("adminId") adminId: Int,
-            @ModelAttribute page: Page
-    ) {
-        val newId = DbEngine.createPage(adminId, page).id
-        response.sendRedirect("/account/$newId")
-    }
 
     //
     // Account Overviews
