@@ -1,0 +1,33 @@
+<html>
+
+    <head>
+        <title>{% block title %} CSE3330 {% endblock %}</title>
+    </head>
+
+    <body>
+
+        <nav>
+            <ul>
+                <li> <a href="/">Home</a> </li>
+                {% if user %}
+                <li> Howdy, {{user.fullName}} </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <div id="Main">
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+
+        <footer>
+            {% block footer %}
+            Copyright &copy; 2018 -- Austin D. Donovan
+            {% endblock %}
+        </footer>
+
+    </body>
+
+</html>
