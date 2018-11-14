@@ -2,22 +2,7 @@ CREATE OR REPLACE FUNCTION GetFollowers(
     FolloweeId          INTEGER,
     Requests            BOOLEAN
 ) RETURNS TABLE (
-    FirstName           "Profile".FirstName%TYPE,
-    LastName            "Profile".LastName%TYPE,
-    Username            "Profile".Username%TYPE,
-    Password            "Profile".Password%TYPE,
-    LanguageId          "Profile".LanguageId%TYPE,
-    PageName            "Page".PageName%TYPE,
-    PageDesc            "Page".PageDesc%TYPE,
-    ViewCount           "Page".ViewCount%TYPE,
-    AccountId           "Account".AccountId%TYPE,
-    Email               "Account".Email%TYPE,
-    PhoneNumber         "Account".PhoneNumber%TYPE,
-    ProfileImageURL     "Account".ProfileImageURL%TYPE,
-    HeaderImageURL      "Account".HeaderImageURL%TYPE,
-    IsActive            BOOLEAN,
-    IsPrivate           BOOLEAN,
-    CreatedTime         TIMESTAMP
+    FollowerId          INTEGER
 )
 LANGUAGE plpgsql
 AS $$
@@ -26,30 +11,15 @@ BEGIN
 
     IF Requests THEN
 
-        SELECT
-               FirstName, LastName, Username, Password, LanguageId,
-               PageName, PageDesc, ViewCount,
-               AccountId, Email, PhoneNumber, ProfileImageURL, HeaderImageURL,
-               IsActive, IsPrivate, CreateTime
+        SELECT FollowerId
         FROM "FollowRequest" fr
-        INNER JOIN "Account" ac ON ac.accountid = fr.followerid
-        LEFT JOIN "Profile" prof ON prof.accountid = fr.followerid
-        LEFT JOIN "Page" page ON page.accountid = fr.followerid
         WHERE fr.followeeid = FolloweeId;
 
     ELSE
 
-        SELECT
-               FirstName, LastName, Username, Password, LanguageId,
-               PageName, PageDesc, ViewCount,
-               AccountId, Email, PhoneNumber, ProfileImageURL, HeaderImageURL,
-               IsActive, IsPrivate, CreateTime
+        SELECT FollowerId
         FROM "Follow" f
-                 INNER JOIN "Account" ac ON ac.accountid = f.followerid
-                 LEFT JOIN "Profile" prof ON prof.accountid = f.followerid
-                 LEFT JOIN "Page" page ON page.accountid = f.followerid
         WHERE f.followeeid = FolloweeId;
-
 
     END IF;
 
