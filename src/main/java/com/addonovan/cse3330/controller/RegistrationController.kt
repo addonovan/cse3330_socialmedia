@@ -3,10 +3,12 @@ package com.addonovan.cse3330.controller
 import com.addonovan.cse3330.DbEngine
 import com.addonovan.cse3330.model.Page
 import com.addonovan.cse3330.model.Profile
+import com.addonovan.cse3330.profile
 import com.addonovan.cse3330.signIn
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @Controller
@@ -17,10 +19,7 @@ open class RegistrationController {
      * Provides the form to register a new profile.
      */
     @GetMapping("/profile")
-    fun profileRegistrationForm(model: Model): String {
-        model.addAttribute("profile", Profile())
-        return "register/profile"
-    }
+    fun profileRegistrationForm(model: Model) = "register/profile"
 
     /**
      * Handles the submission of a profile registration request.
@@ -39,20 +38,23 @@ open class RegistrationController {
      * Provides the form to create a new page.
      */
     @GetMapping("/page")
-    fun pageRegistrationForm(model: Model): String {
-        model.addAttribute("page", Page())
-        return "register/page"
-    }
+    fun pageRegistrationForm(model: Model) = "register/page"
 
     /**
      * Handles the submission of a page creation request.
      */
     @PostMapping("/page")
-    fun pageRegistartionSubmission(
+    fun pageRegistrationSubmission(
+            request: HttpServletRequest,
             response: HttpServletResponse,
-            @RequestParam adminId: Int,
             @ModelAttribute page: Page
     ) {
+        val adminId = request.profile?.id
+        if (adminId == null) {
+            response.sendRedirect("/")
+            return
+        }
+
         val newId = DbEngine.createPage(adminId, page).id
         response.sendRedirect("/account/$newId")
     }
