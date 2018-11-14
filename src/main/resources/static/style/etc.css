@@ -1,7 +1,6 @@
+.inline { display: inline; }
 
-.inline {
-    display: inline;
-}
+.hidden { display: none; }
 
 button.link {
     background: none;

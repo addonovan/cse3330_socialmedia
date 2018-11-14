@@ -38,6 +38,30 @@ open class Account : SqlEntity {
     /** When the user was created. */
     lateinit var createdTime: Timestamp
 
+    //
+    // Derived Properties
+    //
+
+    /**
+     * Computes the display name for this account, if this account has that
+     * information.
+     */
+    val fullName: String by lazy {
+        when (this) {
+            is Profile -> "$firstName $lastName"
+            is Page -> name
+            else -> throw IllegalStateException("Account does not have enough information to find its name")
+        }
+    }
+
+    val isProfile: Boolean by lazy {
+        when (this) {
+            is Profile -> true
+            is Page -> false
+            else -> throw IllegalStateException("Account does not have enough information to determine type")
+        }
+    }
+
     override fun fromRow(row: ResultSet) {
         id = row.getInt("AccountId")
         email = row.getString("Email")
@@ -48,16 +72,5 @@ open class Account : SqlEntity {
         isActive = row.getBoolean("IsActive")
         createdTime = row.getTimestamp("CreatedTime")
     }
-
-    /**
-     * Computes the display name for this account, if this account has that
-     * information.
-     */
-    val fullName: String
-        get() = when (this) {
-            is Profile -> "$firstName $lastName"
-            is Page -> name
-            else -> throw IllegalStateException("Account does not have enough information to find its name")
-        }
 
 }
