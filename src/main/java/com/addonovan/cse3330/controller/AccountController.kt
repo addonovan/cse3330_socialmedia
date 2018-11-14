@@ -83,7 +83,7 @@ open class AccountController {
             pageOverview(model, DbEngine.getProfileByUsername(username))
 
     /**
-     * Updates the [model] with the given [profile] information, then returns
+     * Updates the [model] with the given [account] information, then returns
      * the name of the relevant template file.
      */
     private fun pageOverview(model: Model, account: Account?) = when (account) {
