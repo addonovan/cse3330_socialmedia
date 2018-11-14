@@ -15,7 +15,7 @@ private const val LOGIN_PROFILE_COOKIE_NAME = "TotallyInsecureLoggedInProfileId"
  */
 val HttpServletRequest.profile: Profile?
     get() {
-        val cookie = this.cookies.find {
+        val cookie = this.cookies?.find {
             it.name == LOGIN_PROFILE_COOKIE_NAME
         } ?: return null
 
