@@ -29,6 +29,30 @@ val HttpServletRequest.profile: Profile?
  * cookies on their end, but I don't really care this is a school project.
  */
 fun HttpServletResponse.signIn(profile: Profile) {
-    val cookie = Cookie(LOGIN_PROFILE_COOKIE_NAME, profile.id.toString())
+    val cookie = createCookie(
+            name = LOGIN_PROFILE_COOKIE_NAME,
+            value = profile.id.toString(),
+            maxAgeMins = 60
+    )
     this.addCookie(cookie)
 }
+
+/**
+ * Replaces the active sign-in cookie with one that contains no data and will
+ * expire immediately.
+ */
+fun HttpServletResponse.signOut() {
+    val cookie = createCookie(
+            name = LOGIN_PROFILE_COOKIE_NAME,
+            value = null,
+            maxAgeMins = 0
+    )
+    this.addCookie(cookie)
+}
+
+private fun createCookie(name: String, value: String?, maxAgeMins: Int) =
+        Cookie(name, value).apply {
+            path = "/cse3330"
+            isHttpOnly = true
+            maxAge = maxAgeMins * 60
+        }
