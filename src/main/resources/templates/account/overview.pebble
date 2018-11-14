@@ -20,13 +20,14 @@
             {% endif %}
             <span class="followerCount">{{account.followers.size()}} Followers</span>
             <span class="followingCount">{{account.following.size()}} Following</span>
-            {% if user != null %}
-                    <button class="unfollow" onclick="unfollow()">
-                        Unfollow
-                    </button>
-                    <button class="follow" onclick="follow()">
-                        Follow
-                    </button>
+            {% if account.followers contains user %}
+                <form method="post" action="/account/{{account.id}}/unfollow">
+                    <button type="submit">Unfollow</button>
+                </form>
+            {% else %}
+                <form method="post" action="/account/{{account.id}}/follow">
+                    <button type="submit">Follow</button>
+                </form>
             {% endif %}
         </div>
     </div>
@@ -71,41 +72,4 @@
         </div>
         {% endfor %}
     </div>
-{% endblock %}
-
-{% block scripts %}
-    {% if user != null %}
-        <script>
-            const userId = {{user.id}};
-            const accountId = {{account.id}};
-
-            function toggleVisibleButton(following) {
-                if (following) {
-                    document.querySelector("button.follow").classList.add("hidden");
-                    document.querySelector("button.unfollow").classList.remove("hidden");
-                } else {
-                    document.querySelector("button.follow").classList.remove("hidden");
-                    document.querySelector("button.unfollow").classList.add("hidden");
-                }
-            }
-
-            {% if account.followers contains user %}
-                toggleVisibleButton(true);
-            {% else %}
-                toggleVisibleButton(false);
-            {% endif %}
-
-
-            function unfollow() {
-                console.log(userId + " to unfollow " + accountId);
-                toggleVisibleButton(false);
-            }
-
-            function follow() {
-                console.log(userId + " to follow " + accountId);
-                toggleVisibleButton(true);
-            }
-
-        </script>
-    {% endif %}
 {% endblock %}
