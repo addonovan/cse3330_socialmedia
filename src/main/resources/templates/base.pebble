@@ -4,6 +4,7 @@
         <title>{% block title %} CSE3330 {% endblock %}</title>
 
         <link rel="stylesheet" type="text/css" href="/style/main.css">
+        <link rel="stylesheet" type="text/css" href="/style/nav.css">
         <link rel="stylesheet" type="text/css" href="/style/post.css">
         <link rel="stylesheet" type="text/css" href="/style/profile.css">
         <link rel="stylesheet" type="text/css" href="/style/etc.css">
@@ -13,9 +14,11 @@
 
         <nav>
             <ul>
-                <li> <a href="/">Home</a> </li>
                 {% if user != null %}
                     <li> Howdy, {{user.firstName}}! </li>
+                {% endif %}
+                <li> <a href="/">Home</a> </li>
+                {% if user != null %}
                     <li>
                         <form method="post" action="/signout" class="inline">
                             <button type="submit" class="link">

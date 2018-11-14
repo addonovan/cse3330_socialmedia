@@ -5,17 +5,16 @@
 {% endblock %}
 
 {% block content %}
-    <div>
-        <form method="post" action="/post/selfpost">
-            <input name="text" type="text">
+    <form class="post" method="post" action="/post/selfpost">
+        <input name="text" type="text">
 
-            <input type="submit" value="Post">
-        </form>
-    </div>
+        <input type="submit" value="Post">
+    </form>
 
     <div id="Overview">
         {% for post in overview %}
         <div class="post">
+            <img class="profileImage small" src="{{post.poster.profileImageURL}}"/>
             <p class="postName">
                 {% if post.posterId != user.id %}
                     <a href="/account/{{post.posterId}}">
