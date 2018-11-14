@@ -93,4 +93,7 @@ open class Account : SqlEntity {
         createdTime = row.getTimestamp("CreatedTime")
     }
 
+    override fun equals(other: Any?): Boolean =
+            other is Account && other.id == id
+
 }
