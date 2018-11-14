@@ -138,6 +138,14 @@ object DbEngine {
                     null
             }
 
+    fun updateFollow(follower: Account, followee: Account, following: Boolean) =
+            call("UpdateFollow")
+                    .supply(follower.id)
+                    .supply(followee.id)
+                    .supply(following)
+                    .supply(followee.isPrivate)
+                    .executeOn(CONNECTION) {}
+
     /**
      * Views the page as to increment the number of page views.
      *
