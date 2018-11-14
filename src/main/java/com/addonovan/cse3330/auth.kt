@@ -52,7 +52,6 @@ fun HttpServletResponse.signOut() {
 
 private fun createCookie(name: String, value: String?, maxAgeMins: Int) =
         Cookie(name, value).apply {
-            path = "/cse3330"
             isHttpOnly = true
             maxAge = maxAgeMins * 60
         }
