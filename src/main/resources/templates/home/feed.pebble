@@ -15,10 +15,17 @@
 
     <div id="Overview">
         {% for post in overview %}
-        <p> <b>Posted by: </b> {{post.posterId}} </p>
-        <p>
-            {{post.text.body}}
-        </p>
+        <div class="post">
+            <p>
+                <span class="postName"> {{post.poster.fullName}} </span>
+            </p>
+            <p>
+                {{post.text.body}}
+            </p>
+            <p>
+                <span class="postTime"> {{post.createTime}} </span>
+            </p>
+        </div>
         {% endfor %}
     </div>
 {% endblock %}
