@@ -5,6 +5,14 @@
 {% endblock %}
 
 {% block content %}
+    <div>
+        <form method="post" action="/post/selfpost">
+            <input name="text" type="text">
+
+            <input type="submit" value="Post">
+        </form>
+    </div>
+
     <div id="Overview">
         {% for post in overview %}
         <p> <b>Posted by: </b> {{post.posterId}} </p>

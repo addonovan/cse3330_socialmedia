@@ -1,14 +1,12 @@
 package com.addonovan.cse3330.controller
 
 import com.addonovan.cse3330.DbEngine
-import com.addonovan.cse3330.model.Account
 import com.addonovan.cse3330.model.Post
 import com.addonovan.cse3330.profile
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -21,19 +19,35 @@ import javax.servlet.http.HttpServletResponse
 open class PostController {
 
     /**
-     * Handles the process of creating a new [post], posted by account with the
-     * given [posterId] onto the account's wall with the given [wallId].
+     * Handles the process of creating a new [post] on a different wall.
      */
     @PostMapping("/submit")
     fun submitPost(
             request: HttpServletRequest,
             response: HttpServletResponse,
-            @RequestParam wallId: Int,
             @ModelAttribute post: Post
     ) {
         response.sendRedirect(request.requestURL.toString())
-        val account = request.profile ?: return
-        DbEngine.createPost(account, wallId, post)
+
+        val user = request.profile ?: return
+        post.posterId = user.id
+        DbEngine.createPost(post)
     }
 
+    /**
+     * Handles the process of creating a new [post] on the user's own profile.
+     */
+    @PostMapping("/selfpost")
+    fun submitSelfPost(
+            request: HttpServletRequest,
+            response: HttpServletResponse,
+            @ModelAttribute post: Post
+    ) {
+        response.sendRedirect(request.requestURL.toString())
+
+        val user = request.profile ?: return
+        post.posterId = user.id
+        post.wallId = user.id
+        DbEngine.createPost(post)
+    }
 }
