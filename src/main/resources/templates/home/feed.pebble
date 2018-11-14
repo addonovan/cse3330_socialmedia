@@ -16,15 +16,17 @@
     <div id="Overview">
         {% for post in overview %}
         <div class="post">
-            <p>
-                <span class="postName"> {{post.poster.fullName}} </span>
+            <p class="postName">
+                {% if post.posterId != user.id %}
+                    <a href="/account/{{post.posterId}}">
+                        {{post.poster.fullName}}
+                    </a>
+                {% else %}
+                    {{post.poster.fullName}}
+                {% endif %}
             </p>
-            <p>
-                {{post.text.body}}
-            </p>
-            <p>
-                <span class="postTime"> {{post.createTime}} </span>
-            </p>
+            <p class="postBody"> {{post.text.body}} </p>
+            <p class="postTime"> {{post.createTime}} </p>
         </div>
         {% endfor %}
     </div>
