@@ -53,7 +53,7 @@ open class Account : SqlEntity {
      * Computes the display name for this account, if this account has that
      * information.
      */
-    val Account.name: String
+    val fullName: String
         get() = when (this) {
             is Profile -> "$firstName $lastName"
             is Page -> name

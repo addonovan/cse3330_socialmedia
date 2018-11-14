@@ -9,7 +9,7 @@
     <img id="headerImage" src="{{account.headerImageURL}}"/>
     <span id="AccountInfo">
         <img class="profileImage" src="{{account.profileImageURL}}"/>
-        {{account.name}}
+        {{account.fullName}}
     </span>
 </div>
 
