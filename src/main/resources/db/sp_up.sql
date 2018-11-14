@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION GetFollowing(
+CREATE OR REPLACE FUNCTION FindFollowing(
     FollowerId          INTEGER
 ) RETURNS TABLE (
     FolloweeId          INTEGER
@@ -6,16 +6,20 @@ CREATE OR REPLACE FUNCTION GetFollowing(
 LANGUAGE plpgsql
 AS $$
 
+DECLARE
+    _follower_id INTEGER = FollowerId;
+
 BEGIN
 
-    SELECT FolloweeId
-    FROM "Follow" f
-    WHERE f.followerid = FollowerId;
+    RETURN QUERY
+        SELECT f.FolloweeId
+        FROM "Follow" f
+        WHERE f.followerid = _follower_id;
 
 END
 $$;
 
-CREATE OR REPLACE FUNCTION GetFollowers(
+CREATE OR REPLACE FUNCTION FindFollowers(
     FolloweeId          INTEGER,
     Requests            BOOLEAN
 ) RETURNS TABLE (
@@ -24,19 +28,24 @@ CREATE OR REPLACE FUNCTION GetFollowers(
 LANGUAGE plpgsql
 AS $$
 
+DECLARE
+    _followee_id INTEGER = FolloweeId;
+
 BEGIN
 
     IF Requests THEN
 
-        SELECT FollowerId
-        FROM "FollowRequest" fr
-        WHERE fr.followeeid = FolloweeId;
+        RETURN QUERY
+            SELECT fr.FollowerId
+            FROM "FollowRequest" fr
+            WHERE fr.followeeid = _followee_id;
 
     ELSE
 
-        SELECT FollowerId
-        FROM "Follow" f
-        WHERE f.followeeid = FolloweeId;
+        RETURN QUERY
+            SELECT f.FollowerId
+            FROM "Follow" f
+            WHERE f.followeeid = _followee_id;
 
     END IF;
 
