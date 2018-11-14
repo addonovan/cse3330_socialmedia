@@ -18,6 +18,8 @@
                     ({{account.username}})
                 </span>
             {% endif %}
+            <span class="followerCount">{{account.followers.size()}} Followers</span>
+            <span class="followingCount">{{account.following.size()}} Following</span>
         </div>
     </div>
 
