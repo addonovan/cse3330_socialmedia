@@ -1,3 +1,50 @@
+CREATE OR REPLACE FUNCTION UpdateFollow(
+    FollowerId          INTEGER,
+    FolloweeId          INTEGER,
+    Following           BOOLEAN
+) RETURNS INTEGER
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    followee_is_private BOOLEAN = TRUE;
+
+BEGIN
+
+    -- if we need to unfollow, then we can just remove it from the tables
+    IF NOT Following THEN
+
+        DELETE FROM "Follow"
+        WHERE "Follow".followerid = FollowerId
+            AND "Follow".followeeid = FolloweeId;
+
+        DELETE FROM "FollowRequest"
+        WHERE "FollowRequest".followerid = FollowerId
+            AND "FollowRequest".followeeid = FolloweeId;
+
+    ELSE
+
+        -- check if the followee account is private
+        SELECT isprivate Into followee_is_private
+        FROM "Account" a
+        WHERE a.id = FolloweeId;
+
+        -- if it's private, then we'll add a follow request
+        IF followee_is_private THEN
+            INSERT INTO "FollowRequest" (followerid, followeeid)
+            VALUES (FollowerId, FolloweeId);
+
+        -- otherwise, we'll just add the follower
+        ELSE
+            INSERT INTO "Follow" (followerid, followeeid)
+            VALUES (FollowerId, FolloweeId);
+        END IF;
+
+    END IF;
+
+END
+$$;
+
 CREATE OR REPLACE FUNCTION CreatePost(
     AccountId           INTEGER,
     WallId              INTEGER,
