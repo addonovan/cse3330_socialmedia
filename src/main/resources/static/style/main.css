@@ -1,14 +1,25 @@
 body {
+    display: flex;
+    flex-direction: column;
+
     background: #fafafa;
     margin: 0;
     padding: 0;
 }
 
-div#Main {}
+footer {
+    align-self: center;
+    color: rgba(0, 0, 0, 0.64);
+    font-size: 8pt;
+    padding: 1em;
+}
 
-    div#Main form.post {
-        display: inline;
-    }
+
+div#Main {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+}
 
     div#Main div#Overview {
         display: flex;

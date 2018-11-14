@@ -1,4 +1,4 @@
-.post {
+div.post {
     display: flex;
     align-self: center;
     flex-direction: row;
@@ -46,5 +46,12 @@
         font-size: 8pt;
     }
 
+form.post {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
 
+    max-width: 512px;
+    width: 100%;
+}
 

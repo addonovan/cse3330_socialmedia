@@ -6,9 +6,8 @@
 
 {% block content %}
     <form class="post" method="post" action="/post/selfpost">
-        <input name="text" type="text">
-
-        <input type="submit" value="Post">
+        <textarea name="text" placeholder="How's i goin', pardner?"></textarea>
+        <input type="submit" value="Send it o'er yonder">
     </form>
 
     <div id="Overview">
