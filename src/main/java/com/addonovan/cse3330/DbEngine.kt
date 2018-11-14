@@ -163,6 +163,7 @@ object DbEngine {
      * @return A list of all accounts which follow, or are requesting to follow,
      * the given [account].
      *
+     * @see [getFollowing]
      * @see [updateFollow]
      * @see [getAccountById]
      */
@@ -172,6 +173,21 @@ object DbEngine {
             .executeOn(CONNECTION) {
                 it.map {
                     getAccountById(it.getInt("FollowerId"))!!
+                }
+            }
+
+    /**
+     * Gets a list of all accounts which this [account] is following.
+     *
+     * @see [getFollowers]
+     * @see [updateFollow]
+     * @see [getAccountById]
+     */
+    fun getFollowing(account: Account) = call("FindFollowing")
+            .supply(account.id)
+            .executeOn(CONNECTION) {
+                it.map {
+                    getAccountById(it.getInt("FolloweeId"))!!
                 }
             }
 

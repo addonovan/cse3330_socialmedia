@@ -63,6 +63,11 @@ open class Account : SqlEntity {
         }
     }
 
+    /** A list of accounts this one is currently following */
+    val following: List<Account> by lazy {
+        DbEngine.getFollowing(this)
+    }
+
     /** A list of accounts who are currently following this one. */
     val followers: List<Account> by lazy {
         DbEngine.getFollowers(this)
