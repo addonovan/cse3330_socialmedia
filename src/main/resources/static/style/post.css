@@ -1,0 +1,28 @@
+.post {
+    background: white;
+    border: 1px solid black;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+    max-width: 512px;
+}
+
+.post > p {
+    margin: 0;
+}
+
+.post .postName {
+    font-size: 11pt;
+    font-weight: bold;
+}
+
+.post .postBody {
+    font-size: 14pt;
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+}
+
+.post .postTime {
+    color: rgba(0, 0, 0, 0.64);
+    font-size: 8pt;
+}
+

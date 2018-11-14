@@ -2,6 +2,9 @@
 
     <head>
         <title>{% block title %} CSE3330 {% endblock %}</title>
+
+        <link rel="stylesheet" type="text/css" href="/style/main.css">
+        <link rel="stylesheet" type="text/css" href="/style/post.css">
     </head>
 
     <body>
