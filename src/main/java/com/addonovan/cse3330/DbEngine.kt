@@ -73,7 +73,7 @@ object DbEngine {
                     null
                 else if (it.getString("FirstName") != null)
                     Profile().apply { fromRow(it) }
-                else if (it.getString("Name") != null)
+                else if (it.getString("PageName") != null)
                     Page().apply { fromRow(it) }
                 else
                     throw IllegalStateException("Inconsistent database state: Account(id=$id) is neither a Profile nor a Page!")
