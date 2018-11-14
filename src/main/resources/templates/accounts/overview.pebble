@@ -1,44 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <link type="text/css" rel="stylesheet" href="/style/profile.css">
-</head>
+{% extends "../base" %}
 
-<body>
-<div id="Account">
-    <img id="headerImage" src="{{account.headerImageURL}}"/>
-    <span id="AccountInfo">
-        <img class="profileImage" src="{{account.profileImageURL}}"/>
-        {{account.fullName}}
-    </span>
-</div>
+{% block title %}
+    {{account.fullName}} | SocialMediaSite
+{% endblock %}
 
-<div id="PostSubmission">
-    <form method="post" action="/post/submit">
-        <input name="wallId" type="number" style="visibility: hidden" value="{{account.id}}">
+{% block content %}
+    <div id="Account">
+        <img id="headerImage" src="{{account.headerImageURL}}"/>
+        <span id="AccountInfo">
+            <img class="profileImage" src="{{account.profileImageURL}}"/>
+            {{account.fullName}}
+        </span>
+    </div>
 
-        <label>
-            Poster Id:
-            <input name="posterId" type="number">
-        </label><br/>
+    <div id="PostSubmission">
+        <form method="post" action="/post/submit">
+            <input name="wallId" type="number" style="visibility: hidden" value="{{account.id}}">
 
-        <label>
-            Comment:
-            <input name="text" type="text">
-        </label><br/>
+            <label>
+                Comment:
+                <input name="text" type="text">
+            </label><br/>
 
-        <button name="register" type="submit" value="Submit">Post</button>
-    </form>
-</div>
+            <button name="register" type="submit" value="Submit">Post</button>
+        </form>
+    </div>
 
-<div id="Overview">
-    {% for post in overview %}
-    <p> <b>Posted by: </b> {{post.posterId}} </p>
-    <p>
-        {{post.text.body}}
-    </p>
-    {% endfor %}
-</div>
-
-</body>
-</html>
+    <div id="Overview">
+        {% for post in overview %}
+        <p> <b>Posted by: </b> {{post.posterId}} </p>
+        <p>
+            {{post.text.body}}
+        </p>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,33 +1,41 @@
-<form method="post" action="/account/register/profile">
-    <label>
-        Email:
-        <input name="Email" type="text">
-    </label><br/>
+{% extends "../base" %}
 
-    <label>
-        Phone number:
-        <input name="PhoneNumber" type="text">
-    </label><br/>
+{% block title %}
+    Sign up for SocialMediaSite
+{% endblock %}
 
-    <label>
-        First name:
-        <input name="FirstName" type="text">
-    </label><br/>
+{% block content %}
+    <form method="post" action="/account/register/profile">
+        <label>
+            Email:
+            <input name="Email" type="text">
+        </label><br/>
 
-    <label>
-        Last name:
-        <input name="LastName" type="text">
-    </label><br/>
+        <label>
+            Phone number:
+            <input name="PhoneNumber" type="text">
+        </label><br/>
 
-    <label>
-        Username:
-        <input name="Username" type="text">
-    </label><br/>
+        <label>
+            First name:
+            <input name="FirstName" type="text">
+        </label><br/>
 
-    <label>
-        Password:
-        <input name="Password" type="password">
-    </label><br/>
+        <label>
+            Last name:
+            <input name="LastName" type="text">
+        </label><br/>
 
-    <button name="register" type="submit" value="Submit">Register</button>
-</form>
+        <label>
+            Username:
+            <input name="Username" type="text">
+        </label><br/>
+
+        <label>
+            Password:
+            <input name="Password" type="password">
+        </label><br/>
+
+        <button name="register" type="submit" value="Submit">Register</button>
+    </form>
+{% endblock %}

@@ -1,28 +1,31 @@
-<form method="post" action="/account/register/page">
-    <label>
-        Admin Id:
-        <input name="adminId" type="number">
-    </label><br/>
+{% extends "../base" %}
 
-    <label>
-        Name:
-        <input name="name" type="text">
-    </label><br/>
+{% block title %}
+    Create a new Page
+{% endblock %}
 
-    <label>
-        Description:
-        <input name="description" type="text">
-    </label><br/>
+{% block content %}
+    <form method="post" action="/account/register/page">
+        <label>
+            Name:
+            <input name="name" type="text">
+        </label><br/>
 
-    <label>
-        Email:
-        <input name="email" type="text">
-    </label><br/>
+        <label>
+            Description:
+            <input name="description" type="text">
+        </label><br/>
 
-    <label>
-        Phone number:
-        <input name="phoneNumber" type="text">
-    </label><br/>
+        <label>
+            Email:
+            <input name="email" type="text">
+        </label><br/>
 
-    <button name="submit" type="submit" value="Submit">Create Page</button>
-</form>
+        <label>
+            Phone number:
+            <input name="phoneNumber" type="text">
+        </label><br/>
+
+        <button name="submit" type="submit" value="Submit">Create Page</button>
+    </form>
+{% endblock %}
