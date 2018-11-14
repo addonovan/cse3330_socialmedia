@@ -6,7 +6,6 @@ import com.addonovan.cse3330.model.Post
 import com.addonovan.cse3330.model.Profile
 import com.addonovan.cse3330.sql.call
 import com.addonovan.cse3330.sql.map
-import java.lang.IllegalStateException
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException

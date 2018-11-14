@@ -106,7 +106,7 @@ BEGIN
     RETURNING AccountId INTO account_id;
 
     INSERT INTO "Page"
-        (accountid, name, description)
+        (accountid, pagename, pagedesc)
     VALUES
         (account_id, name, description);
 
