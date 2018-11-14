@@ -3,11 +3,14 @@ package com.addonovan.cse3330.controller
 import com.addonovan.cse3330.DbEngine
 import com.addonovan.cse3330.model.Account
 import com.addonovan.cse3330.model.Post
+import com.addonovan.cse3330.profile
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 /**
  * Controller which handles actions specific to the
@@ -23,13 +26,13 @@ open class PostController {
      */
     @PostMapping("/submit")
     fun submitPost(
-            @RequestParam("posterId") posterId: Int,
-            @RequestParam("wallId") wallId: Int,
+            request: HttpServletRequest,
+            response: HttpServletResponse,
+            @RequestParam wallId: Int,
             @ModelAttribute post: Post
     ) {
-        val account = Account().apply {
-            id = posterId
-        }
+        response.sendRedirect(request.requestURL.toString())
+        val account = request.profile ?: return
         DbEngine.createPost(account, wallId, post)
     }
 
