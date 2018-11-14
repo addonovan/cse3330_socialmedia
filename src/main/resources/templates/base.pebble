@@ -9,7 +9,7 @@
         <nav>
             <ul>
                 <li> <a href="/">Home</a> </li>
-                {% if user %}
+                {% if user != null %}
                 <li> Howdy, {{user.fullName}} </li>
                 {% endif %}
             </ul>

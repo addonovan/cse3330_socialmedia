@@ -31,6 +31,7 @@ open class HomeController {
             user: Profile,
             model: Model
     ): String {
+        model.addAttribute("user", user)
         DbEngine.wallOverview(user).let {
             model.addAttribute("overview", it)
         }

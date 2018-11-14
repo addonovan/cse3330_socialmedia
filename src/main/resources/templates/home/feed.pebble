@@ -1,0 +1,16 @@
+{% extends "../base" %}
+
+{% block title %}
+    {{user.fullName}} | SocialMediaSite
+{% endblock %}
+
+{% block content %}
+    <div id="Overview">
+        {% for post in overview %}
+        <p> <b>Posted by: </b> {{post.posterId}} </p>
+        <p>
+            {{post.text.body}}
+        </p>
+        {% endfor %}
+    </div>
+{% endblock %}
