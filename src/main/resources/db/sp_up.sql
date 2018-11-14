@@ -16,7 +16,7 @@ DECLARE
 BEGIN
 
     INSERT INTO "Post"
-        (PosterId, WallId, PostMessage, MediaURL, PollQuestion, PollEndTime, ParentPostId)
+        (PosterId, WallId, PostMessage, PostMediaURL, PollQuestion, PollEndTime, ParentPostId)
     VALUES
         (AccountId, WallId, message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
     RETURNING "Post".PostId INTO post_id;
