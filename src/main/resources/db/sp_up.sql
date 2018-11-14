@@ -1,3 +1,108 @@
+CREATE OR REPLACE FUNCTION FindFollowing(
+    FollowerId          INTEGER
+) RETURNS TABLE (
+    FolloweeId          INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    _follower_id INTEGER = FollowerId;
+
+BEGIN
+
+    RETURN QUERY
+        SELECT f.FolloweeId
+        FROM "Follow" f
+        WHERE f.followerid = _follower_id;
+
+END
+$$;
+
+CREATE OR REPLACE FUNCTION FindFollowers(
+    FolloweeId          INTEGER,
+    Requests            BOOLEAN
+) RETURNS TABLE (
+    FollowerId          INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    _followee_id INTEGER = FolloweeId;
+
+BEGIN
+
+    IF Requests THEN
+
+        RETURN QUERY
+            SELECT fr.FollowerId
+            FROM "FollowRequest" fr
+            WHERE fr.followeeid = _followee_id;
+
+    ELSE
+
+        RETURN QUERY
+            SELECT f.FollowerId
+            FROM "Follow" f
+            WHERE f.followeeid = _followee_id;
+
+    END IF;
+
+END
+$$;
+
+
+CREATE OR REPLACE FUNCTION UpdateFollow(
+    FollowerId          INTEGER,
+    FolloweeId          INTEGER,
+    Following           BOOLEAN
+) RETURNS VOID
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    followee_is_private BOOLEAN = TRUE;
+    _follower_id INTEGER = FollowerId;
+    _followee_id INTEGER = FolloweeId;
+
+BEGIN
+
+    -- if we need to unfollow, then we can just remove it from the tables
+    IF NOT Following THEN
+
+        DELETE FROM "Follow"
+        WHERE "Follow".followerid = _follower_id
+          AND "Follow".followeeid = _followee_id;
+
+        DELETE FROM "FollowRequest"
+        WHERE "FollowRequest".followerid = _follower_id
+          AND "FollowRequest".followeeid = _followee_id;
+
+    ELSE
+
+        -- check if the followee account is private
+        SELECT isprivate INTO followee_is_private
+        FROM "Account" a
+        WHERE a.accountid = FolloweeId;
+
+        -- if it's private, then we'll add a follow request
+        IF followee_is_private THEN
+            INSERT INTO "FollowRequest" (followerid, followeeid)
+            VALUES (FollowerId, FolloweeId);
+
+        -- otherwise, we'll just add the follower
+        ELSE
+            INSERT INTO "Follow" (followerid, followeeid)
+            VALUES (FollowerId, FolloweeId);
+        END IF;
+
+    END IF;
+
+END
+$$;
+
+
 CREATE OR REPLACE FUNCTION CreatePost(
     AccountId           INTEGER,
     WallId              INTEGER,
@@ -25,6 +130,27 @@ BEGIN
 
 END
 $$;
+
+CREATE OR REPLACE FUNCTION FindFeedFor(
+    AccountId           INTEGER
+) RETURNS SETOF "Post"
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    RETURN QUERY
+        SELECT * FROM "Post" p
+        WHERE p.wallid = AccountId
+           OR (
+                p.parentpostid IS NULL
+                    AND
+                p.posterid IN (SELECT followeeid FROM "Follow" f WHERE f.followerid = AccountId)
+           )
+        ORDER BY p.createdtime DESC;
+
+END
+$$;
+
 
 CREATE OR REPLACE FUNCTION FindWallOverviewFor(
     AccountId           INTEGER

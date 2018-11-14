@@ -18,6 +18,17 @@
                     ({{account.username}})
                 </span>
             {% endif %}
+            <span class="followerCount">{{account.followers.size()}} Followers</span>
+            <span class="followingCount">{{account.following.size()}} Following</span>
+            {% if account.followers contains user %}
+                <form method="post" action="/account/{{account.id}}/unfollow">
+                    <button type="submit">Unfollow</button>
+                </form>
+            {% else %}
+                <form method="post" action="/account/{{account.id}}/follow">
+                    <button type="submit">Follow</button>
+                </form>
+            {% endif %}
         </div>
     </div>
 

@@ -139,6 +139,59 @@ object DbEngine {
             }
 
     /**
+     * Updates the relationship between the [follower] and [followee]. If
+     * [following] is set to `true`, then the `follower` will attempt to
+     * follow the given `followee`; otherwise, it will unfollow them.
+     *
+     * If the `followee` is private and the `follower` is trying to follow them,
+     * then a follow request will be added to the account.
+     *
+     * @see [getFollowers]
+     */
+    fun updateFollow(follower: Account, followee: Account, following: Boolean) =
+            call("UpdateFollow")
+                    .supply(follower.id)
+                    .supply(followee.id)
+                    .supply(following)
+                    .executeOn(CONNECTION) {}
+
+    /**
+     * Gets a list of all accounts which follow the given [account]. This can
+     * also return only the follow requests for the given account, should
+     * [requests] be `true`.
+     *
+     * @return A list of all accounts which follow, or are requesting to follow,
+     * the given [account].
+     *
+     * @see [getFollowing]
+     * @see [updateFollow]
+     * @see [getAccountById]
+     */
+    fun getFollowers(account: Account, requests: Boolean = false) = call("FindFollowers")
+            .supply(account.id)
+            .supply(requests)
+            .executeOn(CONNECTION) {
+                it.map {
+                    getAccountById(it.getInt("FollowerId"))!!
+                }
+            }
+
+    /**
+     * Gets a list of all accounts which this [account] is following.
+     *
+     * @see [getFollowers]
+     * @see [updateFollow]
+     * @see [getAccountById]
+     */
+    fun getFollowing(account: Account) = call("FindFollowing")
+            .supply(account.id)
+            .executeOn(CONNECTION) {
+                it.map {
+                    getAccountById(it.getInt("FolloweeId"))!!
+                }
+            }
+
+    /**
      * Views the page as to increment the number of page views.
      *
      * @see [getPageById]
@@ -148,12 +201,30 @@ object DbEngine {
             .executeOn(CONNECTION) {}
 
     /**
+     * Generates the feed for the [account].
+     *
+     * The feed is a list of all of the account's activity along with the
+     * activity from the accounts they follow. This is shown on the homepage.
+     *
+     * @see [createPost]
+     * @see [wallOverview]
+     */
+    fun feedFor(account: Account) = call("FindFeedFor")
+            .supply(account.id)
+            .executeOn(CONNECTION) {
+                it.map {
+                    Post().apply { fromRow(it) }
+                }
+            }
+
+    /**
      * Constructs a wall overview (i.e. a list of
      * [Posts][com.addonovan.cse3330.model.Post]) of the given `account`. Note
      * that this is *anything* that the query deems relevant; therefore, the
      * posts returned might not even be on the *wall* for the given account.
      *
      * @see [createPost]
+     * @see [feedFor]
      */
     fun wallOverview(account: Account) = call("FindWallOverviewFor")
             .supply(account.id)

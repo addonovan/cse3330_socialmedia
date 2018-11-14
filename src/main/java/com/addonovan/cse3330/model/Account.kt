@@ -1,5 +1,6 @@
 package com.addonovan.cse3330.model
 
+import com.addonovan.cse3330.DbEngine
 import java.lang.IllegalStateException
 import java.sql.ResultSet
 import java.sql.Timestamp
@@ -62,6 +63,25 @@ open class Account : SqlEntity {
         }
     }
 
+    /** A list of accounts this one is currently following */
+    val following: List<Account> by lazy {
+        DbEngine.getFollowing(this)
+    }
+
+    /** A list of accounts who are currently following this one. */
+    val followers: List<Account> by lazy {
+        DbEngine.getFollowers(this)
+    }
+
+    /** A list of accounts who are requesting ot follow this one. */
+    val followRequests: List<Account> by lazy {
+        DbEngine.getFollowers(this, requests = true)
+    }
+
+    //
+    // Functions
+    //
+
     override fun fromRow(row: ResultSet) {
         id = row.getInt("AccountId")
         email = row.getString("Email")
@@ -72,5 +92,8 @@ open class Account : SqlEntity {
         isActive = row.getBoolean("IsActive")
         createdTime = row.getTimestamp("CreatedTime")
     }
+
+    override fun equals(other: Any?): Boolean =
+            other is Account && other.id == id
 
 }

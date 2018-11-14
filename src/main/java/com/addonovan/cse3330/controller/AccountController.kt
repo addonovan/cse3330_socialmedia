@@ -1,15 +1,10 @@
 package com.addonovan.cse3330.controller
 
-import com.addonovan.cse3330.DbEngine
+import com.addonovan.cse3330.*
 import com.addonovan.cse3330.model.Account
-import com.addonovan.cse3330.model.Page
-import com.addonovan.cse3330.model.Profile
-import com.addonovan.cse3330.profile
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 /**
  * The controller for general account activities, such as creation and deletion
@@ -24,7 +19,7 @@ open class AccountController {
      */
     @GetMapping(value = ["/{id:[0-9]+}"])
     fun overviewById(
-            request: HttpServletRequest,
+            request: Request,
             model: Model,
             @PathVariable id: Int
     ) = pageOverview(request, model, DbEngine.getAccountById(id))
@@ -34,17 +29,46 @@ open class AccountController {
      */
     @GetMapping(value = ["/{username:[a-zA-Z_][a-zA-Z0-9_-]*}"])
     fun overviewByUsername(
-            request: HttpServletRequest,
+            request: Request,
             model: Model,
             @PathVariable username: String
     ) = pageOverview(request, model, DbEngine.getProfileByUsername(username))
+
+    @PostMapping(value = ["/{id:[0-9+]}/follow"])
+    fun followAccount(
+            request: Request,
+            response: Response,
+            model: Model,
+            @PathVariable id: Int
+    ) {
+        response.redirectToReferrer(request)
+
+        val user = request.profile!!
+        val followee = DbEngine.getAccountById(id)!!
+        DbEngine.updateFollow(user, followee, following = true)
+    }
+
+    @PostMapping(value = ["/{id:[0-9]+}/unfollow"])
+    fun unfollowAccount(
+            request: Request,
+            response: Response,
+            model: Model,
+            @PathVariable id: Int
+    ) {
+        response.redirectToReferrer(request)
+
+        val user = request.profile!!
+        val followee = DbEngine.getAccountById(id)!!
+        DbEngine.updateFollow(user, followee, following = false)
+    }
+
 
     /**
      * Updates the [model] with the given [account] information, then returns
      * the name of the relevant template file.
      */
     private fun pageOverview(
-            request: HttpServletRequest,
+            request: Request,
             model: Model,
             account: Account?
     ) = when (account) {
