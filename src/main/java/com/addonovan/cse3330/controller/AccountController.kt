@@ -17,15 +17,6 @@ import javax.servlet.http.HttpServletResponse
 @RequestMapping("/account")
 open class AccountController {
 
-    //
-    // Registration
-    //
-
-
-    //
-    // Account Overviews
-    //
-
     /**
      * Generates a profile overview by the profile's [id].
      */
