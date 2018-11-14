@@ -141,15 +141,15 @@ BEGIN
     RETURN QUERY
         SELECT * FROM "Post" p
         WHERE p.wallid = AccountId
-           OR p.posterid IN (
-                SELECT followeeid FROM "Follow" f
-                WHERE f.followerid = AccountId
+           OR (
+                p.parentpostid IS NULL
+                    AND
+                p.posterid IN (SELECT followeeid FROM "Follow" f WHERE f.followerid = AccountId)
            )
         ORDER BY p.createdtime DESC;
 
 END
 $$;
-
 
 
 CREATE OR REPLACE FUNCTION FindWallOverviewFor(
