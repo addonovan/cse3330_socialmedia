@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 /** The name of the login cookie. */
-private const val LOGIN_PROFILE_COOKIE_NAME = "TotallyInsecureLoggedProfileId"
+private const val LOGIN_PROFILE_COOKIE_NAME = "TotallyInsecureLoggedInProfileId"
 
 /**
  * The profile currently signed in, as per the cookies on the given
