@@ -201,12 +201,30 @@ object DbEngine {
             .executeOn(CONNECTION) {}
 
     /**
+     * Generates the feed for the [account].
+     *
+     * The feed is a list of all of the account's activity along with the
+     * activity from the accounts they follow. This is shown on the homepage.
+     *
+     * @see [createPost]
+     * @see [wallOverview]
+     */
+    fun feedFor(account: Account) = call("FindFeedFor")
+            .supply(account.id)
+            .executeOn(CONNECTION) {
+                it.map {
+                    Post().apply { fromRow(it) }
+                }
+            }
+
+    /**
      * Constructs a wall overview (i.e. a list of
      * [Posts][com.addonovan.cse3330.model.Post]) of the given `account`. Note
      * that this is *anything* that the query deems relevant; therefore, the
      * posts returned might not even be on the *wall* for the given account.
      *
      * @see [createPost]
+     * @see [feedFor]
      */
     fun wallOverview(account: Account) = call("FindWallOverviewFor")
             .supply(account.id)
