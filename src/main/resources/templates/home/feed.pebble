@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block content %}
-    <form class="post" method="post" action="/post/selfpost">
+    <form class="post" method="post" action="/post/submit">
+        <input type="number" name="wallId" class="hidden" value="{{user.id}}">
         <textarea name="text" placeholder="How's i goin', pardner?"></textarea>
         <input type="submit" value="Send it o'er yonder">
     </form>

@@ -33,21 +33,4 @@ open class PostController {
         post.posterId = user.id
         DbEngine.createPost(post)
     }
-
-    /**
-     * Handles the process of creating a new [post] on the user's own profile.
-     */
-    @PostMapping("/selfpost")
-    fun submitSelfPost(
-            request: HttpServletRequest,
-            response: HttpServletResponse,
-            @ModelAttribute post: Post
-    ) {
-        response.sendRedirect(request.getHeader("referer"))
-
-        val user = request.profile ?: return
-        post.posterId = user.id
-        post.wallId = user.id
-        DbEngine.createPost(post)
-    }
 }
