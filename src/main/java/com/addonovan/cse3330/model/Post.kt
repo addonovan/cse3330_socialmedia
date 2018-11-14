@@ -15,6 +15,9 @@ class Post : SqlEntity {
     /** The account ID of the account which posted this. */
     var posterId: Int = 0
 
+    /** The unique identifier for the account whose wall this was posted to. */
+    var wallId: Int = 0
+
     /** The text of this post, if any. */
     var text: TextBody? = null
 
@@ -35,18 +38,19 @@ class Post : SqlEntity {
     //
 
     override fun fromRow(row: ResultSet) {
-        id = row.getInt("Id")
+        id = row.getInt("PostId")
         posterId = row.getInt("PosterId")
+        wallId = row.getInt("WallId")
 
         // the different body types have a little bit of preprocessing to do
         // because at least one needs to be present, but all of them could be
         // there, so we have to use nulls to represent those
 
-        row.getString("Message")?.let {
+        row.getString("PostMessage")?.let {
             text = TextBody(body = it)
         }
 
-        row.getString("MediaURL")?.let {
+        row.getString("PostMediaURL")?.let {
             media = MediaBody(url = it)
         }
 
@@ -70,7 +74,7 @@ class Post : SqlEntity {
                 it
         }
 
-        createTime = row.getTimestamp("CreateTime")
+        createTime = row.getTimestamp("CreatedTime")
     }
 
     //

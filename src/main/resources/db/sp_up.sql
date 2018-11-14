@@ -1,8 +1,8 @@
 CREATE OR REPLACE FUNCTION CreatePost(
     AccountId           INTEGER,
     WallId              INTEGER,
-    Message             "Post".Message%TYPE,
-    MediaURL            "Post".MediaURL%TYPE,
+    Message             "Post".PostMessage%TYPE,
+    MediaURL            "Post".PostMediaURL%TYPE,
     PollQuestion        "Post".PollQuestion%TYPE,
     PollEndTime         "Post".PollEndTime%TYPE,
     ParentPostId        INTEGER
@@ -16,13 +16,12 @@ DECLARE
 BEGIN
 
     INSERT INTO "Post"
-        (PosterId, WallId, Message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
+        (PosterId, WallId, PostMessage, MediaURL, PollQuestion, PollEndTime, ParentPostId)
     VALUES
-        (AccountId, WallId, Message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
-    RETURNING "Post".Id INTO post_id;
+        (AccountId, WallId, message, MediaURL, PollQuestion, PollEndTime, ParentPostId)
+    RETURNING "Post".PostId INTO post_id;
 
     RETURN post_id;
-
 
 END
 $$;
@@ -37,7 +36,7 @@ BEGIN
     RETURN QUERY
     SELECT * FROM "Post" p
     WHERE p.wallid = AccountId
-    ORDER BY p.createtime DESC;
+    ORDER BY p.createdtime DESC;
 
 END
 $$;
@@ -51,10 +50,10 @@ CREATE OR REPLACE FUNCTION FindAccount(
     Username            "Profile".Username%TYPE,
     Password            "Profile".Password%TYPE,
     LanguageId          "Profile".LanguageId%TYPE,
-    Name                "Page".Name%TYPE,
-    Description         "Page".Description%TYPE,
+    PageName            "Page".PageName%TYPE,
+    PageDesc            "Page".PageDesc%TYPE,
     ViewCount           "Page".ViewCount%TYPE,
-    Id                  "Account".Id%TYPE,
+    AccountId           "Account".AccountId%TYPE,
     Email               "Account".Email%TYPE,
     PhoneNumber         "Account".PhoneNumber%TYPE,
     ProfileImageURL     "Account".ProfileImageURL%TYPE,
@@ -69,17 +68,17 @@ BEGIN
 
     RETURN QUERY
     SELECT
-        prof.firstname, prof.lastname, prof.username, prof.password, prof.languageid,
-        page.name, page.description, page.viewcount,
-        a.id, a.email, a.phonenumber, a.profileimageurl, a.headerimageurl,
-        a.isactive, a.isprivate, a.createdtime
+           prof.firstname, prof.lastname, prof.username, prof.password, prof.languageid,
+           page.pagename, page.pagedesc, page.viewcount,
+           a.AccountId, a.email, a.phonenumber, a.profileimageurl, a.headerimageurl,
+           a.isactive, a.isprivate, a.createdtime
     FROM "Account" a
-    LEFT JOIN "Profile" prof ON prof.accountid = a.id
-    LEFT JOIN "Page" page ON page.accountid = a.id
+    LEFT JOIN "Profile" prof ON prof.accountid = a.AccountId
+    LEFT JOIN "Page" page ON page.accountid = a.AccountId
     WHERE
-      (DesiredId IS NULL OR a.id = DesiredId)
-      AND
-      (DesiredUsername IS NULL OR prof.username = DesiredUsername);
+        (DesiredId IS NULL OR a.AccountId = DesiredId)
+        AND
+        (DesiredUsername IS NULL OR prof.username = DesiredUsername);
 
 
 END
@@ -89,8 +88,8 @@ CREATE OR REPLACE FUNCTION CreatePage(
     AdminId     INTEGER,
     Email       "Account".Email%TYPE,
     PhoneNumber "Account".PhoneNumber%TYPE,
-    Name        "Page".Name%TYPE,
-    Description "Page".Description%TYPE
+    Name        "Page".PageName%TYPE,
+    Description "Page".PageDesc%TYPE
 ) RETURNS INTEGER
 LANGUAGE plpgsql
 AS $$
@@ -104,10 +103,10 @@ BEGIN
         (email, phonenumber, isprivate)
     VALUES
         (Email, PhoneNumber, FALSE)
-    RETURNING Id INTO account_id;
+    RETURNING AccountId INTO account_id;
 
     INSERT INTO "Page"
-        (accountid, name, description)
+        (accountid, pagename, pagedesc)
     VALUES
         (account_id, name, description);
 
@@ -145,23 +144,25 @@ CREATE OR REPLACE FUNCTION CreateProfile(
 LANGUAGE plpgsql
 AS $$
 
-    DECLARE
-        account_id INTEGER := -1;
+DECLARE
+    account_id INTEGER := -1;
 
-    BEGIN
+BEGIN
 
-        INSERT INTO "Account"
-          (email, phonenumber, isprivate)
-        VALUES
-          (Email, PhoneNumber, FALSE)
-        RETURNING Id INTO account_id;
+    INSERT INTO "Account"
+        (email, phonenumber, isprivate)
+    VALUES
+        (Email, PhoneNumber, FALSE)
+    RETURNING AccountId INTO account_id;
 
-        INSERT INTO "Profile"
-          (accountid, firstname, lastname, username, Password, languageid)
-        VALUES
-          (account_id, FirstName, LastName, Username, Password, 1);
+    INSERT INTO "Profile"
+        (accountid, firstname, lastname, username, Password, languageid)
+    VALUES
+        (account_id, FirstName, LastName, Username, Password, 1);
 
-        RETURN account_id;
+    RETURN account_id;
 
-    END
+END
 $$;
+
+

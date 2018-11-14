@@ -6,7 +6,6 @@ import com.addonovan.cse3330.model.Post
 import com.addonovan.cse3330.model.Profile
 import com.addonovan.cse3330.sql.call
 import com.addonovan.cse3330.sql.map
-import java.lang.IllegalStateException
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
@@ -74,7 +73,7 @@ object DbEngine {
                     null
                 else if (it.getString("FirstName") != null)
                     Profile().apply { fromRow(it) }
-                else if (it.getString("Name") != null)
+                else if (it.getString("PageName") != null)
                     Page().apply { fromRow(it) }
                 else
                     throw IllegalStateException("Inconsistent database state: Account(id=$id) is neither a Profile nor a Page!")

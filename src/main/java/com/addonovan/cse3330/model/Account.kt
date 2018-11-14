@@ -39,7 +39,7 @@ open class Account : SqlEntity {
     lateinit var createdTime: Timestamp
 
     override fun fromRow(row: ResultSet) {
-        id = row.getInt("Id")
+        id = row.getInt("AccountId")
         email = row.getString("Email")
         phoneNumber = row.getString("PhoneNumber")
         profileImageURL = row.getString("ProfileImageURL")
@@ -53,7 +53,7 @@ open class Account : SqlEntity {
      * Computes the display name for this account, if this account has that
      * information.
      */
-    val Account.name: String
+    val fullName: String
         get() = when (this) {
             is Profile -> "$firstName $lastName"
             is Page -> name
