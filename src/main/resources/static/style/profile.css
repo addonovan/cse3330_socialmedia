@@ -1,12 +1,28 @@
+img.profileImage.small {
+    width: 32px;
+    height: 32px;
+}
+
+img.profileImage.large {
+    width: 128px;
+    height: 128px;
+}
+
 #Account {
+    display: flex;
+    align-items: end;
 
+    border-bottom: 2px solid black;
+    box-shadow: 1px 1px rgba(0, 0, 0, 0.25);
+    margin-bottom: 1.5em;
+    padding-left: 1em;
 }
 
-span#AccountInfo {
-    font-size: 24pt;
+#AccountInfo {
+    padding-left: 1em;
 }
 
-span#AccountInfo img.profileImage {
-    width: 150px;
-    height: 150px;
-}
+    #AccountInfo .accountName {
+        font-size: 24pt;
+        font-weight: bold;
+    }

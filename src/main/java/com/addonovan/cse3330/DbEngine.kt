@@ -167,9 +167,9 @@ object DbEngine {
      * Creates a new `post` on the wall with the given `wallID`, authored by
      * the given `account`.
      */
-    fun createPost(account: Account, wallId: Int, post: Post) = call("CreatePost")
-            .supply(account.id)
-            .supply(wallId)
+    fun createPost(post: Post) = call("CreatePost")
+            .supply(post.posterId)
+            .supply(post.wallId)
             .supply(post.text?.body)
             .supply(post.media?.url)
             .supply(post.poll?.question)

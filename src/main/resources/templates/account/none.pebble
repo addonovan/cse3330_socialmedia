@@ -1,0 +1,5 @@
+{% extends "../base" %}
+
+{% block content %}
+    Sorry, that profile doesn't exist :/
+{% endblock %}

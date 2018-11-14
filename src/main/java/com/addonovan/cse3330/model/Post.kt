@@ -1,5 +1,6 @@
 package com.addonovan.cse3330.model
 
+import com.addonovan.cse3330.DbEngine
 import java.lang.IllegalStateException
 import java.sql.ResultSet
 import java.sql.Timestamp
@@ -32,6 +33,18 @@ class Post : SqlEntity {
 
     /** When this post was written. */
     lateinit var createTime: Timestamp
+
+    //
+    // Derived Properties
+    //
+
+    val poster: Account by lazy {
+        DbEngine.getAccountById(posterId)!!
+    }
+
+    val wall: Account by lazy {
+        DbEngine.getAccountById(wallId)!!
+    }
 
     //
     // Implementation

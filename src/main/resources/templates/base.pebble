@@ -1,0 +1,48 @@
+<html>
+
+    <head>
+        <title>{% block title %} CSE3330 {% endblock %}</title>
+
+        <link rel="stylesheet" type="text/css" href="/style/main.css">
+        <link rel="stylesheet" type="text/css" href="/style/nav.css">
+        <link rel="stylesheet" type="text/css" href="/style/post.css">
+        <link rel="stylesheet" type="text/css" href="/style/profile.css">
+        <link rel="stylesheet" type="text/css" href="/style/etc.css">
+    </head>
+
+    <body>
+
+        <nav>
+            <ul>
+                {% if user != null %}
+                    <li> Howdy, {{user.firstName}}! </li>
+                {% endif %}
+                <li> <a href="/">Home</a> </li>
+                {% if user != null %}
+                    <li>
+                        <form method="post" action="/signout" class="inline">
+                            <button type="submit" class="link">
+                                Log out
+                            </button>
+                        </form>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <div id="Main">
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+
+        <footer>
+            {% block footer %}
+            Copyright &copy; 2018 -- Austin D. Donovan
+            {% endblock %}
+        </footer>
+
+    </body>
+
+</html>

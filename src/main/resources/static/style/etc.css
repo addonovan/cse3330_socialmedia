@@ -1,0 +1,14 @@
+.inline { display: inline; }
+
+.hidden { display: none; }
+
+button.link {
+    background: none;
+    border: none;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 1em;
+    font-family: serif;
+}
+
+

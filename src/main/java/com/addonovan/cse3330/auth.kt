@@ -15,7 +15,7 @@ private const val LOGIN_PROFILE_COOKIE_NAME = "TotallyInsecureLoggedInProfileId"
  */
 val HttpServletRequest.profile: Profile?
     get() {
-        val cookie = this.cookies.find {
+        val cookie = this.cookies?.find {
             it.name == LOGIN_PROFILE_COOKIE_NAME
         } ?: return null
 
@@ -52,7 +52,6 @@ fun HttpServletResponse.signOut() {
 
 private fun createCookie(name: String, value: String?, maxAgeMins: Int) =
         Cookie(name, value).apply {
-            path = "/cse3330"
             isHttpOnly = true
             maxAge = maxAgeMins * 60
         }
