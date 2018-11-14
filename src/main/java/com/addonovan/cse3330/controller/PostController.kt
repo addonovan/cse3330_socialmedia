@@ -27,7 +27,7 @@ open class PostController {
             response: HttpServletResponse,
             @ModelAttribute post: Post
     ) {
-        response.sendRedirect(request.requestURL.toString())
+        response.sendRedirect(request.getHeader("referer"))
 
         val user = request.profile ?: return
         post.posterId = user.id
@@ -43,7 +43,7 @@ open class PostController {
             response: HttpServletResponse,
             @ModelAttribute post: Post
     ) {
-        response.sendRedirect(request.requestURL.toString())
+        response.sendRedirect(request.getHeader("referer"))
 
         val user = request.profile ?: return
         post.posterId = user.id
