@@ -140,15 +140,11 @@ object DbEngine {
 
     /**
      * Updates the relationship between the [follower] and [followee]. If
-     * [following] is set to `true`, then the `follower` will *unfollow* the
-     * `followee`, as the `followee` is *currently being followed*; otherwise,
-     * the `follower` will try to follow the `followee`.
+     * [following] is set to `true`, then the `follower` will attempt to
+     * follow the given `followee`; otherwise, it will unfollow them.
      *
      * If the `followee` is private and the `follower` is trying to follow them,
      * then a follow request will be added to the account.
-     *
-     * @param following If `follower` is *already following* `followee` and is
-     * trying to unfollow them.
      *
      * @see [getFollowers]
      */
