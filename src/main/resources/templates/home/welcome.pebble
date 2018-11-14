@@ -1,0 +1,30 @@
+{% extends "../base" %}
+
+{% block title %}
+    Welcome to SocialMediaSite
+{% endblock %}
+
+{% block content %}
+
+<div>
+    <h3>Already have an account?</h3>
+    <h4>Sign In</h4>
+    <form method="post" action="/signin">
+        <label>
+            Username:
+            <input name="username" type="text">
+        </label>
+
+        <label>
+            Password:
+            <input name="password" type="password">
+        </label>
+
+        <input type="submit" value="Log in">
+    </form>
+
+    <h3>New here?</h3>
+    <h4><a href="/register/profile">Register for an account</a></h4>
+</div>
+
+{% endblock %}
