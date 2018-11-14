@@ -138,12 +138,46 @@ object DbEngine {
                     null
             }
 
+    /**
+     * Updates the relationship between the [follower] and [followee]. If
+     * [following] is set to `true`, then the `follower` will *unfollow* the
+     * `followee`, as the `followee` is *currently being followed*; otherwise,
+     * the `follower` will try to follow the `followee`.
+     *
+     * If the `followee` is private and the `follower` is trying to follow them,
+     * then a follow request will be added to the account.
+     *
+     * @param following If `follower` is *already following* `followee` and is
+     * trying to unfollow them.
+     *
+     * @see [getFollowers]
+     */
     fun updateFollow(follower: Account, followee: Account, following: Boolean) =
             call("UpdateFollow")
                     .supply(follower.id)
                     .supply(followee.id)
                     .supply(following)
                     .executeOn(CONNECTION) {}
+
+    /**
+     * Gets a list of all accounts which follow the given [account]. This can
+     * also return only the follow requests for the given account, should
+     * [requests] be `true`.
+     *
+     * @return A list of all accounts which follow, or are requesting to follow,
+     * the given [account].
+     *
+     * @see [updateFollow]
+     * @see [getAccountById]
+     */
+    fun getFollowers(account: Account, requests: Boolean = false) = call("FindFollowers")
+            .supply(account.id)
+            .supply(requests)
+            .executeOn(CONNECTION) {
+                it.map {
+                    getAccountById(it.getInt("FollowerId"))!!
+                }
+            }
 
     /**
      * Views the page as to increment the number of page views.
