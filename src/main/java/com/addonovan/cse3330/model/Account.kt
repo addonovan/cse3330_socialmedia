@@ -1,5 +1,6 @@
 package com.addonovan.cse3330.model
 
+import com.addonovan.cse3330.DbEngine
 import java.lang.IllegalStateException
 import java.sql.ResultSet
 import java.sql.Timestamp
@@ -61,6 +62,20 @@ open class Account : SqlEntity {
             else -> throw IllegalStateException("Account does not have enough information to determine type")
         }
     }
+
+    /** A list of accounts who are currently following this one. */
+    val followers: List<Account> by lazy {
+        DbEngine.getFollowers(this)
+    }
+
+    /** A list of accounts who are requesting ot follow this one. */
+    val followRequests: List<Account> by lazy {
+        DbEngine.getFollowers(this, requests = true)
+    }
+
+    //
+    // Functions
+    //
 
     override fun fromRow(row: ResultSet) {
         id = row.getInt("AccountId")
