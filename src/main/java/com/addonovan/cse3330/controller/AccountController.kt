@@ -36,14 +36,14 @@ open class AccountController {
      * the name of the relevant template file.
      */
     private fun pageOverview(model: Model, account: Account?) = when (account) {
-        null -> "no_profile"
+        null -> "account/none"
 
         else -> {
             val overview = DbEngine.wallOverview(account)
 
             model.addAttribute("account", account)
             model.addAttribute("overview", overview)
-            "account_overview"
+            "account/overview"
         }
     }
 
