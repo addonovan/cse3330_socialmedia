@@ -52,6 +52,7 @@ BEGIN
 END
 $$;
 
+
 CREATE OR REPLACE FUNCTION UpdateFollow(
     FollowerId          INTEGER,
     FolloweeId          INTEGER,
@@ -62,6 +63,8 @@ AS $$
 
 DECLARE
     followee_is_private BOOLEAN = TRUE;
+    _follower_id INTEGER = FollowerId;
+    _followee_id INTEGER = FolloweeId;
 
 BEGIN
 
@@ -69,19 +72,19 @@ BEGIN
     IF NOT Following THEN
 
         DELETE FROM "Follow"
-        WHERE "Follow".followerid = FollowerId
-            AND "Follow".followeeid = FolloweeId;
+        WHERE "Follow".followerid = _follower_id
+          AND "Follow".followeeid = _followee_id;
 
         DELETE FROM "FollowRequest"
-        WHERE "FollowRequest".followerid = FollowerId
-            AND "FollowRequest".followeeid = FolloweeId;
+        WHERE "FollowRequest".followerid = _follower_id
+          AND "FollowRequest".followeeid = _followee_id;
 
     ELSE
 
         -- check if the followee account is private
-        SELECT isprivate Into followee_is_private
+        SELECT isprivate INTO followee_is_private
         FROM "Account" a
-        WHERE a.id = FolloweeId;
+        WHERE a.accountid = FolloweeId;
 
         -- if it's private, then we'll add a follow request
         IF followee_is_private THEN
@@ -98,6 +101,7 @@ BEGIN
 
 END
 $$;
+
 
 CREATE OR REPLACE FUNCTION CreatePost(
     AccountId           INTEGER,
