@@ -11,5 +11,8 @@ div#Main {}
     }
 
     div#Main div#Overview {
+        display: flex;
+        flex-direction: column;
+
         margin: 1em auto 1em auto;
     }

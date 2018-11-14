@@ -15,17 +15,33 @@
         {% for post in overview %}
         <div class="post">
             <img class="profileImage small" src="{{post.poster.profileImageURL}}"/>
-            <p class="postName">
-                {% if post.posterId != user.id %}
-                    <a href="/account/{{post.posterId}}">
-                        {{post.poster.fullName}}
-                    </a>
-                {% else %}
-                    {{post.poster.fullName}}
-                {% endif %}
-            </p>
-            <p class="postBody"> {{post.text.body}} </p>
-            <p class="postTime"> {{post.createTime}} </p>
+            <div class="content">
+                <p>
+                    <span class="postName">
+                        {% if post.posterId != user.id %}
+                            <a href="/account/{{post.posterId}}">
+                                {{post.poster.fullName}}</a>
+                        {% else %}
+                            {{user.fullName}}
+                        {% endif %}
+                    </span>
+
+                    {% if post.posterId != post.wallId %}
+                    >
+
+                    <span class="postName">
+                        {% if post.wallId != user.id %}
+                            <a href="/account/{{post.wallId}}">
+                                {{post.wall.fullName}}</a>
+                        {% else %}
+                            {{user.fullName}}
+                        {% endif %}
+                    </span>
+                    {% endif %}
+                </p>
+                <p class="postBody"> {{post.text.body}} </p>
+                <p class="postTime"> {{post.createTime}} </p>
+            </div>
         </div>
         {% endfor %}
     </div>

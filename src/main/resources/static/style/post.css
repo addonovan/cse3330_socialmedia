@@ -1,28 +1,50 @@
 .post {
+    display: flex;
+    align-self: center;
+    flex-direction: row;
+    align-content: space-between;
+
     background: white;
     border: 1px solid black;
+    box-shadow: 1px 1px inset rgba(0, 0, 0, 0.30),
+                2px 2px rgba(0, 0, 0, 0.20);
     margin-bottom: 0.5em;
     margin-top: 0.5em;
+
+    width: 100%;
     max-width: 512px;
 }
 
-.post > p {
-    margin: 0;
-}
+    .post p {
+        margin: 0;
+    }
 
-.post .postName {
-    font-size: 11pt;
-    font-weight: bold;
-}
+    .post img.profileImage {
+        border: 2px solid black;
+        margin: 1em 0.5em 1em 1em;
+    }
 
-.post .postBody {
-    font-size: 14pt;
-    margin-top: 0.25em;
-    margin-bottom: 0.25em;
-}
+    .post .content {
+        flex-grow: 1;
+        margin: 1em;
+    }
 
-.post .postTime {
-    color: rgba(0, 0, 0, 0.64);
-    font-size: 8pt;
-}
+    .post .postName {
+        font-size: 11pt;
+        font-weight: bold;
+    }
+
+    .post .postBody {
+        font-size: 14pt;
+        margin-top: 0.25em;
+        margin-bottom: 0.25em;
+        text-align: justify;
+    }
+
+    .post .postTime {
+        color: rgba(0, 0, 0, 0.64);
+        font-size: 8pt;
+    }
+
+
 
