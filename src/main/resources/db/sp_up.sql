@@ -1,3 +1,20 @@
+CREATE OR REPLACE FUNCTION GetFollowing(
+    FollowerId          INTEGER
+) RETURNS TABLE (
+    FolloweeId          INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+
+BEGIN
+
+    SELECT FolloweeId
+    FROM "Follow" f
+    WHERE f.followerid = FollowerId;
+
+END
+$$;
+
 CREATE OR REPLACE FUNCTION GetFollowers(
     FolloweeId          INTEGER,
     Requests            BOOLEAN
