@@ -30,7 +30,9 @@
         {% endif %}
 
         {% if post.media != null %}
-            <img class="postMedia" src="{{post.media.url}}"/>
+            <img class="postMedia"
+                 src="{{post.media.url}}"
+                 onclick="window.open(this.src)"/>
         {% endif %}
 
         {% if post.poll != null %}
