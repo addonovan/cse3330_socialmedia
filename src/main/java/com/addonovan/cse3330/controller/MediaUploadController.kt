@@ -76,8 +76,25 @@ open class MediaUploadController {
             // which, admittedly, is probably a pretty bad idea, but whatever
             val fileName = (file.originalFilename ?: file.name).let {
                 val extension = it.substringAfterLast('.')
-                val newName = System.currentTimeMillis().toString(radix = 36)
-                "$newName.$extension"
+                var name: String
+
+                // continue trying new names until we find one that doesn't
+                // already exist
+                do {
+
+                    // generate a random named based off of:
+                    // - the system's clock time in millis
+                    // - the JVM's monotonic clock time
+                    // together, these should probably never actually cause a
+                    // name collision, but better safe than sorry
+                    // also base 36 because it's easy and looks cool
+                    val millisPart = System.currentTimeMillis().toString(radix = 36)
+                    val nanosPart = System.nanoTime().toString(radix = 36)
+
+                    name = "$millisPart$nanosPart.$extension"
+                } while (Files.exists(Paths.get(name)))
+
+                name
             }
 
             val type = UploadType.PostAttachment
