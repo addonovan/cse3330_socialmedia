@@ -13,7 +13,7 @@
 
     <div id="Overview">
         {% for post in overview %}
-            {% include "../post" %}
+            {% include "../post" with {"wall": user} %}
         {% endfor %}
     </div>
 {% endblock %}

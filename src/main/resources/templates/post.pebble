@@ -3,11 +3,11 @@
     <div class="content">
         <p>
             <span class="postName">
-                {% if post.posterId != user.id %}
+                {% if post.posterId != wall.id %}
                     <a href="/account/{{post.posterId}}">
                         {{post.poster.fullName}}</a>
                 {% else %}
-                    {{user.fullName}}
+                    {{wall.fullName}}
                 {% endif %}
             </span>
 
@@ -15,11 +15,11 @@
                 >
 
                 <span class="postName">
-                    {% if post.wallId != user.id %}
+                    {% if post.wallId != wall.id %}
                         <a href="/account/{{post.wallId}}">
                             {{post.wall.fullName}}</a>
                     {% else %}
-                        {{user.fullName}}
+                        {{wall.fullName}}
                     {% endif %}
                 </span>
             {% endif %}

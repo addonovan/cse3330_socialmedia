@@ -40,36 +40,7 @@
 
     <div id="Overview">
         {% for post in overview %}
-        <div class="post">
-            <img class="profileImage small" src="{{post.poster.profileImageURL}}"/>
-            <div class="content">
-                <p>
-                    <span class="postName">
-                        {% if post.posterId != account.id %}
-                            <a href="/account/{{post.posterId}}">
-                                {{post.poster.fullName}}</a>
-                        {% else %}
-                            {{post.poster.fullName}}
-                        {% endif %}
-                    </span>
-
-                    {% if post.posterId != post.wallId %}
-                    >
-
-                    <span class="postName">
-                        {% if post.wallId != account.id %}
-                            <a href="/account/{{post.wallId}}">
-                                {{post.wall.fullName}}</a>
-                        {% else %}
-                            {{post.wall.fullName}}
-                        {% endif %}
-                    </span>
-                    {% endif %}
-                </p>
-                <p class="postBody"> {{post.text.body}} </p>
-                <p class="postTime"> {{post.createTime}} </p>
-            </div>
-        </div>
+            {% include "../post" with {"wall": account} %}
         {% endfor %}
     </div>
 {% endblock %}
