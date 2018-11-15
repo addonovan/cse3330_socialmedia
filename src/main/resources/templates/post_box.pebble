@@ -1,0 +1,7 @@
+<form class="post" method="post" action="/post/submit" enctype="multipart/form-data">
+    <input type="number" name="wallId" class="hidden" value="{{wall.id}}">
+
+    <textarea name="text" placeholder="How's i goin', pardner?"></textarea>
+    <input type="file" name="mediaFile"/>
+    <input type="submit" value="Send it o'er yonder">
+</form>

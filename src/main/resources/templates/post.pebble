@@ -1,0 +1,44 @@
+<div class="post">
+    <img class="profileImage small" src="{{post.poster.profileImageURL}}"/>
+    <div class="content">
+        <p>
+            <span class="postName">
+                {% if post.posterId != wall.id %}
+                    <a href="/account/{{post.posterId}}">
+                        {{post.poster.fullName}}</a>
+                {% else %}
+                    {{wall.fullName}}
+                {% endif %}
+            </span>
+
+            {% if post.posterId != post.wallId %}
+                >
+
+                <span class="postName">
+                    {% if post.wallId != wall.id %}
+                        <a href="/account/{{post.wallId}}">
+                            {{post.wall.fullName}}</a>
+                    {% else %}
+                        {{wall.fullName}}
+                    {% endif %}
+                </span>
+            {% endif %}
+        </p>
+
+        {% if post.text != null %}
+            <p class="postBody"> {{post.text.body}} </p>
+        {% endif %}
+
+        {% if post.media != null %}
+            <img class="postMedia"
+                 src="{{post.media.url}}"
+                 onclick="window.open(this.src)"/>
+        {% endif %}
+
+        {% if post.poll != null %}
+            <p class="pollPost">Hello, I'm just a placeholder!</p>
+        {% endif %}
+
+        <p class="postTime"> {{post.createTime}} </p>
+    </div>
+</div>

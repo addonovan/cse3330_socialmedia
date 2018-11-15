@@ -2,6 +2,15 @@
 /build/
 !gradle/wrapper/gradle-wrapper.jar
 
+# Exclude all uploaded media from being tracked
+src/main/resources/static/media/headers/*
+src/main/resources/static/media/profiles/*
+src/main/resources/static/media/posts/*
+
+# But make sure not to exclude the default images (as those *should* be tracked)
+!src/main/resources/static/media/headers/default.png
+!src/main/resources/static/media/profiles/default.png
+
 ### STS ###
 .apt_generated
 .classpath
