@@ -41,6 +41,12 @@ div.post {
         text-align: justify;
     }
 
+    .post .postMedia {
+        max-height: 15em;
+        max-width: 100%;
+        padding: 0.5em;
+    }
+
     .post .postTime {
         color: rgba(0, 0, 0, 0.64);
         font-size: 8pt;
