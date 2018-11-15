@@ -29,14 +29,15 @@ open class PostController {
     fun submitPost(
             request: HttpServletRequest,
             response: HttpServletResponse,
-            @RequestParam mediaFile: MultipartFile?,
+            @RequestParam mediaFile: MultipartFile,
             @ModelAttribute post: Post
     ) {
         response.sendRedirect(request.getHeader("referer"))
 
         // if we have a file, then we'll save it and add it to the post here
-        mediaFile?.writeAs(UploadType.PostAttachment)?.let {
-            post.media = Post.MediaBody(it)
+        if (!mediaFile.isEmpty) {
+            val url = mediaFile.writeAs(UploadType.PostAttachment)
+            post.media = Post.MediaBody(url)
         }
 
         val user = request.profile ?: return
