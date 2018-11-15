@@ -11,6 +11,11 @@
         <input type="submit" value="Send it o'er yonder">
     </form>
 
+    <form class="post" method="post" action="/media/upload" enctype="multipart/form-data">
+        <input type="file" name="file"/>
+        <input type="submit" value="Show 'em all this 'ere picture"/>
+    </form>
+
     <div id="Overview">
         {% for post in overview %}
             {% include "../post" with {"wall": user} %}
