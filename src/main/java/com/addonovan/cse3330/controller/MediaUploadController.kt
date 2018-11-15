@@ -14,6 +14,12 @@ import java.nio.file.Paths
 @RequestMapping("/media")
 open class MediaUploadController {
 
+    companion object {
+
+        private const val LOCAL_DIR: String = "src/main/resources/static/media"
+
+    }
+
     /**
      * The type of file being uploaded.
      */
@@ -23,8 +29,8 @@ open class MediaUploadController {
         HeaderImage("headers"),
         PostAttachment("posts");
 
-        /** The location */
-        val directory = "resources/static/media/$dirName".apply {
+        /** The directory containing this type of media upload. */
+        val directory = "$LOCAL_DIR/$dirName/".apply {
             val path = Paths.get(this)
             if (Files.exists(path)) return@apply
 
@@ -32,6 +38,9 @@ open class MediaUploadController {
             if (Files.notExists(path))
                 throw IllegalStateException("Failed to create necessary media directory: $this")
         }
+
+        /** The URL prefix of a file in this directory. */
+        val url = "/media/$dirName"
 
     }
 
@@ -61,15 +70,29 @@ open class MediaUploadController {
             return MediaUploadResponse.fail("Selected file empty or does not exist")
         }
 
-        try {
+        return try {
+
+            // generate the new file name based off of the current system time,
+            // which, admittedly, is probably a pretty bad idea, but whatever
+            val fileName = (file.originalFilename ?: file.name).let {
+                val extension = it.substringAfterLast('.')
+                val newName = System.currentTimeMillis().toString(radix = 36)
+                "$newName.$extension"
+            }
+
+            val type = UploadType.PostAttachment
+
+            // actually copy the file into its new location
             val bytes = file.bytes
-            val path = Paths.get(UploadType.PostAttachment.directory + file.originalFilename)
+            val path = Paths.get("${type.directory}/$fileName")
             Files.write(path, bytes)
 
-            return MediaUploadResponse.success(path.toString())
+            // now tell the user how to access that file
+            MediaUploadResponse.success("${type.url}/$fileName")
+
         } catch (e: IOException) {
             e.printStackTrace()
-            return MediaUploadResponse.fail("A server-side error occurred: ${e.message}")
+            MediaUploadResponse.fail("A server-side error occurred: ${e.message}")
         }
     }
 
