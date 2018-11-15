@@ -32,11 +32,9 @@
         </div>
     </div>
 
-    <form class="post" method="post" action="/post/submit">
-        <input name="wallId" type="number" class="hidden" value="{{account.id}}">
-        <textarea name="text" placeholder="How's i goin', pardner?"></textarea>
-        <input type="submit" value="Send it o'er yonder">
-    </form>
+    {% if user != null %}
+        {% include "../post_box" with {"wall": account} %}
+    {% endif %}
 
     <div id="Overview">
         {% for post in overview %}
