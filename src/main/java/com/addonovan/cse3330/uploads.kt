@@ -32,53 +32,6 @@ enum class UploadType(dirName: String) {
 
 }
 
-/**
- * A response type of the [success] of a media upload.
- *
- * @see [SuccessfulUploadResponse]
- * @see [FailedUploadResponse]
- * @see [fail]
- * @see [success]
- */
-sealed class MediaUploadResponse(val success: Boolean) {
-
-    companion object {
-
-        /**
-         * Convenience function to create a new [FailedUploadResponse] with the
-         * given [message].
-         *
-         * @see [FailedUploadResponse]
-         */
-        fun fail(message: String) = FailedUploadResponse(message)
-
-        /**
-         * Convenience function to create a new [SuccessfulUploadResponse] with
-         * the given [link].
-         *
-         * @see [SuccessfulUploadResponse]
-         */
-        fun success(link: String) = SuccessfulUploadResponse(link)
-    }
-
-    /**
-     * A successful media upload response, where [success] is `true` and the
-     * [link] is a local URL which will be used to reference the new image.
-     *
-     * @see [success]
-     */
-    data class SuccessfulUploadResponse(val link: String) : MediaUploadResponse(true)
-
-    /**
-     * An unsuccessful (i.e. failed) media upload response, where [success] is
-     * `false` and the [message] describes the problem when uploading.
-     *
-     * @see [fail]
-     */
-    data class FailedUploadResponse(val message: String) : MediaUploadResponse(false)
-
-}
-
 //
 // End points
 //
@@ -87,37 +40,28 @@ sealed class MediaUploadResponse(val success: Boolean) {
  * Copies [this][MultipartFile] file from the hosts's computer to the
  * directory corresponding with the given upload [type] with a new file name.
  *
- * @return The JSON response to send back to the file uploader.
- *
- * @see [MediaUploadResponse]
+ * @return The URL the file can now be accessed at.
  */
-fun MultipartFile.writeAs(type: UploadType): MediaUploadResponse {
+fun MultipartFile.writeAs(type: UploadType): String {
     if (isEmpty) {
-        return MediaUploadResponse.fail("Selected file empty or does not exist")
+        throw java.lang.IllegalStateException("Selected file is empty or does not exist!")
     }
 
-    return try {
+    // generate the new file name based off of the current system time,
+    // which, admittedly, is probably a pretty bad idea, but whatever
+    val fileName = (originalFilename ?: name).let {
+        val extension = it.substringAfterLast('.')
 
-        // generate the new file name based off of the current system time,
-        // which, admittedly, is probably a pretty bad idea, but whatever
-        val fileName = (originalFilename ?: name).let {
-            val extension = it.substringAfterLast('.')
-
-            findNewFileName(type.directory, extension)
-        }
-
-        // actually copy the file into its new location
-        val bytes = bytes
-        val path = Paths.get("${type.directory}/$fileName")
-        Files.write(path, bytes)
-
-        // now tell the user how to access that file
-        MediaUploadResponse.success("${type.url}/$fileName")
-
-    } catch (e: IOException) {
-        e.printStackTrace()
-        MediaUploadResponse.fail("A server-side error occurred: ${e.message}")
+        findNewFileName(type.directory, extension)
     }
+
+    // actually copy the file into its new location
+    val bytes = bytes
+    val path = Paths.get("${type.directory}/$fileName")
+    Files.write(path, bytes)
+
+    // now tell the user how to access that file
+    return "${type.url}/$fileName"
 }
 
 /**
