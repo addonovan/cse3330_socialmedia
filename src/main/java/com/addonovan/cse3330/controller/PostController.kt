@@ -58,6 +58,8 @@ open class PostController {
             @RequestParam endTime: String,
             @RequestParam endDate: String
     ) {
+        response.redirectToReferrer(request)
+
         val user = request.profile ?: return
         val start = Timestamp.valueOf("$startDate $startTime:00")
         val end = Timestamp.valueOf("$endDate $endTime:00")
