@@ -1,10 +1,7 @@
 package com.addonovan.cse3330.controller
 
-import com.addonovan.cse3330.DbEngine
-import com.addonovan.cse3330.UploadType
+import com.addonovan.cse3330.*
 import com.addonovan.cse3330.model.Post
-import com.addonovan.cse3330.profile
-import com.addonovan.cse3330.writeAs
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
@@ -43,5 +40,13 @@ open class PostController {
         val user = request.profile ?: return
         post.posterId = user.id
         DbEngine.createPost(post)
+    }
+
+    @PostMapping("/event")
+    fun submitEvent(
+            request: Request,
+            response: Response
+    ) {
+        val user = request.profile ?: return
     }
 }
