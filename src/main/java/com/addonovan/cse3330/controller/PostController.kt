@@ -1,6 +1,7 @@
 package com.addonovan.cse3330.controller
 
 import com.addonovan.cse3330.*
+import com.addonovan.cse3330.model.Event
 import com.addonovan.cse3330.model.Post
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.ModelAttribute
@@ -60,5 +61,14 @@ open class PostController {
         val user = request.profile ?: return
         val start = Timestamp.valueOf("$startDate $startTime:00")
         val end = Timestamp.valueOf("$endDate $endTime:00")
+
+        DbEngine.createEvent(Event().apply {
+            this.hostId = user.id
+            this.name = name
+            this.description = description
+            this.location = location
+            this.startTime = start
+            this.endTime = end
+        })
     }
 }
