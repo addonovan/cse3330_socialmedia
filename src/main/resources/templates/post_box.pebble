@@ -1,5 +1,5 @@
 <div class="flex-vertical">
-    <div class="flex-horizontal">
+    <div id="PostTypeSelector" class="flex-horizontal">
         <label>
             <input type="radio" name="postType" value="post"> Post
         </label>
@@ -8,7 +8,11 @@
         </label>
     </div>
 
-    <form class="post" method="post" action="/post/submit" enctype="multipart/form-data">
+    <form id="PostForm"
+          class="post"
+          method="post"
+          action="/post/submit"
+          enctype="multipart/form-data">
         <input type="number" name="wallId" class="hidden" value="{{wall.id}}">
 
         <textarea name="text" placeholder="How's i goin', pardner?"></textarea>
@@ -16,7 +20,10 @@
         <input type="submit" value="Send it o'er yonder">
     </form>
 
-    <form class="post" method="post" action="/post/event">
+    <form id="EventForm"
+          class="post"
+          method="post"
+          action="/post/event">
         <input type="text" placeholder="Name">
         <textarea name="description" placeholder="Description"></textarea>
         <input type="text" placeholder="Location">
