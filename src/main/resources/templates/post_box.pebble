@@ -28,9 +28,18 @@
         <textarea name="description" placeholder="Description"></textarea>
         <input type="text" placeholder="Location">
         <label>
-            Start Time
-            <input type="date">
-            <input type="time">
+            Starts at
+            <input type="time" name="startTime">
+            on
+            <input type="date" name="startDate">
         </label>
+        <label>
+            Ends at
+            <input type="time" name="endTime">
+            on
+            <input type="date" name="endDate">
+        </label>
+
+        <input type="submit" value="Post">
     </form>
 </div>
