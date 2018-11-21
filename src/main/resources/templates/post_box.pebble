@@ -16,7 +16,7 @@
         <input type="submit" value="Send it o'er yonder">
     </form>
 
-    <form class="event flexbox-vertical" method="post" action="/post/event">
+    <form class="post" method="post" action="/post/event">
         <input type="text" placeholder="Name">
         <textarea name="description" placeholder="Description"></textarea>
         <input type="text" placeholder="Location">

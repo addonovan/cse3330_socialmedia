@@ -1,6 +1,5 @@
+.hidden { display: none !important; }
 .inline { display: inline; }
-
-.hidden { display: none; }
 
 button.link {
     background: none;
@@ -10,5 +9,8 @@ button.link {
     font-size: 1em;
     font-family: serif;
 }
+
+.flex-vertical { display: flex; flex-direction: column; }
+.flex-horizontal { display: flex; flex-direction: row; }
 
 
