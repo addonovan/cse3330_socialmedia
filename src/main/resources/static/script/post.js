@@ -26,6 +26,13 @@ function attachEventTypeListener() {
     })
 }
 
+function selectPostDefault() {
+    $("#PostTypeSelector input[name='postType'][value='post']")
+        .prop("checked", true);
+    showNormalPost();
+}
+
 $(() => {
     attachEventTypeListener();
+    selectPostDefault();
 });
