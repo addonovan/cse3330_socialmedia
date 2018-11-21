@@ -1,3 +1,46 @@
+CREATE OR REPLACE FUNCTION CreateEvent(
+    HostId      INTEGER,
+    Name        "Event".EventName%TYPE,
+    Description "Event".EventDesc%TYPE,
+    StartTime   TIMESTAMP,
+    EndTime     TIMESTAMP,
+    Location    "Event".Location%TYPE
+) RETURNS INTEGER
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    _new_id INTEGER = 0;
+
+BEGIN
+
+    INSERT INTO "Event" (hostid, eventname, eventdesc, starttime, endtime, location)
+    VALUES (HostId, name, description, starttime, endtime, location)
+    RETURNING eventid INTO _new_id;
+
+    RETURN _new_id;
+
+END
+$$;
+
+CREATE OR REPLACE FUNCTION FindEvent(
+    EventId     INTEGER
+) RETURNS SETOF "Event"
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    _event_id INTEGER = EventId;
+
+BEGIN
+
+    RETURN QUERY
+        SELECT * FROM "Event" e
+        WHERE e.eventid = _event_id;
+
+END
+$$;
+
 CREATE OR REPLACE FUNCTION FindFollowing(
     FollowerId          INTEGER
 ) RETURNS TABLE (
