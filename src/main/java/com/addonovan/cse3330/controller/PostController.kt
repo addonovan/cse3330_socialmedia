@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.multipart.MultipartFile
+import java.sql.Date
+import java.sql.Time
+import java.sql.Timestamp
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -45,8 +48,17 @@ open class PostController {
     @PostMapping("/event")
     fun submitEvent(
             request: Request,
-            response: Response
+            response: Response,
+            @RequestParam name: String,
+            @RequestParam description: String,
+            @RequestParam location: String,
+            @RequestParam startTime: String,
+            @RequestParam startDate: String,
+            @RequestParam endTime: String,
+            @RequestParam endDate: String
     ) {
         val user = request.profile ?: return
+        val start = Timestamp.valueOf("$startDate $startTime:00")
+        val end = Timestamp.valueOf("$endDate $endTime:00")
     }
 }
