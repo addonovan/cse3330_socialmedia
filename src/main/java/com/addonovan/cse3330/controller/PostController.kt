@@ -1,16 +1,17 @@
 package com.addonovan.cse3330.controller
 
-import com.addonovan.cse3330.DbEngine
-import com.addonovan.cse3330.UploadType
+import com.addonovan.cse3330.*
+import com.addonovan.cse3330.model.Event
 import com.addonovan.cse3330.model.Post
-import com.addonovan.cse3330.profile
-import com.addonovan.cse3330.writeAs
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.multipart.MultipartFile
+import java.sql.Date
+import java.sql.Time
+import java.sql.Timestamp
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -44,4 +45,5 @@ open class PostController {
         post.posterId = user.id
         DbEngine.createPost(post)
     }
+
 }

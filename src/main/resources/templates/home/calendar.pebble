@@ -1,0 +1,13 @@
+{% extends "../base" %}
+
+{% block title %}
+    Calendar | SocialMediaSite
+{% endblock %}
+
+{% block content %}
+    <div id="Overview">
+        {% for event in calendar %}
+            {% include "../event" with {"event": event} %}
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,9 +1,6 @@
 package com.addonovan.cse3330
 
-import com.addonovan.cse3330.model.Account
-import com.addonovan.cse3330.model.Page
-import com.addonovan.cse3330.model.Post
-import com.addonovan.cse3330.model.Profile
+import com.addonovan.cse3330.model.*
 import com.addonovan.cse3330.sql.call
 import com.addonovan.cse3330.sql.map
 import java.sql.Connection
@@ -211,9 +208,20 @@ object DbEngine {
      */
     fun feedFor(account: Account) = call("FindFeedFor")
             .supply(account.id)
-            .executeOn(CONNECTION) {
-                it.map {
-                    Post().apply { fromRow(it) }
+            .executeOn(CONNECTION) { set ->
+                set.map { row ->
+                    Post().apply { fromRow(row) }
+                }
+            }
+
+    /**
+     * Generates a list of calendar [events][Event] for the given [account].
+     */
+    fun calendarFor(account: Account) = call("FindCalendarFor")
+            .supply(account.id)
+            .executeOn(CONNECTION) { set ->
+                set.map { row ->
+                    Event().apply { fromRow(row) }
                 }
             }
 
@@ -288,6 +296,70 @@ object DbEngine {
                     throw RuntimeException("No result from CreatePage call!")
 
                 getPageById(it.getInt(1))!!
+            }
+
+    /**
+     * Finds the event that has the given [id], if any exist.
+     */
+    fun getEventById(id: Int) = call("FindEvent")
+            .supply(id)
+            .executeOn(CONNECTION) {
+                if (it.next())
+                    Event().apply { fromRow(it) }
+                else
+                    null
+            }
+
+    /**
+     * Inserts the provided [event] into the database, then returns the
+     * newly created event object.
+     */
+    fun createEvent(event: Event) = call("CreateEvent")
+            .supply(event.hostId)
+            .supply(event.name)
+            .supply(event.description)
+            .supply(event.startTime)
+            .supply(event.endTime)
+            .supply(event.location)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("No result from CreateEvent call!")
+
+                getEventById(it.getInt(1))!!
+            }
+
+    fun deleteEvent(event: Event) = call("DeleteEvent")
+            .supply(event.id)
+            .executeOn(CONNECTION) {}
+
+    fun markEventInterest(
+            user: Profile,
+            eventId: Int,
+            onlyInterested: Boolean
+    ) = call("MarkEventInterest")
+            .supply(user.id)
+            .supply(eventId)
+            .supply(onlyInterested)
+            .executeOn(CONNECTION) {}
+
+    fun getAttendees(eventId: Int): List<Profile> = call("GetEventInterest")
+            .supply(eventId)
+            .supply(true)
+            .executeOn(CONNECTION) { set ->
+                set.map { row ->
+                    val profileId = row.getInt(1)
+                    getProfileById(profileId)!!
+                }
+            }
+
+    fun getProspectiveAttendees(eventId: Int): List<Profile> = call("GetEventInterest")
+            .supply(eventId)
+            .supply(false)
+            .executeOn(CONNECTION) { set ->
+                set.map { row ->
+                    val profileId = row.getInt(1)
+                    getProfileById(profileId)!!
+                }
             }
 
 }

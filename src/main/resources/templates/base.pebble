@@ -8,6 +8,12 @@
         <link rel="stylesheet" type="text/css" href="/style/post.css">
         <link rel="stylesheet" type="text/css" href="/style/profile.css">
         <link rel="stylesheet" type="text/css" href="/style/etc.css">
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+                crossorigin="anonymous"></script>
+        <script src="/script/post.js"></script>
+        <script src="/script/event.js"></script>
     </head>
 
     <body>
@@ -19,6 +25,7 @@
                 {% endif %}
                 <li> <a href="/">Home</a> </li>
                 {% if user != null %}
+                    <li> <a href="/calendar">Your Calendar</a> </li>
                     <li>
                         <form method="post" action="/signout" class="inline">
                             <button type="submit" class="link">

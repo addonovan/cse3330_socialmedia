@@ -1,7 +1,45 @@
-<form class="post" method="post" action="/post/submit" enctype="multipart/form-data">
-    <input type="number" name="wallId" class="hidden" value="{{wall.id}}">
+<div class="flex-vertical">
+    <div id="PostTypeSelector" class="flex-horizontal">
+        <label>
+            <input type="radio" name="postType" value="post"> Post
+        </label>
+        <label>
+            <input type="radio" name="postType" value="event"> Event
+        </label>
+    </div>
 
-    <textarea name="text" placeholder="How's i goin', pardner?"></textarea>
-    <input type="file" name="mediaFile"/>
-    <input type="submit" value="Send it o'er yonder">
-</form>
+    <form id="PostForm"
+          class="post"
+          method="post"
+          action="/post/submit"
+          enctype="multipart/form-data">
+        <input type="number" name="wallId" class="hidden" value="{{wall.id}}">
+
+        <textarea name="text" placeholder="How's i goin', pardner?"></textarea>
+        <input type="file" name="mediaFile"/>
+        <input type="submit" value="Send it o'er yonder">
+    </form>
+
+    <form id="EventForm"
+          class="post"
+          method="post"
+          action="/event/submit">
+        <input name="name" type="text" placeholder="Name">
+        <textarea name="description" placeholder="Description"></textarea>
+        <input name="location" type="text" placeholder="Location">
+        <label>
+            Starts at
+            <input type="time" name="startTime">
+            on
+            <input type="date" name="startDate">
+        </label>
+        <label>
+            Ends at
+            <input type="time" name="endTime">
+            on
+            <input type="date" name="endDate">
+        </label>
+
+        <input type="submit" value="Post">
+    </form>
+</div>

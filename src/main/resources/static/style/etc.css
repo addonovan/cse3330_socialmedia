@@ -1,6 +1,5 @@
+.hidden { display: none !important; }
 .inline { display: inline; }
-
-.hidden { display: none; }
 
 button.link {
     background: none;
@@ -11,4 +10,8 @@ button.link {
     font-family: serif;
 }
 
+.flex-vertical { display: flex; flex-direction: column; }
+.flex-horizontal { display: flex; flex-direction: row; }
 
+.ui { color: rgba(0, 0, 0, 0.60)}
+.important { color: black; font-weight: bold; }
