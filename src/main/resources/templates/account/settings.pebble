@@ -1,0 +1,31 @@
+{% extends "../base" %}
+
+{% block title %}
+    Account Settings | SocialMediaSite
+{% endblock %}
+
+{% block content %}
+    <form method="post" action="/account/updateSettings">
+        <label>
+            Username:
+            <input name="username" type="text" value="{{user.username}}">
+        </label>
+
+        <label>
+            First name:
+            <input name="firstName" type="text" value="{{user.firstName}}">
+        </label>
+
+        <label>
+            Last name:
+            <input name="lastName" type="text" value="{{user.lastName}}">
+        </label>
+
+        <label>
+            Password:
+            <input name="password" type="password" value="{{user.password}}">
+        </label>
+
+        <button type="submit">Update</button>
+    </form>
+{% endblock %}
