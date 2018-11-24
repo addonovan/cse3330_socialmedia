@@ -38,7 +38,12 @@
 
         <label>
             Private:
-            <input name="isPrivate" type="checkbox" value="{{user.isPrivate}}">
+            <input name="isPrivate"
+                   type="checkbox"
+                   {% if user.isPrivate %}
+                   checked
+                   {% endif %}
+            >
         </label>
 
         <button type="submit">Update</button>
