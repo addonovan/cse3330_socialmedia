@@ -1,3 +1,28 @@
+CREATE OR REPLACE FUNCTION UpdateProfile(
+    _AccountId  INTEGER,
+    _Email       "Account".Email%TYPE,
+    _PhoneNumber "Account".PhoneNumber%TYPE,
+    _FirstName   "Profile".FirstName%TYPE,
+    _LastName    "Profile".LastName%TYPE,
+    _Username    "Profile".Username%TYPE,
+    _Password    "Profile".Password%TYPE
+) RETURNS VOID
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    UPDATE "Account"
+    SET email = _email, phonenumber = _phonenumber
+    WHERE accountid = _AccountId;
+
+    UPDATE "Profile"
+    SET firstname = _FirstName, lastname = _LastName, username = _Username, password = _Password
+    WHERE accountid = _AccountId;
+
+END
+$$;
+
+
 CREATE OR REPLACE FUNCTION GetEventInterest(
     _EventId         INTEGER,
     _IsAttending     BOOLEAN
