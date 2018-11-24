@@ -45,7 +45,6 @@ open class EventController {
     }
 
     @PostMapping("/delete")
-    @ResponseStatus(HttpStatus.OK)
     fun deleteEvent(
             request: Request,
             @RequestParam eventId: Int
@@ -56,5 +55,15 @@ open class EventController {
             throw IllegalStateException("User does not have permission to delete that event")
 
         DbEngine.deleteEvent(event)
+    }
+
+    @PostMapping("/markInterested")
+    fun markInterested(
+            request: Request,
+            @RequestParam eventId: Int,
+            @RequestParam onlyInterested: Boolean
+    ) {
+        val user = request.profile!!
+        DbEngine.markEventInterest(user, eventId, onlyInterested)
     }
 }

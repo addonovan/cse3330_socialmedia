@@ -332,4 +332,14 @@ object DbEngine {
             .supply(event.id)
             .executeOn(CONNECTION) {}
 
+    fun markEventInterest(
+            user: Profile,
+            eventId: Int,
+            onlyInterested: Boolean
+    ) = call("MarkEventInterest")
+            .supply(user.id)
+            .supply(eventId)
+            .supply(onlyInterested)
+            .executeOn(CONNECTION) {}
+
 }
