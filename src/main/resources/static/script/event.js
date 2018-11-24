@@ -40,6 +40,7 @@ function removeButtons(eventId) {
 
 function addGoingButton(eventId) {
     $("<button>")
+        .text("I'm going!")
         .click(() => {
             markAttending(eventId, true)
         })

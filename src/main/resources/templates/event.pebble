@@ -36,6 +36,17 @@
     <div class="buttons">
         {% if event.hostId == user.id %}
             <button onclick="deleteEvent({{event.id}})">Cancel</button>
+        {% elseif event.attendees contains user %}
+            <span class="ui">
+                You're going!
+            </span>
+        {% elseif event.prospectiveAttendees contains user %}
+            <span class="ui">
+                You're considering going. Want to make it official?
+            </span>
+            <button onclick="markAttending({{event.id}}, false)">
+                I'm going!
+            </button>
         {% else %}
             <button onclick="markAttending({{event.id}}, false)">
                 I'm going!
