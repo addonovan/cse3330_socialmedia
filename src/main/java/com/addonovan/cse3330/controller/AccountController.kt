@@ -51,13 +51,12 @@ open class AccountController {
     fun updateSettings(
             request: Request,
             response: Response,
-            model: Model,
             newSettings: Profile
     ) {
         response.redirectToReferrer(request)
         val user = request.profile!!
 
-        DbEngine.updateProfile(user, newSettings);
+        DbEngine.updateProfile(user, newSettings)
     }
 
     @PostMapping(value = ["/{id:[0-9+]}/follow"])
