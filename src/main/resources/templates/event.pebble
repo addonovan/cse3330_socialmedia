@@ -1,1 +1,48 @@
-TODO
+<div class="event">
+    <div class="flex-horizontal">
+        <img class="profileImage small" src="{{event.host.profileImageURL}}">
+
+        <div class="flex-vertical">
+            <span class="important">
+                <a href="/account/{{event.hostId}}">{{event.host.fullName}}</a>
+            </span>
+            <div>
+                <span class="ui"> is hosting </span>
+                <span class="important">
+                    {{event.name}}
+                </span>
+            </div>
+            <div>
+                <span class="ui"> from </span>
+                <span class="important">
+                    {{event.startTime}}
+                </span>
+                <span class="ui"> to </span>
+                <span class="important">
+                    {{event.endTime}}
+                </span>
+            </div>
+            {% if event.location %}
+                <div>
+                    <span class="ui"> at </span>
+                    <span class="important"> {{event.location}} </span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="content">
+        <p class="description">{{event.description}}</p>
+    </div>
+    <div>
+        {% if event.hostId == user.id %}
+            <button onclick="deleteEvent({{event.id}}">Cancel</button>
+        {% else %}
+            <button onclick="markAttending({{event.id}}, true)">
+                I'm going!
+            </button>
+            <button onclick="markAttending({{event.id}}, false)">
+                I'm interested
+            </button>
+        {% endif %}
+    </div>
+</div>
