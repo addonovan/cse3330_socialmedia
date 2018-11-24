@@ -28,6 +28,14 @@ class Event : SqlEntity {
         DbEngine.getAccountById(hostId)!!
     }
 
+    val attendees: List<Profile> by lazy {
+        DbEngine.getAttendees(id)
+    }
+
+    val prospectiveAttendees: List<Profile> by lazy {
+        DbEngine.getProspectiveAttendees(id)
+    }
+
     //
     // Functions
     //

@@ -342,4 +342,24 @@ object DbEngine {
             .supply(onlyInterested)
             .executeOn(CONNECTION) {}
 
+    fun getAttendees(eventId: Int): List<Profile> = call("GetEventInterest")
+            .supply(eventId)
+            .supply(true)
+            .executeOn(CONNECTION) { set ->
+                set.map { row ->
+                    val profileId = row.getInt(1)
+                    getProfileById(profileId)!!
+                }
+            }
+
+    fun getProspectiveAttendees(eventId: Int): List<Profile> = call("GetEventInterest")
+            .supply(eventId)
+            .supply(false)
+            .executeOn(CONNECTION) { set ->
+                set.map { row ->
+                    val profileId = row.getInt(1)
+                    getProfileById(profileId)!!
+                }
+            }
+
 }
