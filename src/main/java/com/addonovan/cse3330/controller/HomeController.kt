@@ -29,7 +29,8 @@ open class HomeController {
             model: Model,
             request: Request
     ): String {
-        val user = request.profile ?: return errorPage(model, "")
+        val user = request.profile
+                ?: return errorPage(model, "You must be logged in to do that")
         val eventList = DbEngine.calendarFor(user)
 
         model.addAttribute("user", user)

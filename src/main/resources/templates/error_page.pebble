@@ -1,0 +1,12 @@
+{% extends "base" %}
+
+{% block title %}
+    Error | SocialMediaSite
+{% endblock %}
+
+{% block content %}
+    <h4>An error has occurred</h4>
+    <p>
+        {{errorReason}}
+    </p>
+{% endblock %}
