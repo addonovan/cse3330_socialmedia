@@ -1,3 +1,18 @@
+CREATE OR REPLACE FUNCTION MarkEventInterest(
+    UserId          INTEGER,
+    EventId         INTEGER,
+    OnlyInterested  BOOLEAN
+) RETURNS VOID
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    INSERT INTO "EventInterest"(eventid, profileid, isattending)
+    VALUES (eventid, userid, NOT OnlyInterested);
+
+END
+$$;
+
 CREATE OR REPLACE FUNCTION DeleteEvent(
     EventId     INTEGER
 ) RETURNS VOID
