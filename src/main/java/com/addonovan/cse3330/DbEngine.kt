@@ -208,9 +208,20 @@ object DbEngine {
      */
     fun feedFor(account: Account) = call("FindFeedFor")
             .supply(account.id)
-            .executeOn(CONNECTION) {
-                it.map {
-                    Post().apply { fromRow(it) }
+            .executeOn(CONNECTION) { set ->
+                set.map { row ->
+                    Post().apply { fromRow(row) }
+                }
+            }
+
+    /**
+     * Generates a list of calendar [events][Event] for the given [account].
+     */
+    fun calendarFor(account: Account) = call("FindCalendarFor")
+            .supply(account.id)
+            .executeOn(CONNECTION) { set ->
+                set.map { row ->
+                    Event().apply { fromRow(row) }
                 }
             }
 
