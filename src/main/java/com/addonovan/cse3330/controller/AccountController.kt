@@ -2,6 +2,7 @@ package com.addonovan.cse3330.controller
 
 import com.addonovan.cse3330.*
 import com.addonovan.cse3330.model.Account
+import com.addonovan.cse3330.model.Profile
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -33,6 +34,30 @@ open class AccountController {
             model: Model,
             @PathVariable username: String
     ) = pageOverview(request, model, DbEngine.getProfileByUsername(username))
+
+    @GetMapping("/settings")
+    fun settings(
+            request: Request,
+            model: Model
+    ): String {
+        val user = request.profile
+                ?: return errorPage(model, "You have to be logged in to do that")
+
+        model.addAttribute("user", user)
+        return "account/settings"
+    }
+
+    @PostMapping("/updateSettings")
+    fun updateSettings(
+            request: Request,
+            response: Response,
+            newSettings: Profile
+    ) {
+        response.redirectToReferrer(request)
+        val user = request.profile!!
+
+        DbEngine.updateProfile(user, newSettings)
+    }
 
     @PostMapping(value = ["/{id:[0-9+]}/follow"])
     fun followAccount(

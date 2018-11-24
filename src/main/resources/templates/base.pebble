@@ -26,6 +26,7 @@
                 <li> <a href="/">Home</a> </li>
                 {% if user != null %}
                     <li> <a href="/calendar">Your Calendar</a> </li>
+                    <li> <a href="/account/settings"> Your Account </a> </li>
                     <li>
                         <form method="post" action="/signout" class="inline">
                             <button type="submit" class="link">
