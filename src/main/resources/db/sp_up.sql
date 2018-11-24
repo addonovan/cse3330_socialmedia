@@ -1,3 +1,21 @@
+CREATE OR REPLACE FUNCTION FindCalendarFor(
+    AccountId   INTEGER
+) RETURNS SETOF "Event"
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    RETURN QUERY
+        SELECT * FROM "Event" e
+        WHERE e.hostid = AccountId
+            OR e.hostid IN (
+                SELECT followeeid FROM "Follow"
+                WHERE followerid = AccountId
+            );
+
+END
+$$;
+
 CREATE OR REPLACE FUNCTION CreateEvent(
     HostId      INTEGER,
     Name        "Event".EventName%TYPE,
