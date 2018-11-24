@@ -1,3 +1,18 @@
+CREATE OR REPLACE FUNCTION GetEventInterest(
+    _EventId         INTEGER,
+    _IsAttending     BOOLEAN
+) RETURNS SETOF INTEGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    RETURN QUERY
+        SELECT ei.profileid FROM "EventInterest" ei
+        WHERE ei.eventid = _eventid AND ei.isattending = _IsAttending;
+
+END
+$$;
+
 CREATE OR REPLACE FUNCTION MarkEventInterest(
     UserId          INTEGER,
     EventId         INTEGER,
