@@ -23,7 +23,7 @@
     <form id="EventForm"
           class="post"
           method="post"
-          action="/post/event">
+          action="/event/submit">
         <input name="name" type="text" placeholder="Name">
         <textarea name="description" placeholder="Description"></textarea>
         <input name="location" type="text" placeholder="Location">

@@ -46,31 +46,4 @@ open class PostController {
         DbEngine.createPost(post)
     }
 
-    @PostMapping("/event")
-    fun submitEvent(
-            request: Request,
-            response: Response,
-            @RequestParam name: String,
-            @RequestParam description: String,
-            @RequestParam location: String,
-            @RequestParam startTime: String,
-            @RequestParam startDate: String,
-            @RequestParam endTime: String,
-            @RequestParam endDate: String
-    ) {
-        response.redirectToReferrer(request)
-
-        val user = request.profile ?: return
-        val start = Timestamp.valueOf("$startDate $startTime:00")
-        val end = Timestamp.valueOf("$endDate $endTime:00")
-
-        DbEngine.createEvent(Event().apply {
-            this.hostId = user.id
-            this.name = name
-            this.description = description
-            this.location = location
-            this.startTime = start
-            this.endTime = end
-        })
-    }
 }
