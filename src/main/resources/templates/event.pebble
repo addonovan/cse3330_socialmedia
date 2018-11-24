@@ -1,4 +1,4 @@
-<div class="event">
+<div class="event" id="Event{{event.id}}">
     <div class="flex-horizontal">
         <img class="profileImage small" src="{{event.host.profileImageURL}}">
 
@@ -33,14 +33,14 @@
     <div class="content">
         <p class="description">{{event.description}}</p>
     </div>
-    <div>
+    <div class="buttons">
         {% if event.hostId == user.id %}
-            <button onclick="deleteEvent({{event.id}}">Cancel</button>
+            <button onclick="deleteEvent({{event.id}})">Cancel</button>
         {% else %}
-            <button onclick="markAttending({{event.id}}, true)">
+            <button onclick="markAttending({{event.id}}, false)">
                 I'm going!
             </button>
-            <button onclick="markAttending({{event.id}}, false)">
+            <button onclick="markAttending({{event.id}}, true)">
                 I'm interested
             </button>
         {% endif %}
