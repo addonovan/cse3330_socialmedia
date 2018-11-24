@@ -38,11 +38,6 @@ open class HomeController {
         return "home/calendar"
     }
 
-    private fun errorPage(model: Model, message: String): String {
-        model.addAttribute("errorReason", message)
-        return "error_page"
-    }
-
     private fun defaultHome(model: Model): String {
         return "home/welcome"
     }

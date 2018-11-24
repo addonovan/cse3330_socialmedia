@@ -34,6 +34,18 @@ open class AccountController {
             @PathVariable username: String
     ) = pageOverview(request, model, DbEngine.getProfileByUsername(username))
 
+    @GetMapping("/settings")
+    fun settings(
+            request: Request,
+            model: Model
+    ): String {
+        val user = request.profile
+                ?: return errorPage(model, "You have to be logged in to do that")
+
+        model.addAttribute("user", user)
+        return "account/settings"
+    }
+
     @PostMapping(value = ["/{id:[0-9+]}/follow"])
     fun followAccount(
             request: Request,
