@@ -12,6 +12,16 @@
         </label>
 
         <label>
+            Email:
+            <input name="email" type="text" value="{{user.email}}">
+        </label>
+
+        <label>
+            Phone number:
+            <input name="phoneNumber" type="text" value="{{user.phoneNumber}}">
+        </label>
+
+        <label>
             First name:
             <input name="firstName" type="text" value="{{user.firstName}}">
         </label>
@@ -24,6 +34,11 @@
         <label>
             Password:
             <input name="password" type="password" value="{{user.password}}">
+        </label>
+
+        <label>
+            Private:
+            <input name="isPrivate" type="checkbox" value="{{user.isPrivate}}">
         </label>
 
         <button type="submit">Update</button>
