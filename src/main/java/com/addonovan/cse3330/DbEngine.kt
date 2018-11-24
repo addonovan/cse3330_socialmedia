@@ -362,4 +362,14 @@ object DbEngine {
                 }
             }
 
+    fun updateProfile(user: Profile, newSettings: Profile) = call("UpdateProfile")
+            .supply(user.id)
+            .supply(newSettings.email)
+            .supply(newSettings.phoneNumber)
+            .supply(newSettings.firstName)
+            .supply(newSettings.lastName)
+            .supply(newSettings.username)
+            .supply(newSettings.password)
+            .executeOn(CONNECTION) {}
+
 }
