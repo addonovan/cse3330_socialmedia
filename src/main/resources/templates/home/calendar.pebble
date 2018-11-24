@@ -1,0 +1,15 @@
+{% extends "../base" %}
+
+{% block title %}
+    Calendar | SocialMediaSite
+{% endblock %}
+
+{% block content %}
+    {% include "../post_box" with {"wall": user} %}
+
+    <div id="Overview">
+        {% for event in calendar %}
+            {% include "../event" with {"event": event} %}
+        {% endfor %}
+    </div>
+{% endblock %}

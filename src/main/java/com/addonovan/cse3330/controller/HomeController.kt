@@ -32,7 +32,7 @@ open class HomeController {
         val user = request.profile ?: return errorPage(model, "")
         val eventList = DbEngine.calendarFor(user)
 
-        model.addAttribute("events", eventList)
+        model.addAttribute("calendar", eventList)
         return "home/calendar"
     }
 
