@@ -1,3 +1,19 @@
+CREATE OR REPLACE FUNCTION DeleteEvent(
+    EventId     INTEGER
+) RETURNS VOID
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    _event_id INTEGER = EventId;
+
+BEGIN
+
+    DELETE FROM "Event" e
+        WHERE e.eventid = _event_id;
+
+END
+$$;
+
 CREATE OR REPLACE FUNCTION FindCalendarFor(
     AccountId   INTEGER
 ) RETURNS SETOF "Event"
