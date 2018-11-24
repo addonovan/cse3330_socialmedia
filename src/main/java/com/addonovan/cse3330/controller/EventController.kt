@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import java.lang.IllegalArgumentException
+import java.lang.IllegalStateException
 import java.sql.Timestamp
 
 @Controller
@@ -38,5 +40,18 @@ open class EventController {
             this.startTime = start
             this.endTime = end
         })
+    }
+
+    @PostMapping("/delete")
+    fun deleteEvent(
+            request: Request,
+            @RequestParam eventId: Int
+    ) {
+        val user = request.profile!!
+        val event = DbEngine.getEventById(eventId)!!
+        if (user.id != event.hostId)
+            throw IllegalStateException("User does not have permission to delete that event")
+
+        DbEngine.deleteEvent(event)
     }
 }

@@ -328,4 +328,8 @@ object DbEngine {
                 getEventById(it.getInt(1))!!
             }
 
+    fun deleteEvent(event: Event) = call("DeleteEvent")
+            .supply(event.id)
+            .executeOn(CONNECTION) {}
+
 }
