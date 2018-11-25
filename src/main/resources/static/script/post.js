@@ -43,7 +43,7 @@ function sendReaction(postId, emotionId) {
 }
 
 function hideReactionButtons(postId) {
-    $("#Post" + postId + " .reactions .buttons").remove();
+    $("#Post" + postId + " > .content > .reactions .buttons").remove();
 }
 
 $(() => {
