@@ -47,11 +47,11 @@ class Post : SqlEntity {
     }
 
     val replies: List<Post> by lazy {
-        DbEngine.getRepliesTo(id)
+        DbEngine.getRepliesTo(this)
     }
 
     val reactions: Map<Profile, Emotion> by lazy {
-        DbEngine.getReactionsTo(id)
+        DbEngine.getReactionsTo(this)
     }
 
     val reactionCounts: Map<Emotion, Int> by lazy {

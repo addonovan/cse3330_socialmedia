@@ -64,6 +64,11 @@ open class EventController {
             @RequestParam onlyInterested: Boolean
     ) {
         val user = request.profile!!
-        DbEngine.markEventInterest(user, eventId, onlyInterested)
+        val event = Event().apply { id = eventId }
+
+        if (onlyInterested)
+            DbEngine.interestedInEvent(user, event)
+        else
+            DbEngine.attendingEvent(user, event)
     }
 }
