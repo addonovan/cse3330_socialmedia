@@ -1,4 +1,4 @@
-<div class="post">
+<div class="post" id="Post{{post.id}}">
     <img class="profileImage small" src="{{post.poster.profileImageURL}}"/>
     <div class="content">
         <p>
@@ -34,6 +34,25 @@
                  src="{{post.media.url}}"
                  onclick="window.open(this.src)"/>
         {% endif %}
+
+        <div class="reactions">
+            {% for entry in post.reactionCounts %}
+                <img class="emotion" src="{{entry.key.imageUrl}}">
+                {% if entry.value > 1 %}
+                    <span class="emotion">x{{entry.value}}</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if not (post.reacters contains user) %}
+                <div class="buttons">
+                    {% for emotion in emotions %}
+                        <button onclick="sendReaction({{post.id}}, {{emotion.id}})">
+                            <img class="emotion" src="{{emotion.imageUrl}}">
+                        </button>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
 
         {% if post.poll != null %}
             <p class="pollPost">Hello, I'm just a placeholder!</p>

@@ -50,6 +50,20 @@ class Post : SqlEntity {
         DbEngine.getRepliesTo(id)
     }
 
+    val reactions: Map<Profile, Emotion> by lazy {
+        DbEngine.getReactionsTo(id)
+    }
+
+    val reactionCounts: Map<Emotion, Int> by lazy {
+        reactions.toList()
+                .groupBy { (_, emotion) -> emotion }
+                .mapValues { it.value.size }
+    }
+
+    val reacters: List<Profile> by lazy {
+        reactions.keys.toList()
+    }
+
     //
     // Implementation
     //

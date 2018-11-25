@@ -32,6 +32,20 @@ function selectPostDefault() {
     showNormalPost();
 }
 
+function sendReaction(postId, emotionId) {
+    let data = {
+        postId: postId,
+        emotionId: emotionId
+    };
+    $.post("/post/react", data, () => {
+        hideReactionButtons(postId)
+    });
+}
+
+function hideReactionButtons(postId) {
+    $("#Post" + postId + " > .content > .reactions .buttons").remove();
+}
+
 $(() => {
     attachEventTypeListener();
     selectPostDefault();

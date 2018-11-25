@@ -160,10 +160,10 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA "public" TO "application";
 INSERT INTO "RefEmotion"
     (emotionname, ImageURL)
 VALUES
-       ('Like', '//media/reactions/like.png'),
-       ('Anger', '//media/reactions/anger.png'),
-       ('Dislike', '//media/reactions/dislike.png'),
-       ('Love', '//media/reactions/love.png');
+       ('Like', '/media/reactions/like.png'),
+       ('Anger', '/media/reactions/anger.png'),
+       ('Dislike', '/media/reactions/dislike.png'),
+       ('Love', '/media/reactions/love.png');
 
 INSERT INTO "RefLanguage"
     (LocaleCode, LanguageName)

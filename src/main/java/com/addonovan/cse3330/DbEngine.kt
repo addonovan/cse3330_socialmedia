@@ -372,7 +372,7 @@ object DbEngine {
             .supply(newSettings.password)
             .executeOn(CONNECTION) {}
 
-    fun getPagesByAdmin(id: Int): List<Page> = call("FindAdminedPages")
+    fun getPagesByAdmin(id: Int) = call("FindAdminedPages")
             .supply(id)
             .executeOn(CONNECTION) { set ->
                 set.map { row ->
@@ -381,11 +381,38 @@ object DbEngine {
                 }
             }
 
-    fun getRepliesTo(postId: Int): List<Post> = call("FindRepliesToPost")
+    fun getRepliesTo(postId: Int) = call("FindRepliesToPost")
             .supply(postId)
             .executeOn(CONNECTION) { set ->
                 set.map { row ->
                     Post().apply { fromRow(row) }
                 }
             }
+
+    fun getEmotionByName(emotionName: String) = call("FindEmotionByName")
+            .supply(emotionName)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("No emotion by name: $emotionName")
+
+                Emotion().apply { fromRow(it) }
+            }
+
+    fun getReactionsTo(eventId: Int) = call("FindReactionsTo")
+            .supply(eventId)
+            .executeOn(CONNECTION) { set ->
+                val mapEntries = set.map { row ->
+                    val profile = getProfileById(row.getInt(1))!!
+                    val emotion = Emotion[row.getInt(2)]
+                    Pair(profile, emotion)
+                }
+                mapEntries.toMap()
+            }
+
+    fun addReaction(postId: Int, userId: Int, emotionId: Int) = call("AddReaction")
+            .supply(postId)
+            .supply(userId)
+            .supply(emotionId)
+            .executeOn(CONNECTION) {}
+
 }
