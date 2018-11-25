@@ -137,7 +137,7 @@ object DbEngine {
             }
 
     //
-    // Account Actions
+    // Following Actions
     //
 
     @Suppress("SqlResolve")
@@ -184,10 +184,6 @@ object DbEngine {
                 .supply(followee.id)
                 .executeOn(CONNECTION) {}
     }
-
-    //
-    // Account Information
-    //
 
     @Language("PostgreSQL")
     private val GET_FOLLOWERS_FORMAT: String =
