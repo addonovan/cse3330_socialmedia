@@ -380,4 +380,12 @@ object DbEngine {
                     getPageById(pageId)!!
                 }
             }
+
+    fun getRepliesTo(postId: Int): List<Post> = call("FindRepliesToPost")
+            .supply(postId)
+            .executeOn(CONNECTION) { set ->
+                set.map { row ->
+                    Post().apply { fromRow(row) }
+                }
+            }
 }
