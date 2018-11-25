@@ -568,13 +568,27 @@ object DbEngine {
                 }
             }
 
-    fun getRepliesTo(postId: Int) = call("FindRepliesToPost")
-            .supply(postId)
+    @Language("PostgreSQL")
+    private val GET_POST_REPLIES: String =
+            """
+            SELECT * FROM "Post" p
+            WHERE
+                p.parentpostid IS NOT NULL AND
+                p.parentpostid = ?
+            ORDER BY p.createdtime DESC;
+            """.trimIndent()
+
+    fun getRepliesTo(post: Post) = query(GET_POST_REPLIES)
+            .supply(post.id)
             .executeOn(CONNECTION) { set ->
                 set.map { row ->
                     Post().apply { fromRow(row) }
                 }
             }
+
+    //
+    // Emotions & Reactions
+    //
 
     fun getEmotionByName(emotionName: String) = call("FindEmotionByName")
             .supply(emotionName)
