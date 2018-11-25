@@ -235,14 +235,55 @@ object DbEngine {
                 }
             }
 
+    //
+    // Account Overviews
+    //
+
+    @Language("PostgreSQL")
+    private val WALL_OVERVIEW_FOR: String =
+            """
+            SELECT * FROM "Post" p
+            WHERE p.wallid = ?
+            ORDER BY p.createdtime DESC;
+            """.trimIndent()
+
+    /**
+     * Constructs a wall overview (i.e. a list of
+     * [Posts][com.addonovan.cse3330.model.Post]) of the given `account`. Note
+     * that this is *anything* that the query deems relevant; therefore, the
+     * posts returned might not even be on the *wall* for the given account.
+     *
+     * @see [createPost]
+     * @see [feedFor]
+     */
+    fun wallOverview(account: Account) = query(WALL_OVERVIEW_FOR)
+            .supply(account.id)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Post().apply { fromRow(it) }
+                }
+            }
+
+    @Language("PostgreSQL")
+    private val VIEW_PAGE: String =
+            """
+            UPDATE "Page" p
+            SET viewcount = p.viewcount + 1
+            WHERE p.accountid = ?;
+            """.trimIndent()
+
     /**
      * Views the page as to increment the number of page views.
      *
      * @see [getPageById]
      */
-    fun viewPage(id: Int) = call("ViewPage")
-            .supply(id)
+    fun viewPage(page: Page) = query(VIEW_PAGE)
+            .supply(page.id)
             .executeOn(CONNECTION) {}
+
+    //
+    // Account overviews
+    //
 
     /**
      * Generates the feed for the [account].
@@ -269,23 +310,6 @@ object DbEngine {
             .executeOn(CONNECTION) { set ->
                 set.map { row ->
                     Event().apply { fromRow(row) }
-                }
-            }
-
-    /**
-     * Constructs a wall overview (i.e. a list of
-     * [Posts][com.addonovan.cse3330.model.Post]) of the given `account`. Note
-     * that this is *anything* that the query deems relevant; therefore, the
-     * posts returned might not even be on the *wall* for the given account.
-     *
-     * @see [createPost]
-     * @see [feedFor]
-     */
-    fun wallOverview(account: Account) = call("FindWallOverviewFor")
-            .supply(account.id)
-            .executeOn(CONNECTION) {
-                it.map {
-                    Post().apply { fromRow(it) }
                 }
             }
 
