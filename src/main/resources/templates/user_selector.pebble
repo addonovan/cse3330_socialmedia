@@ -1,0 +1,8 @@
+{% if user.administeredPages.size() > 0 %}
+    <select name="{{dropdownName}}" title="{{dropdownTitle}}">
+        <option value="{{user.id}}">{{user.fullName}}</option>
+        {% for page in user.administeredPages %}
+            <option value="{{page.id}}">{{page.fullName}}</option>
+        {% endfor %}
+    </select>
+{% endif %}

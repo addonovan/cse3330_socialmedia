@@ -372,4 +372,12 @@ object DbEngine {
             .supply(newSettings.password)
             .executeOn(CONNECTION) {}
 
+    fun getPagesByAdmin(id: Int): List<Page> = call("FindAdminedPages")
+            .supply(id)
+            .executeOn(CONNECTION) { set ->
+                set.map { row ->
+                    val pageId = row.getInt(1)
+                    getPageById(pageId)!!
+                }
+            }
 }
