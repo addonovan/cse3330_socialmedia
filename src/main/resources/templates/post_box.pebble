@@ -1,11 +1,14 @@
 <div class="flex-vertical">
-    {% if allowEvents %}
+    {% if extendedOptions %}
         <div id="PostTypeSelector" class="flex-horizontal">
             <label>
                 <input type="radio" name="postType" value="post"> Post
             </label>
             <label>
                 <input type="radio" name="postType" value="event"> Event
+            </label>
+            <label>
+                <input type="radio" name="postType" value="poll"> Poll
             </label>
         </div>
     {% endif %}
@@ -32,7 +35,7 @@
         <input type="submit" value="Send it o'er yonder">
     </form>
 
-    {% if allowEvents %}
+    {% if extendedOptions %}
         <form id="EventForm"
               class="post"
               method="post"
@@ -60,6 +63,28 @@
             } %}
 
             <input type="submit" value="Post">
+        </form>
+
+        <form id="PollForm"
+              class="post"
+              method="post">
+            <input name="question" type="text" title="Question">
+            <label>
+                Ends at
+                <input type="time" name="endTime">
+                on
+                <input type="date" name="endDate">
+            </label>
+
+            <div id="PollFormQuestions" class="flex-vertical">
+                <div class="flex-horizontal">
+                    <input type="text" title="Answer">
+                    <button onclick="removeAnswer(this)">X</button>
+                </div>
+                <button onclick="addAnswer(this)">+</button>
+            </div>
+
+            <button onclick="postPoll()">Post</button>
         </form>
     {% endif %}
 </div>
