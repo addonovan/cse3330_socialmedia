@@ -3,6 +3,8 @@ package com.addonovan.cse3330
 import com.addonovan.cse3330.model.*
 import com.addonovan.cse3330.sql.call
 import com.addonovan.cse3330.sql.map
+import com.addonovan.cse3330.sql.query
+import org.intellij.lang.annotations.Language
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
@@ -51,6 +53,19 @@ object DbEngine {
         })
     }
 
+    //
+    // Acount Finding
+    //
+
+    @Language("PostgreSQL")
+    private val FIND_ACCOUNT_BY_ID: String =
+            """
+            SELECT * FROM "Account" a
+            LEFT JOIN "Profile" prof ON PROF.accountid = a.accountid
+            LEFT JOIN "Page" page ON page.accountid = a.accountid
+            WHERE a.accountid = ?;
+            """.trimIndent()
+
     /**
      * Generalization of the [getProfileById] and [getPageById], this will find
      * any [Account][com.addonovan.cse3330.model.Account] by the Id. This is
@@ -62,9 +77,8 @@ object DbEngine {
      * @see [getProfileByUsername]
      * @see [getPageById]
      */
-    fun getAccountById(id: Int) = call("FindAccount")
+    fun getAccountById(id: Int) = query(FIND_ACCOUNT_BY_ID)
             .supply(id)
-            .supplyNull<String>()
             .executeOn(CONNECTION) {
                 if (!it.next())
                     null
