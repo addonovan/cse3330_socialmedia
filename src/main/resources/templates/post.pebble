@@ -43,13 +43,15 @@
                 {% endif %}
             {% endfor %}
 
-            <div class="buttons">
-                {% for emotion in emotions %}
-                    <button onclick="sendReaction({{post.id}}, {{emotion.id}})">
-                        <img class="emotion" src="{{emotion.imageUrl}}">
-                    </button>
-                {% endfor %}
-            </div>
+            {% if not (post.reacters contains user) %}
+                <div class="buttons">
+                    {% for emotion in emotions %}
+                        <button onclick="sendReaction({{post.id}}, {{emotion.id}})">
+                            <img class="emotion" src="{{emotion.imageUrl}}">
+                        </button>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
 
         {% if post.poll != null %}
