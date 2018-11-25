@@ -59,7 +59,10 @@ function hideReactionButtons(postId) {
 }
 
 function removeAnswer(button) {
-    $(button).parent().remove();
+    let container = $(button).parent();
+    if (container.parent().children().length > 2) {
+        container.remove();
+    }
 }
 
 function addAnswer(button) {
