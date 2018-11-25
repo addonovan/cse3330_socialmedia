@@ -4,6 +4,7 @@ import com.addonovan.cse3330.*
 import com.addonovan.cse3330.model.Event
 import com.addonovan.cse3330.model.Post
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -30,9 +31,13 @@ open class PostController {
     fun submitPost(
             request: HttpServletRequest,
             response: HttpServletResponse,
+            model: Model,
             @RequestParam mediaFile: MultipartFile,
             @ModelAttribute post: Post
-    ) {
+    ): String {
+        val user = request.profile
+                ?: return errorPage(model, "You must be logged in to do that")
+
         response.sendRedirect(request.getHeader("referer"))
 
         // if we have a file, then we'll save it and add it to the post here
@@ -41,9 +46,18 @@ open class PostController {
             post.media = Post.MediaBody(url)
         }
 
-        val user = request.profile ?: return
-        post.posterId = user.id
+        // default the post to be created by the current user, unless they
+        // got to select the posting account on their end. Then just check to
+        // make sure they're allowed to do that.
+        if (post.posterId == 0) {
+            post.posterId = user.id
+        } else if (user.administeredPages.none { it.id == post.posterId }) {
+            return errorPage(model, "You don't have permission to post from that account!")
+        }
+
         DbEngine.createPost(post)
+
+        return errorPage(model, "You shouldn't really see this")
     }
 
 }
