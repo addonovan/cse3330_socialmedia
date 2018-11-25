@@ -195,17 +195,17 @@ object DbEngine {
 
     fun updateProfile(user: Profile, newSettings: Profile) {
         query(UPDATE_ACCOUNT)
-                .supply(user.id)
                 .supply(newSettings.email)
                 .supply(newSettings.phoneNumber)
+                .supply(user.id)
                 .executeOn(CONNECTION)
 
         query(UPDATE_PROFILE)
-                .supply(user.id)
                 .supply(newSettings.firstName)
                 .supply(newSettings.lastName)
                 .supply(newSettings.username)
                 .supply(newSettings.password)
+                .supply(user.id)
                 .executeOn(CONNECTION)
     }
 
