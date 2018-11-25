@@ -1,3 +1,22 @@
+CREATE OR REPLACE FUNCTION FindRepliesToPost(
+    _PostId INTEGER
+) RETURNS SETOF "Post"
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    RETURN QUERY
+        SELECT * FROM "Post" p
+        WHERE
+            p.parentpostid IS NOT NULL AND
+            p.parentpostid = _PostId
+        ORDER BY p.createdtime DESC;
+
+END
+$$;
+
+
+
 CREATE OR REPLACE FUNCTION FindAdminedPages(
     UserId  INTEGER
 ) RETURNS SETOF INTEGER
