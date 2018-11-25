@@ -58,6 +58,10 @@ open class AccountController {
         response.redirectToReferrer(request)
         val user = request.profile!!
 
+        // this is a bit stupid, but for some reason the checkbox's value
+        // isn't sent if it's off...
+        newSettings.isPrivate = request.getParameter("isPrivate") == "on"
+
         DbEngine.updateProfile(user, newSettings)
     }
 
