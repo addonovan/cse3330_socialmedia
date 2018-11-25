@@ -14,6 +14,8 @@ class Emotion : SqlEntity {
 
         val VALUES = listOf(LIKE, ANGER, DISLIKE, LOVE)
 
+        operator fun get(id: Int) = VALUES.first { it.id == id }
+
     }
 
     var id: Int = 0

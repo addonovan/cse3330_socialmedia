@@ -372,7 +372,7 @@ object DbEngine {
             .supply(newSettings.password)
             .executeOn(CONNECTION) {}
 
-    fun getPagesByAdmin(id: Int): List<Page> = call("FindAdminedPages")
+    fun getPagesByAdmin(id: Int) = call("FindAdminedPages")
             .supply(id)
             .executeOn(CONNECTION) { set ->
                 set.map { row ->
@@ -381,7 +381,7 @@ object DbEngine {
                 }
             }
 
-    fun getRepliesTo(postId: Int): List<Post> = call("FindRepliesToPost")
+    fun getRepliesTo(postId: Int) = call("FindRepliesToPost")
             .supply(postId)
             .executeOn(CONNECTION) { set ->
                 set.map { row ->
@@ -389,7 +389,7 @@ object DbEngine {
                 }
             }
 
-    fun getEmotionByName(emotionName: String): Emotion  = call("FindEmotionByName")
+    fun getEmotionByName(emotionName: String) = call("FindEmotionByName")
             .supply(emotionName)
             .executeOn(CONNECTION) {
                 if (!it.next())
@@ -397,4 +397,16 @@ object DbEngine {
 
                 Emotion().apply { fromRow(it) }
             }
+
+    fun getReactionsTo(eventId: Int) = call("FindReactionsTo")
+            .supply(eventId)
+            .executeOn(CONNECTION) { set ->
+                val mapEntries = set.map { row ->
+                    val profile = getProfileById(row.getInt(1))!!
+                    val emotion = Emotion[row.getInt(2)]
+                    Pair(profile, emotion)
+                }
+                mapEntries.toMap()
+            }
+
 }
