@@ -1,3 +1,17 @@
+CREATE OR REPLACE FUNCTION FindAdminedPages(
+    UserId  INTEGER
+) RETURNS SETOF INTEGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    RETURN QUERY
+        SELECT pageid FROM "PageAdmin"
+        WHERE profileid = UserId;
+
+END
+$$;
+
 CREATE OR REPLACE FUNCTION UpdateProfile(
     _AccountId  INTEGER,
     _Email       "Account".Email%TYPE,
