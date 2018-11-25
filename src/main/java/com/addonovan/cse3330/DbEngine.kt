@@ -198,7 +198,7 @@ object DbEngine {
                 .supply(user.id)
                 .supply(newSettings.email)
                 .supply(newSettings.phoneNumber)
-                .executeOn(CONNECTION) {}
+                .executeOn(CONNECTION)
 
         query(UPDATE_PROFILE)
                 .supply(user.id)
@@ -206,7 +206,7 @@ object DbEngine {
                 .supply(newSettings.lastName)
                 .supply(newSettings.username)
                 .supply(newSettings.password)
-                .executeOn(CONNECTION) {}
+                .executeOn(CONNECTION)
     }
 
     @Language("PostgreSQL")
@@ -248,7 +248,7 @@ object DbEngine {
         for (query in queries) {
             query.supply(follower.id)
                     .supply(followee.id)
-                    .executeOn(CONNECTION) {}
+                    .executeOn(CONNECTION)
         }
     }
 
@@ -272,7 +272,7 @@ object DbEngine {
         query(ADD_FOLLOW_FORMAT.format(tableName))
                 .supply(follower.id)
                 .supply(followee.id)
-                .executeOn(CONNECTION) {}
+                .executeOn(CONNECTION)
     }
 
     @Language("PostgreSQL")
@@ -369,7 +369,7 @@ object DbEngine {
      */
     fun viewPage(page: Page) = query(VIEW_PAGE)
             .supply(page.id)
-            .executeOn(CONNECTION) {}
+            .executeOn(CONNECTION)
 
     //
     // User's Display
@@ -520,7 +520,7 @@ object DbEngine {
 
     fun deleteEvent(event: Event) = query(DELETE_EVENT)
             .supply(event.id)
-            .executeOn(CONNECTION) {}
+            .executeOn(CONNECTION)
 
     @Language("PostgreSQL")
     private val MARK_EVENT_INTEREST: String =
@@ -533,13 +533,13 @@ object DbEngine {
             .supply(user.id)
             .supply(event.id)
             .supply(true)
-            .executeOn(CONNECTION) {}
+            .executeOn(CONNECTION)
 
     fun interestedInEvent(user: Profile, event: Event) = query(MARK_EVENT_INTEREST)
             .supply(user.id)
             .supply(event.id)
             .supply(false)
-            .executeOn(CONNECTION) {}
+            .executeOn(CONNECTION)
 
     @Language("PostgreSQL")
     private val GET_EVENT_ATTENDEES: String =
@@ -635,6 +635,6 @@ object DbEngine {
             .supply(post.id)
             .supply(user.id)
             .supply(emotion.id)
-            .executeOn(CONNECTION) {}
+            .executeOn(CONNECTION)
 
 }

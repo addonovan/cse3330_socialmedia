@@ -88,6 +88,23 @@ class Query(@Language("PostgreSQL") val queryText: String) {
         }
     }
 
+    fun executeOn(connection: Connection) {
+        try {
+            connection.prepareStatement(queryText).use {
+                for ((i, param) in parameters.withIndex()) {
+                    if (param is NullParameter) {
+                        it.setNull(i + 1, param.type)
+                    } else {
+                        it.set(i + 1, param)
+                    }
+                }
+                it.execute()
+            }
+        } catch (e: SQLException) {
+            throw RuntimeException("Failed to invoke query:\n$queryText", e)
+        }
+    }
+
     private data class NullParameter(val type: Int)
 
 }
