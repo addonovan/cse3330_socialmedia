@@ -590,30 +590,51 @@ object DbEngine {
     // Emotions & Reactions
     //
 
-    fun getEmotionByName(emotionName: String) = call("FindEmotionByName")
-            .supply(emotionName)
-            .executeOn(CONNECTION) {
-                if (!it.next())
-                    throw RuntimeException("No emotion by name: $emotionName")
+    @Language("PostgreSQL")
+    private val GET_EMOTIONS: String =
+            """
+            SELECT * FROM "RefEmotion";
+            """.trimIndent()
 
-                Emotion().apply { fromRow(it) }
+    fun getEmotions() = query(GET_EMOTIONS)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Emotion().apply { fromRow(it) }
+                }
             }
 
-    fun getReactionsTo(eventId: Int) = call("FindReactionsTo")
-            .supply(eventId)
+    @Language("PostgreSQL")
+    private val GET_REACTIONS_TO_POST: String =
+            """
+            SELECT * FROM "PostReaction" pr
+            INNER JOIN "Post" p ON p.postid = pr.postid
+            INNER JOIN "Account" a ON a.accountid = pr.profileid
+            INNER JOIN "Profile" prof ON prof.accountid = a.accountid
+            WHERE pr.postid = ?;
+            """.trimIndent()
+
+    fun getReactionsTo(post: Post) = query(GET_REACTIONS_TO_POST)
+            .supply(post.id)
             .executeOn(CONNECTION) { set ->
-                val mapEntries = set.map { row ->
-                    val profile = getProfileById(row.getInt(1))!!
-                    val emotion = Emotion[row.getInt(2)]
-                    Pair(profile, emotion)
+                val mapEntries = set.map {
+                    val profile = Profile().apply { fromRow(it) }
+                    val emotion = Emotion[it.getInt("EmotionId")]
+                    profile to emotion
                 }
                 mapEntries.toMap()
             }
 
-    fun addReaction(postId: Int, userId: Int, emotionId: Int) = call("AddReaction")
-            .supply(postId)
-            .supply(userId)
-            .supply(emotionId)
+    @Language("PostgreSQL")
+    private val ADD_REACTION: String =
+            """
+            INSERT INTO "PostReaction"(postid, profileid, emotionid)
+            VALUES (?, ?, ?);
+            """.trimIndent()
+
+    fun addReaction(post: Post, user: Profile, emotion: Emotion) = query(ADD_REACTION)
+            .supply(post.id)
+            .supply(user.id)
+            .supply(emotion.id)
             .executeOn(CONNECTION) {}
 
 }
