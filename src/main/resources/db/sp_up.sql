@@ -1,3 +1,18 @@
+CREATE OR REPLACE FUNCTION AddReaction(
+    _PostId     INTEGER,
+    _ProfileId  INTEGER,
+    _EmotionId  INTEGER
+) RETURNS VOID
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    INSERT INTO "PostReaction"(postid, profileid, emotionid)
+    VALUES (_PostId, _ProfileId, _EmotionId);
+
+END
+$$;
+
 CREATE OR REPLACE FUNCTION FindReactionsTo(
     _PostId      INTEGER
 ) RETURNS TABLE (
