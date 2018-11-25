@@ -58,6 +58,17 @@ function hideReactionButtons(postId) {
     $("#Post" + postId + " > .content > .reactions .buttons").remove();
 }
 
+function removeAnswer(button) {
+    $(button).parent().remove();
+}
+
+function addAnswer(button) {
+    let btn = $(button);
+    let newAnswer = btn.prev().clone();
+    newAnswer.find("input[type='text']").val("");
+    newAnswer.insertBefore(btn);
+}
+
 $(() => {
     attachEventTypeListener();
     selectPostDefault();

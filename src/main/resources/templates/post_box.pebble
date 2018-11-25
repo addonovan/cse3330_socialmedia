@@ -65,9 +65,8 @@
             <input type="submit" value="Post">
         </form>
 
-        <form id="PollForm"
-              class="post"
-              method="post">
+        <div id="PollForm"
+              class="post">
             <input name="question" type="text" placeholder="Question">
             <label>
                 Ends at
@@ -85,6 +84,6 @@
             </div>
 
             <button onclick="postPoll()">Post</button>
-        </form>
+        </div>
     {% endif %}
 </div>
