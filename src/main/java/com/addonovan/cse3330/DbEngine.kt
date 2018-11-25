@@ -177,6 +177,55 @@ object DbEngine {
                     null
             }
 
+    @Language("PostgreSQL")
+    private val UPDATE_ACCOUNT: String =
+            """
+            UPDATE "Account"
+            SET email = ?, phonenumber = ?
+            WHERE accountid = ?;
+            """.trimIndent()
+
+    @Language("PostgreSQL")
+    private val UPDATE_PROFILE: String =
+            """
+            UPDATE "Profile"
+            SET firstname = ?, lastname = ?, username = ?, password = ?
+            WHERE accountid = ?;
+            """.trimIndent()
+
+    fun updateProfile(user: Profile, newSettings: Profile) {
+        query(UPDATE_ACCOUNT)
+                .supply(user.id)
+                .supply(newSettings.email)
+                .supply(newSettings.phoneNumber)
+                .executeOn(CONNECTION) {}
+
+        query(UPDATE_PROFILE)
+                .supply(user.id)
+                .supply(newSettings.firstName)
+                .supply(newSettings.lastName)
+                .supply(newSettings.username)
+                .supply(newSettings.password)
+                .executeOn(CONNECTION) {}
+    }
+
+    @Language("PostgreSQL")
+    private val GET_PAGES_BY_ADMIN: String =
+            """
+            SELECT * FROM "PageAdmin" pa
+            INNER JOIN "Account" a ON a.accountid = pa.pageid
+            INNER JOIN "Page" p ON p.accountid = a.accountid
+            WHERE pa.profileid = ?;
+            """.trimIndent()
+
+    fun getPagesByAdmin(admin: Profile) = query(GET_PAGES_BY_ADMIN)
+            .supply(admin.id)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Page().apply { fromRow(it) }
+                }
+            }
+
     //
     // Following Actions
     //
@@ -516,25 +565,6 @@ object DbEngine {
             .executeOn(CONNECTION) { set ->
                 set.map {
                     Profile().apply { fromRow(it) }
-                }
-            }
-
-    fun updateProfile(user: Profile, newSettings: Profile) = call("UpdateProfile")
-            .supply(user.id)
-            .supply(newSettings.email)
-            .supply(newSettings.phoneNumber)
-            .supply(newSettings.firstName)
-            .supply(newSettings.lastName)
-            .supply(newSettings.username)
-            .supply(newSettings.password)
-            .executeOn(CONNECTION) {}
-
-    fun getPagesByAdmin(id: Int) = call("FindAdminedPages")
-            .supply(id)
-            .executeOn(CONNECTION) { set ->
-                set.map { row ->
-                    val pageId = row.getInt(1)
-                    getPageById(pageId)!!
                 }
             }
 
