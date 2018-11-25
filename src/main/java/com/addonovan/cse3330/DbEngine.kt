@@ -382,11 +382,23 @@ object DbEngine {
                 }
             }
 
+    //
+    // Posts & Events
+    //
+
+    @Language("PostgreSQL")
+    private val CREATE_POST: String =
+            """
+            INSERT INTO "Post"(posterid, wallid, postmessage, postmediaurl, pollquestion, pollendtime, parentpostid)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            RETURNING postid;
+            """.trimIndent()
+
     /**
      * Creates a new `post` on the wall with the given `wallID`, authored by
      * the given `account`.
      */
-    fun createPost(post: Post) = call("CreatePost")
+    fun createPost(post: Post) = query(CREATE_POST)
             .supply(post.posterId)
             .supply(post.wallId)
             .supply(post.text?.body)
@@ -398,26 +410,24 @@ object DbEngine {
                 if (!it.next())
                     throw RuntimeException("No result from CreatePost call!")
 
-                it.getInt(1)
+                post.apply {
+                    id = it.getInt(1)
+                }
             }
 
-    /**
-     * Finds the event that has the given [id], if any exist.
-     */
-    fun getEventById(id: Int) = call("FindEvent")
-            .supply(id)
-            .executeOn(CONNECTION) {
-                if (it.next())
-                    Event().apply { fromRow(it) }
-                else
-                    null
-            }
+    @Language("PostgreSQL")
+    private val CREATE_EVENT: String =
+            """
+            INSERT INTO "Event"(hostid, eventname, eventdesc, starttime, endtime, location)
+            VALUES (?, ?, ?, ?, ?, ?)
+            RETURNING eventid;
+            """.trimIndent()
 
     /**
      * Inserts the provided [event] into the database, then returns the
      * newly created event object.
      */
-    fun createEvent(event: Event) = call("CreateEvent")
+    fun createEvent(event: Event) = query(CREATE_EVENT)
             .supply(event.hostId)
             .supply(event.name)
             .supply(event.description)
@@ -428,40 +438,84 @@ object DbEngine {
                 if (!it.next())
                     throw RuntimeException("No result from CreateEvent call!")
 
-                getEventById(it.getInt(1))!!
-            }
-
-    fun deleteEvent(event: Event) = call("DeleteEvent")
-            .supply(event.id)
-            .executeOn(CONNECTION) {}
-
-    fun markEventInterest(
-            user: Profile,
-            eventId: Int,
-            onlyInterested: Boolean
-    ) = call("MarkEventInterest")
-            .supply(user.id)
-            .supply(eventId)
-            .supply(onlyInterested)
-            .executeOn(CONNECTION) {}
-
-    fun getAttendees(eventId: Int): List<Profile> = call("GetEventInterest")
-            .supply(eventId)
-            .supply(true)
-            .executeOn(CONNECTION) { set ->
-                set.map { row ->
-                    val profileId = row.getInt(1)
-                    getProfileById(profileId)!!
+                event.apply {
+                    it.getInt(1)
                 }
             }
 
-    fun getProspectiveAttendees(eventId: Int): List<Profile> = call("GetEventInterest")
-            .supply(eventId)
+    @Language("PostgreSQL")
+    private val GET_EVENT: String =
+            """
+            SELECT * FROM "Event" e
+            WHERE e.eventid = ?;
+            """.trimIndent()
+
+    /**
+     * Finds the event that has the given [id], if any exist.
+     */
+    fun getEventById(id: Int) = query(GET_EVENT)
+            .supply(id)
+            .executeOn(CONNECTION) {
+                if (it.next())
+                    Event().apply { fromRow(it) }
+                else
+                    null
+            }
+
+    @Language("PostgreSQL")
+    private val DELETE_EVENT: String =
+            """
+            DELETE FROM "Event" e
+            WHERE e.eventid = ?;
+            """.trimIndent()
+
+    fun deleteEvent(event: Event) = query(DELETE_EVENT)
+            .supply(event.id)
+            .executeOn(CONNECTION) {}
+
+    @Language("PostgreSQL")
+    private val MARK_EVENT_INTEREST: String =
+            """
+            INSERT INTO "EventInterest"(eventid, profileid, isattending)
+            VALUES (?, ?, ?);
+            """.trimIndent()
+
+    fun attendingEvent(user: Profile, event: Event) = query(MARK_EVENT_INTEREST)
+            .supply(user.id)
+            .supply(event.id)
+            .supply(true)
+            .executeOn(CONNECTION) {}
+
+    fun interestedInEvent(user: Profile, event: Event) = query(MARK_EVENT_INTEREST)
+            .supply(user.id)
+            .supply(event.id)
             .supply(false)
+            .executeOn(CONNECTION) {}
+
+    @Language("PostgreSQL")
+    private val GET_EVENT_ATTENDEES: String =
+            """
+            SELECT * FROM "EventInterest" ei
+            INNER JOIN "Account" a ON a.accountid = ei.profileid
+            INNER JOIN "Profile" p ON p.accountid = a.accountid
+            WHERE ei.eventid = ? AND ei.isattending = ?;
+            """.trimIndent()
+
+    fun getAttendees(event: Event) = query(GET_EVENT_ATTENDEES)
+            .supply(event.id)
+            .supply(true)
             .executeOn(CONNECTION) { set ->
-                set.map { row ->
-                    val profileId = row.getInt(1)
-                    getProfileById(profileId)!!
+                set.map {
+                    Profile().apply { fromRow(it) }
+                }
+            }
+
+    fun getProspectiveAttendees(event: Event): List<Profile> = query(GET_EVENT_ATTENDEES)
+            .supply(event.id)
+            .supply(null as Boolean?)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Profile().apply { fromRow(it) }
                 }
             }
 
