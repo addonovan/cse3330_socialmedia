@@ -1,4 +1,4 @@
-<div class="post">
+<div class="post" id="Post{{post.id}}">
     <img class="profileImage small" src="{{post.poster.profileImageURL}}"/>
     <div class="content">
         <p>

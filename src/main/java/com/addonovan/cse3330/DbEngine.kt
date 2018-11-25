@@ -409,4 +409,10 @@ object DbEngine {
                 mapEntries.toMap()
             }
 
+    fun addReaction(postId: Int, userId: Int, emotionId: Int) = call("AddReaction")
+            .supply(postId)
+            .supply(userId)
+            .supply(emotionId)
+            .executeOn(CONNECTION) {}
+
 }

@@ -60,4 +60,14 @@ open class PostController {
         return errorPage(model, "You shouldn't really see this")
     }
 
+    @PostMapping("/react")
+    fun reactTo(
+            request: Request,
+            @RequestParam postId: Int,
+            @RequestParam emotionId: Int
+    ) {
+        val user = request.profile!!
+        DbEngine.addReaction(postId, user.id, emotionId)
+    }
+
 }
