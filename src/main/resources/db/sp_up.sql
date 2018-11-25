@@ -298,6 +298,7 @@ END
 $$;
 
 
+
 CREATE OR REPLACE FUNCTION FindWallOverviewFor(
     AccountId           INTEGER
 ) RETURNS SETOF "Post"
