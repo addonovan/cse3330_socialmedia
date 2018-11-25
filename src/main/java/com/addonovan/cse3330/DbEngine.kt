@@ -488,6 +488,18 @@ object DbEngine {
             }
 
     @Language("PostgreSQL")
+    private val ADD_POLL_ANSWER: String =
+            """
+            INSERT INTO "PollAnswer"(postid, pollanswertext)
+            VALUES (?, ?);
+            """.trimIndent()
+
+    fun addPollAnswer(post: Post, answer: String) = query(ADD_POLL_ANSWER)
+            .supply(post.id)
+            .supply(answer)
+            .executeOn(CONNECTION)
+
+    @Language("PostgreSQL")
     private val CREATE_EVENT: String =
             """
             INSERT INTO "Event"(hostid, eventname, eventdesc, starttime, endtime, location)

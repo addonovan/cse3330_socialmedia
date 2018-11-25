@@ -72,6 +72,25 @@ function addAnswer(button) {
     newAnswer.insertBefore(btn);
 }
 
+function postPoll() {
+    let data = {
+        question: $("#PollForm input[name='question']").val(),
+        endDate: $("#PollForm input[name='endDate']").val(),
+        endTime: $("#PollForm input[name='endTime']").val()
+    };
+
+    $("#PollFormQuestions").find("input[type='text']")
+        .each((i, it) => {
+            data["answer" + i] = it.value;
+        });
+
+    debugger;
+
+    $.post("/post/poll/submit", data, () => {
+        console.log("poll submitted!!");
+    });
+}
+
 $(() => {
     attachEventTypeListener();
     selectPostDefault();
