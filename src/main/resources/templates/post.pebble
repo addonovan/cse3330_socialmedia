@@ -41,6 +41,9 @@
 
         <p class="postTime"> {{post.createTime}} </p>
 
+        {% for reply in post.replies %}
+            {% include "post" with {"post": reply} %}
+        {% endfor %}
 
         {% include "post_box" with {
             "parentPostId": post.id,
