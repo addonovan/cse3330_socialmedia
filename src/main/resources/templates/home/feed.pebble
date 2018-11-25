@@ -13,12 +13,12 @@
                 <li id="FollowRequest{{request.id}}">
                     <img class="profileImage small" src="{{request.profileImageUrl}}">
                     {{request.fullName}}
-                    <button onclick="approveFollow({{request.id}})">
-                        Approve
-                    </button>
-                    <button onclick="denyFollow({{request.id}})">
-                        Deny
-                    </button>
+                    <form method="post" action="/account/follow/approve/{{request.id}}">
+                        <button type="submit">Approve</button>
+                    </form>
+                    <form method="post" action="/account/follow/reject/{{request.id}}">
+                        <button type="submit">Reject</button>
+                    </form>
                 </li>
                 {% endfor %}
             </ul>
