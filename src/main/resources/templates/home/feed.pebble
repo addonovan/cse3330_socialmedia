@@ -5,6 +5,26 @@
 {% endblock %}
 
 {% block content %}
+    {% if followRequests.size() > 0 %}
+        <div class="followRequests">
+            Pending follow requests:
+            <ul>
+                {% for request in followRequests %}
+                <li>
+                    <img class="profileImage small" src="{{request.profileImageUrl}}">
+                    {{request.fullName}}
+                    <button onclick="approveFollow({{user.id}}, {{request.id}})">
+                        Approve
+                    </button>
+                    <button onclick="denyFollow({{user.id}}, {{request.id}})">
+                        Deny
+                    </button>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
     {% include "../post_box" with {"allowEvents": "true", "wall": user} %}
 
     <div id="Overview">
