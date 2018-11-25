@@ -5,6 +5,26 @@
 {% endblock %}
 
 {% block content %}
+    {% if followRequests.size() > 0 %}
+        <div class="followRequests">
+            Pending follow requests:
+            <ul>
+                {% for request in followRequests %}
+                <li id="FollowRequest{{request.id}}">
+                    <img class="profileImage small" src="{{request.profileImageUrl}}">
+                    {{request.fullName}}
+                    <form method="post" action="/account/follow/approve/{{request.id}}">
+                        <button type="submit">Approve</button>
+                    </form>
+                    <form method="post" action="/account/follow/reject/{{request.id}}">
+                        <button type="submit">Reject</button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
     {% include "../post_box" with {"allowEvents": "true", "wall": user} %}
 
     <div id="Overview">

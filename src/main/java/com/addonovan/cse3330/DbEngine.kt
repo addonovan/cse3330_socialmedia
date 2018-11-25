@@ -181,7 +181,7 @@ object DbEngine {
     private val UPDATE_ACCOUNT: String =
             """
             UPDATE "Account"
-            SET email = ?, phonenumber = ?
+            SET email = ?, phonenumber = ?, isprivate = ?
             WHERE accountid = ?;
             """.trimIndent()
 
@@ -195,17 +195,18 @@ object DbEngine {
 
     fun updateProfile(user: Profile, newSettings: Profile) {
         query(UPDATE_ACCOUNT)
-                .supply(user.id)
                 .supply(newSettings.email)
                 .supply(newSettings.phoneNumber)
+                .supply(newSettings.isPrivate)
+                .supply(user.id)
                 .executeOn(CONNECTION)
 
         query(UPDATE_PROFILE)
-                .supply(user.id)
                 .supply(newSettings.firstName)
                 .supply(newSettings.lastName)
                 .supply(newSettings.username)
                 .supply(newSettings.password)
+                .supply(user.id)
                 .executeOn(CONNECTION)
     }
 
@@ -324,6 +325,28 @@ object DbEngine {
                     Account.fromRow(it)
                 }
             }
+
+    @Language("PostgreSQL")
+    private val DELETE_FOLLOW_REQUEST: String =
+            """
+            DELETE FROM "FollowRequest" fr
+            WHERE fr.followerid = ? AND fr.followeeid = ?;
+            """.trimIndent()
+
+    fun deleteFollowRequest(followee: Account, follower: Account) =
+            query(DELETE_FOLLOW_REQUEST)
+                    .supply(follower.id)
+                    .supply(followee.id)
+                    .executeOn(CONNECTION)
+
+    fun approveFollowRequest(followee: Account, follower: Account) {
+        deleteFollowRequest(followee, follower)
+
+        query(ADD_FOLLOW_FORMAT.format("Follow"))
+                .supply(follower.id)
+                .supply(followee.id)
+                .executeOn(CONNECTION)
+    }
 
     //
     // Account Overviews

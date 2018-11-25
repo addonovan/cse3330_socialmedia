@@ -58,6 +58,10 @@ open class AccountController {
         response.redirectToReferrer(request)
         val user = request.profile!!
 
+        // this is a bit stupid, but for some reason the checkbox's value
+        // isn't sent if it's off...
+        newSettings.isPrivate = request.getParameter("isPrivate") == "on"
+
         DbEngine.updateProfile(user, newSettings)
     }
 
@@ -65,7 +69,6 @@ open class AccountController {
     fun followAccount(
             request: Request,
             response: Response,
-            model: Model,
             @PathVariable id: Int
     ) {
         response.redirectToReferrer(request)
@@ -79,7 +82,6 @@ open class AccountController {
     fun unfollowAccount(
             request: Request,
             response: Response,
-            model: Model,
             @PathVariable id: Int
     ) {
         response.redirectToReferrer(request)
@@ -87,6 +89,32 @@ open class AccountController {
         val user = request.profile!!
         val followee = DbEngine.getAccountById(id)!!
         DbEngine.removeFollow(user, followee)
+    }
+
+    @PostMapping("/follow/approve/{id:[0-9]+}")
+    fun acceptFollowRequest(
+            request: Request,
+            response: Response,
+            @PathVariable id: Int
+    ) {
+        response.redirectToReferrer(request)
+
+        val user = request.profile!!
+        val follower = Account().apply { this.id = id }
+        DbEngine.approveFollowRequest(user, follower)
+    }
+
+    @PostMapping("/follow/reject/{id:[0-9]+}")
+    fun rejectFollowRequest(
+            request: Request,
+            response: Response,
+            @PathVariable id: Int
+    ) {
+        response.redirectToReferrer(request)
+
+        val user = request.profile!!
+        val follower = Account().apply { this.id = id }
+        DbEngine.deleteFollowRequest(user, follower)
     }
 
 
@@ -103,7 +131,15 @@ open class AccountController {
 
         else -> {
             val user = request.profile
-            val overview = DbEngine.wallOverview(account)
+
+            val overview = when {
+                !account.isPrivate
+                || user == account
+                || (user as Account?) in account.followers
+                    -> DbEngine.wallOverview(account)
+
+                else -> listOf()
+            }
 
             if (account is Page) {
                 DbEngine.viewPage(account)

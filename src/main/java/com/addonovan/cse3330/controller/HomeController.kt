@@ -48,9 +48,8 @@ open class HomeController {
             model: Model
     ): String {
         model.addAttribute("user", user)
-        DbEngine.feedFor(user).let {
-            model.addAttribute("overview", it)
-        }
+        model.addAttribute("overview", DbEngine.feedFor(user))
+        model.addAttribute("followRequests", DbEngine.getFollowRequests(user))
         model.addAttribute("emotions", Emotion.values)
 
         return "home/feed"
