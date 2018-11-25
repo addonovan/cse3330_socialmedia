@@ -44,7 +44,7 @@
             {% endfor %}
 
             <div class="buttons">
-                {% for emotion in Emotion.VALUES %}
+                {% for emotion in emotions %}
                     <button onclick="sendReaction({{post.id}}, {{emotion.id}})">
                         <img class="emotion" src="{{emotion.imageUrl}}">
                     </button>

@@ -2,6 +2,7 @@ package com.addonovan.cse3330.controller
 
 import com.addonovan.cse3330.*
 import com.addonovan.cse3330.model.Account
+import com.addonovan.cse3330.model.Emotion
 import com.addonovan.cse3330.model.Profile
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -106,6 +107,7 @@ open class AccountController {
             model.addAttribute("account", account)
             model.addAttribute("overview", overview)
             model.addAttribute("user", user)
+            model.addAttribute("emotions", Emotion.values)
             "account/overview"
         }
     }

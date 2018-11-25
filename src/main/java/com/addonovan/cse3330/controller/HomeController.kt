@@ -2,6 +2,7 @@ package com.addonovan.cse3330.controller
 
 import com.addonovan.cse3330.DbEngine
 import com.addonovan.cse3330.Request
+import com.addonovan.cse3330.model.Emotion
 import com.addonovan.cse3330.model.Profile
 import com.addonovan.cse3330.profile
 import org.springframework.stereotype.Controller
@@ -50,6 +51,7 @@ open class HomeController {
         DbEngine.feedFor(user).let {
             model.addAttribute("overview", it)
         }
+        model.addAttribute("emotions", Emotion.values)
 
         return "home/feed"
     }
