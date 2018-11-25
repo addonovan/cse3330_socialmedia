@@ -139,12 +139,12 @@ CREATE TABLE "PageAdmin" (
 
 CREATE TABLE "FollowRequest" (
     FollowerId      INTEGER         NOT NULL REFERENCES "Profile"(AccountId),
-    FolloweeId      INTEGER         NOT NULL REFERENCES "Profile"(AccountId)
+    FolloweeId      INTEGER         NOT NULL REFERENCES "Account"(AccountId)
 );
 
 CREATE TABLE "Follow" (
     FollowerId      INTEGER         NOT NULL REFERENCES "Profile"(AccountId),
-    FolloweeId      INTEGER         NOT NULL REFERENCES "Profile"(AccountId)
+    FolloweeId      INTEGER         NOT NULL REFERENCES "Account"(AccountId)
 );
 
 --
