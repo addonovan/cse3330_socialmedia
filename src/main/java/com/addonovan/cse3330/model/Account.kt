@@ -86,7 +86,7 @@ open class Account : SqlEntity {
 
     /** A list of accounts who are requesting ot follow this one. */
     val followRequests: List<Account> by lazy {
-        DbEngine.getFollowers(this, requests = true)
+        DbEngine.getFollowRequests(this)
     }
 
     //

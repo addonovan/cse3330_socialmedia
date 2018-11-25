@@ -71,7 +71,7 @@ open class AccountController {
 
         val user = request.profile!!
         val followee = DbEngine.getAccountById(id)!!
-        DbEngine.updateFollow(user, followee, following = true)
+        DbEngine.addFollow(user, followee)
     }
 
     @PostMapping(value = ["/{id:[0-9]+}/unfollow"])
@@ -85,7 +85,7 @@ open class AccountController {
 
         val user = request.profile!!
         val followee = DbEngine.getAccountById(id)!!
-        DbEngine.updateFollow(user, followee, following = false)
+        DbEngine.removeFollow(user, followee)
     }
 
 
