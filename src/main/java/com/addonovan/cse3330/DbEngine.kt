@@ -325,6 +325,28 @@ object DbEngine {
                 }
             }
 
+    @Language("PostgreSQL")
+    private val DELETE_FOLLOW_REQUEST: String =
+            """
+            DELETE FROM "FollowRequest" fr
+            WHERE fr.followerid = ? AND fr.followeeid = ?;
+            """.trimIndent()
+
+    fun deleteFollowRequest(followee: Account, follower: Account) =
+            query(DELETE_FOLLOW_REQUEST)
+                    .supply(follower.id)
+                    .supply(followee.id)
+                    .executeOn(CONNECTION)
+
+    fun approveFollowRequest(followee: Account, follower: Account) {
+        deleteFollowRequest(followee, follower)
+
+        query(ADD_FOLLOW_FORMAT.format("Follow"))
+                .supply(follower.id)
+                .supply(followee.id)
+                .executeOn(CONNECTION)
+    }
+
     //
     // Account Overviews
     //

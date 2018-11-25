@@ -87,6 +87,32 @@ open class AccountController {
         DbEngine.removeFollow(user, followee)
     }
 
+    @PostMapping("/follow/approve/{id:[0-9]+}")
+    fun acceptFollowRequest(
+            request: Request,
+            response: Response,
+            @PathVariable id: Int
+    ) {
+        response.redirectToReferrer(request)
+
+        val user = request.profile!!
+        val follower = Account().apply { this.id = id }
+        DbEngine.approveFollowRequest(user, follower)
+    }
+
+    @PostMapping("/follow/reject/{id:[0-9]+}")
+    fun rejectFollowRequest(
+            request: Request,
+            response: Response,
+            @PathVariable id: Int
+    ) {
+        response.redirectToReferrer(request)
+
+        val user = request.profile!!
+        val follower = Account().apply { this.id = id }
+        DbEngine.deleteFollowRequest(user, follower)
+    }
+
 
     /**
      * Updates the [model] with the given [account] information, then returns
