@@ -16,6 +16,9 @@
           action="/post/submit"
           enctype="multipart/form-data">
         <input type="number" name="wallId" class="hidden" value="{{wall.id}}">
+        {% if parentPostId %}
+            <input type="number" name="parentPostId" class="hidden" value="{{parentPostId}}">
+        {% endif %}
 
         <textarea name="text" placeholder="How's i goin', pardner?"></textarea>
         <input type="file" name="mediaFile"/>

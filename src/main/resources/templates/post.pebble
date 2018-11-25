@@ -40,5 +40,11 @@
         {% endif %}
 
         <p class="postTime"> {{post.createTime}} </p>
+
+
+        {% include "post_box" with {
+            "parentPostId": post.id,
+            "wall": post.wall
+        } %}
     </div>
 </div>
