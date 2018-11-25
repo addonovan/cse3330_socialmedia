@@ -54,7 +54,7 @@ object DbEngine {
     }
 
     //
-    // Acount Finding
+    // Account Finding
     //
 
     @Language("PostgreSQL")
@@ -99,34 +99,7 @@ object DbEngine {
      * @see [getAccountById]
      * @see [getProfileByUsername]
      */
-    fun getProfileById(id: Int) = call("FindAccount")
-            .supply(id)
-            .supplyNull<String>()
-            .executeOn(CONNECTION) {
-                if (it.next())
-                    Profile().apply { fromRow(it) }
-                else
-                    null
-            }
-
-    /**
-     * Gets the [Profile] with the given `username`.
-     *
-     * @return `null` if no profile has the given `username`, which may mean
-     * that the profile does not exist or is inactive.
-     *
-     * @see [getAccountById]
-     * @see [getProfileById]
-     */
-    fun getProfileByUsername(username: String) = call("FindAccount")
-            .supplyNull<Int>()
-            .supply(username)
-            .executeOn(CONNECTION) {
-                if (it.next())
-                    Profile().apply { fromRow(it) }
-                else
-                    null
-            }
+    fun getProfileById(id: Int) = getAccountById(id) as? Profile?
 
     /**
      * Gets the [Page] with the given `id`. Note that there is not corresponding
@@ -139,12 +112,30 @@ object DbEngine {
      * @see [getAccountById]
      * @see [viewPage]
      */
-    fun getPageById(id: Int) = call("FindAccount")
-            .supply(id)
-            .supplyNull<String>()
+    fun getPageById(id: Int) = getAccountById(id) as? Page?
+
+    @Language("PostgreSQL")
+    private val FIND_ACCOUNT_BY_USERNAME: String =
+            """
+            SELECT * FROM "Profile" prof
+            LEFT JOIN "Account" a ON a.accountid = prof.accountid
+            WHERE prof.username = ?;
+            """.trimIndent()
+
+    /**
+     * Gets the [Profile] with the given `username`.
+     *
+     * @return `null` if no profile has the given `username`, which may mean
+     * that the profile does not exist or is inactive.
+     *
+     * @see [getAccountById]
+     * @see [getProfileById]
+     */
+    fun getProfileByUsername(username: String) = query(FIND_ACCOUNT_BY_USERNAME)
+            .supply(username)
             .executeOn(CONNECTION) {
                 if (it.next())
-                    Page().apply { fromRow(it) }
+                    Profile().apply { fromRow(it) }
                 else
                     null
             }
