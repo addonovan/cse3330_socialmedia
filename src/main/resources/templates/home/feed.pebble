@@ -10,13 +10,13 @@
             Pending follow requests:
             <ul>
                 {% for request in followRequests %}
-                <li>
+                <li id="FollowRequest{{request.id}}">
                     <img class="profileImage small" src="{{request.profileImageUrl}}">
                     {{request.fullName}}
-                    <button onclick="approveFollow({{user.id}}, {{request.id}})">
+                    <button onclick="approveFollow({{request.id}})">
                         Approve
                     </button>
-                    <button onclick="denyFollow({{user.id}}, {{request.id}})">
+                    <button onclick="denyFollow({{request.id}})">
                         Deny
                     </button>
                 </li>

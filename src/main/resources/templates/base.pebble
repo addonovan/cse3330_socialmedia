@@ -14,6 +14,7 @@
                 crossorigin="anonymous"></script>
         <script src="/script/post.js"></script>
         <script src="/script/event.js"></script>
+        <script src="/script/follow.js"></script>
     </head>
 
     <body>
