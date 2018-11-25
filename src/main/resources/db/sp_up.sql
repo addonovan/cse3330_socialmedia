@@ -9,8 +9,8 @@ AS $$
 BEGIN
 
     RETURN QUERY
-        SELECT profileid, emotionid FROM "PostReaction"
-        WHERE postid = _PostId;
+        SELECT p.profileid, p.emotionid FROM "PostReaction" p
+        WHERE p.postid = _PostId;
 
 END
 $$;
