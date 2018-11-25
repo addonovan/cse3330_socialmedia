@@ -50,7 +50,7 @@ class Post : SqlEntity {
         DbEngine.getRepliesTo(id)
     }
 
-    val reactions: HashMap<Account, Emotion> by lazy {
+    val reactions: Map<Profile, Emotion> by lazy {
         DbEngine.getReactionsTo(id)
     }
 
