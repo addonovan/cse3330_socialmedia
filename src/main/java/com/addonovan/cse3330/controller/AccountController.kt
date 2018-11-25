@@ -102,11 +102,14 @@ open class AccountController {
         else -> {
             val user = request.profile
 
-            val overview =
-                    if (account.isPrivate && (user as Account?) !in account.followers)
-                        listOf()
-                    else
-                        DbEngine.wallOverview(account)
+            val overview = when {
+                !account.isPrivate
+                || user == account
+                || (user as Account?) in account.followers
+                    -> DbEngine.wallOverview(account)
+
+                else -> listOf()
+            }
 
             if (account is Page) {
                 DbEngine.viewPage(account)
