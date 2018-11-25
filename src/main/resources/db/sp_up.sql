@@ -1,3 +1,34 @@
+CREATE OR REPLACE FUNCTION FindReactionsTo(
+    _PostId      INTEGER
+) RETURNS TABLE (
+    ProfileId   INTEGER,
+    EmotionId   INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    RETURN QUERY
+        SELECT profileid, emotionid FROM "PostReaction"
+        WHERE postid = _PostId;
+
+END
+$$;
+
+CREATE OR REPLACE FUNCTION FindEmotionByName(
+    _EmotionName "RefEmotion".emotionname%TYPE
+) RETURNS SETOF "RefEmotion"
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    RETURN QUERY
+        SELECT * FROM "RefEmotion"
+        WHERE emotionname = _EmotionName;
+
+END
+$$;
+
 CREATE OR REPLACE FUNCTION FindRepliesToPost(
     _PostId INTEGER
 ) RETURNS SETOF "Post"
