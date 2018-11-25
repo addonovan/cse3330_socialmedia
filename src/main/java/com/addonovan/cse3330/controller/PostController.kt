@@ -1,6 +1,7 @@
 package com.addonovan.cse3330.controller
 
 import com.addonovan.cse3330.*
+import com.addonovan.cse3330.model.Emotion
 import com.addonovan.cse3330.model.Event
 import com.addonovan.cse3330.model.Post
 import org.springframework.stereotype.Controller
@@ -67,7 +68,10 @@ open class PostController {
             @RequestParam emotionId: Int
     ) {
         val user = request.profile!!
-        DbEngine.addReaction(postId, user.id, emotionId)
+        val post = Post().apply { id = postId }
+        val emotion = Emotion[emotionId]
+
+        DbEngine.addReaction(post, user, emotion)
     }
 
 }

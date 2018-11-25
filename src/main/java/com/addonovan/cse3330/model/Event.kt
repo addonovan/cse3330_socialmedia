@@ -29,11 +29,11 @@ class Event : SqlEntity {
     }
 
     val attendees: List<Profile> by lazy {
-        DbEngine.getAttendees(id)
+        DbEngine.getAttendees(this)
     }
 
     val prospectiveAttendees: List<Profile> by lazy {
-        DbEngine.getProspectiveAttendees(id)
+        DbEngine.getProspectiveAttendees(this)
     }
 
     //

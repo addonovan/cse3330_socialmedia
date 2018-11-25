@@ -30,7 +30,7 @@ class Profile : Account() {
 
     /** A list of pages that this user is an admin for. */
     val administeredPages: List<Page> by lazy {
-        DbEngine.getPagesByAdmin(id)
+        DbEngine.getPagesByAdmin(this)
     }
 
     //

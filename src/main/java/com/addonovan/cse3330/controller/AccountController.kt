@@ -3,6 +3,7 @@ package com.addonovan.cse3330.controller
 import com.addonovan.cse3330.*
 import com.addonovan.cse3330.model.Account
 import com.addonovan.cse3330.model.Emotion
+import com.addonovan.cse3330.model.Page
 import com.addonovan.cse3330.model.Profile
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -71,7 +72,7 @@ open class AccountController {
 
         val user = request.profile!!
         val followee = DbEngine.getAccountById(id)!!
-        DbEngine.updateFollow(user, followee, following = true)
+        DbEngine.addFollow(user, followee)
     }
 
     @PostMapping(value = ["/{id:[0-9]+}/unfollow"])
@@ -85,7 +86,7 @@ open class AccountController {
 
         val user = request.profile!!
         val followee = DbEngine.getAccountById(id)!!
-        DbEngine.updateFollow(user, followee, following = false)
+        DbEngine.removeFollow(user, followee)
     }
 
 
@@ -103,6 +104,10 @@ open class AccountController {
         else -> {
             val user = request.profile
             val overview = DbEngine.wallOverview(account)
+
+            if (account is Page) {
+                DbEngine.viewPage(account)
+            }
 
             model.addAttribute("account", account)
             model.addAttribute("overview", overview)

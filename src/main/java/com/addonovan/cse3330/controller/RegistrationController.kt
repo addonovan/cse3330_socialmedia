@@ -19,7 +19,7 @@ open class RegistrationController {
      * Provides the form to register a new profile.
      */
     @GetMapping("/profile")
-    fun profileRegistrationForm(model: Model) = "register/profile"
+    fun profileRegistrationForm() = "register/profile"
 
     /**
      * Handles the submission of a profile registration request.
@@ -38,7 +38,7 @@ open class RegistrationController {
      * Provides the form to create a new page.
      */
     @GetMapping("/page")
-    fun pageRegistrationForm(model: Model) = "register/page"
+    fun pageRegistrationForm() = "register/page"
 
     /**
      * Handles the submission of a page creation request.
@@ -49,13 +49,13 @@ open class RegistrationController {
             response: HttpServletResponse,
             @ModelAttribute page: Page
     ) {
-        val adminId = request.profile?.id
-        if (adminId == null) {
+        val admin = request.profile
+        if (admin == null) {
             response.sendRedirect("/")
             return
         }
 
-        val newId = DbEngine.createPage(adminId, page).id
+        val newId = DbEngine.createPage(admin, page).id
         response.sendRedirect("/account/$newId")
     }
 }

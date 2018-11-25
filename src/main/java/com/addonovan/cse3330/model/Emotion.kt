@@ -7,12 +7,7 @@ class Emotion : SqlEntity {
 
     companion object {
 
-        val LIKE: Emotion = DbEngine.getEmotionByName("Like")
-        val ANGER: Emotion = DbEngine.getEmotionByName("Anger")
-        val DISLIKE: Emotion = DbEngine.getEmotionByName("Dislike")
-        val LOVE: Emotion = DbEngine.getEmotionByName("Love")
-
-        val values = listOf(LIKE, ANGER, DISLIKE, LOVE)
+        val values = DbEngine.getEmotions()
 
         operator fun get(id: Int) = values.first { it.id == id }
 
