@@ -65,7 +65,6 @@ open class AccountController {
     fun followAccount(
             request: Request,
             response: Response,
-            model: Model,
             @PathVariable id: Int
     ) {
         response.redirectToReferrer(request)
@@ -79,7 +78,6 @@ open class AccountController {
     fun unfollowAccount(
             request: Request,
             response: Response,
-            model: Model,
             @PathVariable id: Int
     ) {
         response.redirectToReferrer(request)
@@ -103,7 +101,12 @@ open class AccountController {
 
         else -> {
             val user = request.profile
-            val overview = DbEngine.wallOverview(account)
+
+            val overview =
+                    if (account.isPrivate && (user as Account?) !in account.followers)
+                        listOf()
+                    else
+                        DbEngine.wallOverview(account)
 
             if (account is Page) {
                 DbEngine.viewPage(account)
