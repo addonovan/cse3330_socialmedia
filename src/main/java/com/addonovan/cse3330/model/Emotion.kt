@@ -12,6 +12,7 @@ class Emotion : SqlEntity {
         val DISLIKE: Emotion = DbEngine.getEmotionByName("Dislike")
         val LOVE: Emotion = DbEngine.getEmotionByName("Love")
 
+        @JvmStatic
         val VALUES = listOf(LIKE, ANGER, DISLIKE, LOVE)
 
         operator fun get(id: Int) = VALUES.first { it.id == id }
