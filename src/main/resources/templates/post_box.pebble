@@ -17,6 +17,13 @@
 
         <textarea name="text" placeholder="How's i goin', pardner?"></textarea>
         <input type="file" name="mediaFile"/>
+
+        {% include "user_selector" with {
+            "dropdownName": "posterId",
+            "dropdownTitle": "Post as: ",
+            "user": user
+        } %}
+
         <input type="submit" value="Send it o'er yonder">
     </form>
 
@@ -39,6 +46,12 @@
             on
             <input type="date" name="endDate">
         </label>
+
+        {% include "user_selector" with {
+            "dropdownName": "posterId",
+            "dropdownTitle": "Post as: ",
+            "user": user
+        } %}
 
         <input type="submit" value="Post">
     </form>
