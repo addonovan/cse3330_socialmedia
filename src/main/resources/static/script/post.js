@@ -1,11 +1,19 @@
-function showEventPost() {
-    $("#PostForm").addClass("hidden");
-    $("#EventForm").removeClass("hidden");
-}
-
 function showNormalPost() {
     $("#PostForm").removeClass("hidden");
     $("#EventForm").addClass("hidden");
+    $("#PollForm").addClass("hidden");
+}
+
+function showEventPost() {
+    $("#PostForm").addClass("hidden");
+    $("#EventForm").removeClass("hidden");
+    $("#PollForm").addClass("hidden");
+}
+
+function showPollPost() {
+    $("#PostForm").addClass("hidden");
+    $("#EventForm").addClass("hidden");
+    $("#PollForm").removeClass("hidden");
 }
 
 function attachEventTypeListener() {
@@ -17,6 +25,10 @@ function attachEventTypeListener() {
 
             case "event":
                 showEventPost();
+                break;
+
+            case "poll":
+                showPollPost();
                 break;
 
             default:
