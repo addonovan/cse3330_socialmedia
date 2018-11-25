@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    {% include "../post_box" with {"wall": user} %}
+    {% include "../post_box" with {"allowEvents": "true", "wall": user} %}
 
     <div id="Overview">
         {% for post in overview %}

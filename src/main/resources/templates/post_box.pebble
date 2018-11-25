@@ -1,12 +1,14 @@
 <div class="flex-vertical">
-    <div id="PostTypeSelector" class="flex-horizontal">
-        <label>
-            <input type="radio" name="postType" value="post"> Post
-        </label>
-        <label>
-            <input type="radio" name="postType" value="event"> Event
-        </label>
-    </div>
+    {% if allowEvents %}
+        <div id="PostTypeSelector" class="flex-horizontal">
+            <label>
+                <input type="radio" name="postType" value="post"> Post
+            </label>
+            <label>
+                <input type="radio" name="postType" value="event"> Event
+            </label>
+        </div>
+    {% endif %}
 
     <form id="PostForm"
           class="post"
@@ -14,6 +16,9 @@
           action="/post/submit"
           enctype="multipart/form-data">
         <input type="number" name="wallId" class="hidden" value="{{wall.id}}">
+        {% if parentPostId %}
+            <input type="number" name="parentPostId" class="hidden" value="{{parentPostId}}">
+        {% endif %}
 
         <textarea name="text" placeholder="How's i goin', pardner?"></textarea>
         <input type="file" name="mediaFile"/>
@@ -27,32 +32,34 @@
         <input type="submit" value="Send it o'er yonder">
     </form>
 
-    <form id="EventForm"
-          class="post"
-          method="post"
-          action="/event/submit">
-        <input name="name" type="text" placeholder="Name">
-        <textarea name="description" placeholder="Description"></textarea>
-        <input name="location" type="text" placeholder="Location">
-        <label>
-            Starts at
-            <input type="time" name="startTime">
-            on
-            <input type="date" name="startDate">
-        </label>
-        <label>
-            Ends at
-            <input type="time" name="endTime">
-            on
-            <input type="date" name="endDate">
-        </label>
+    {% if allowEvents %}
+        <form id="EventForm"
+              class="post"
+              method="post"
+              action="/event/submit">
+            <input name="name" type="text" placeholder="Name">
+            <textarea name="description" placeholder="Description"></textarea>
+            <input name="location" type="text" placeholder="Location">
+            <label>
+                Starts at
+                <input type="time" name="startTime">
+                on
+                <input type="date" name="startDate">
+            </label>
+            <label>
+                Ends at
+                <input type="time" name="endTime">
+                on
+                <input type="date" name="endDate">
+            </label>
 
-        {% include "user_selector" with {
-            "dropdownName": "posterId",
-            "dropdownTitle": "Post as: ",
-            "user": user
-        } %}
+            {% include "user_selector" with {
+                "dropdownName": "posterId",
+                "dropdownTitle": "Post as: ",
+                "user": user
+            } %}
 
-        <input type="submit" value="Post">
-    </form>
+            <input type="submit" value="Post">
+        </form>
+    {% endif %}
 </div>

@@ -46,6 +46,10 @@ class Post : SqlEntity {
         DbEngine.getAccountById(wallId)!!
     }
 
+    val replies: List<Post> by lazy {
+        DbEngine.getRepliesTo(id)
+    }
+
     //
     // Implementation
     //
