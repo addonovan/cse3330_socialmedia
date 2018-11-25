@@ -388,4 +388,13 @@ object DbEngine {
                     Post().apply { fromRow(row) }
                 }
             }
+
+    fun getEmotionByName(emotionName: String): Emotion  = call("FindEmotionByName")
+            .supply(emotionName)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("No emotion by name: $emotionName")
+
+                Emotion().apply { fromRow(it) }
+            }
 }
