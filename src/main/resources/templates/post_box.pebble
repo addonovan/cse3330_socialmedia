@@ -68,7 +68,7 @@
         <form id="PollForm"
               class="post"
               method="post">
-            <input name="question" type="text" title="Question">
+            <input name="question" type="text" placeholder="Question">
             <label>
                 Ends at
                 <input type="time" name="endTime">
@@ -78,7 +78,7 @@
 
             <div id="PollFormQuestions" class="flex-vertical">
                 <div class="flex-horizontal">
-                    <input type="text" title="Answer">
+                    <input type="text" placeholder="Answer">
                     <button onclick="removeAnswer(this)">X</button>
                 </div>
                 <button onclick="addAnswer(this)">+</button>
