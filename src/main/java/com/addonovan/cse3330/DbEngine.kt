@@ -57,6 +57,47 @@ object DbEngine {
     // Account Actions
     //
 
+    /**
+     * Inserts the new [profile][com.addonovan.cse3330.model.Profile] into the
+     * database and returns the model built from querying the database with its
+     * id after insertion.
+     */
+    fun createProfile(profile: Profile) = call("CreateProfile")
+            .supply(profile.email)
+            .supply(profile.phoneNumber)
+            .supply(profile.firstName)
+            .supply(profile.lastName)
+            .supply(profile.username)
+            .supply(profile.password)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("No result from CreateProfile call!")
+
+                profile.apply {
+                    id = it.getInt(1)
+                }
+            }
+
+    /**
+     * Inserts the new [page][com.addonovan.cse3330.model.Page] into the
+     * database and returns the model built from querying the database with its
+     * id after insertion.
+     */
+    fun createPage(admin: Profile, page: Page) = call("CreatePage")
+            .supply(admin.id)
+            .supply(page.email)
+            .supply(page.phoneNumber)
+            .supply(page.name)
+            .supply(page.description)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("No result from CreatePage call!")
+
+                page.apply {
+                    it.getInt(1)
+                }
+            }
+
     @Language("PostgreSQL")
     private val FIND_ACCOUNT_BY_ID: String =
             """
@@ -238,47 +279,6 @@ object DbEngine {
     //
     // Account Overviews
     //
-
-    /**
-     * Inserts the new [profile][com.addonovan.cse3330.model.Profile] into the
-     * database and returns the model built from querying the database with its
-     * id after insertion.
-     */
-    fun createProfile(profile: Profile) = call("CreateProfile")
-            .supply(profile.email)
-            .supply(profile.phoneNumber)
-            .supply(profile.firstName)
-            .supply(profile.lastName)
-            .supply(profile.username)
-            .supply(profile.password)
-            .executeOn(CONNECTION) {
-                if (!it.next())
-                    throw RuntimeException("No result from CreateProfile call!")
-
-                profile.apply {
-                    id = it.getInt(1)
-                }
-            }
-
-    /**
-     * Inserts the new [page][com.addonovan.cse3330.model.Page] into the
-     * database and returns the model built from querying the database with its
-     * id after insertion.
-     */
-    fun createPage(admin: Profile, page: Page) = call("CreatePage")
-            .supply(admin.id)
-            .supply(page.email)
-            .supply(page.phoneNumber)
-            .supply(page.name)
-            .supply(page.description)
-            .executeOn(CONNECTION) {
-                if (!it.next())
-                    throw RuntimeException("No result from CreatePage call!")
-
-                page.apply {
-                    it.getInt(1)
-                }
-            }
 
     @Language("PostgreSQL")
     private val WALL_OVERVIEW_FOR: String =
