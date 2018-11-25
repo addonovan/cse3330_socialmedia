@@ -1,5 +1,6 @@
 package com.addonovan.cse3330.model
 
+import com.addonovan.cse3330.DbEngine
 import java.sql.ResultSet
 
 /**
@@ -22,6 +23,19 @@ class Profile : Account() {
 
     /** The primary language of this user. */
     var languageId: Int = 0
+
+    //
+    // Derived Properties
+    //
+
+    /** A list of pages that this user is an admin for. */
+    val administeredPages: List<Page> by lazy {
+        DbEngine.getPagesByAdmin(id)
+    }
+
+    //
+    // Functions
+    //
 
     override fun fromRow(row: ResultSet) {
         super.fromRow(row)
