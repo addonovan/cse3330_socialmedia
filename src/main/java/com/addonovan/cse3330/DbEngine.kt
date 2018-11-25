@@ -82,12 +82,8 @@ object DbEngine {
             .executeOn(CONNECTION) {
                 if (!it.next())
                     null
-                else if (it.getString("FirstName") != null)
-                    Profile().apply { fromRow(it) }
-                else if (it.getString("PageName") != null)
-                    Page().apply { fromRow(it) }
                 else
-                    throw IllegalStateException("Inconsistent database state: Account(id=$id) is neither a Profile nor a Page!")
+                    Account.fromRow(it)
             }
 
     /**
@@ -140,56 +136,106 @@ object DbEngine {
                     null
             }
 
-    /**
-     * Updates the relationship between the [follower] and [followee]. If
-     * [following] is set to `true`, then the `follower` will attempt to
-     * follow the given `followee`; otherwise, it will unfollow them.
-     *
-     * If the `followee` is private and the `follower` is trying to follow them,
-     * then a follow request will be added to the account.
-     *
-     * @see [getFollowers]
-     */
-    fun updateFollow(follower: Account, followee: Account, following: Boolean) =
-            call("UpdateFollow")
-                    .supply(follower.id)
+    //
+    // Account Actions
+    //
+
+    @Suppress("SqlResolve")
+    @Language("PostgreSQL")
+    private val REMOVE_FOLLOW_FORMAT: String =
+            """
+            DELETE FROM "%s" f
+            WHERE f.followerid = ?
+              AND f.followeeid = ?;
+            """.trimIndent()
+
+    fun removeFollow(follower: Account, followee: Account) {
+        val queries = arrayOf(
+                query(REMOVE_FOLLOW_FORMAT.format("Follow")),
+                query(REMOVE_FOLLOW_FORMAT.format("FollowRequest"))
+        )
+
+        for (query in queries) {
+            query.supply(follower.id)
                     .supply(followee.id)
-                    .supply(following)
                     .executeOn(CONNECTION) {}
+        }
+    }
+
+    @Suppress("SqlResolve")
+    @Language("PostgreSQL")
+    private val ADD_FOLLOW_FORMAT: String =
+            """
+            INSERT INTO "%s" (followerid, followeeid)
+            VALUES (?, ?);
+            """.trimIndent()
 
     /**
-     * Gets a list of all accounts which follow the given [account]. This can
-     * also return only the follow requests for the given account, should
-     * [requests] be `true`.
-     *
-     * @return A list of all accounts which follow, or are requesting to follow,
-     * the given [account].
-     *
-     * @see [getFollowing]
-     * @see [updateFollow]
-     * @see [getAccountById]
+     * @see [getFollowers]
      */
-    fun getFollowers(account: Account, requests: Boolean = false) = call("FindFollowers")
+    fun addFollow(follower: Account, followee: Account) {
+        val tableName = when (followee.isPrivate) {
+            true -> "FollowRequest"
+            false -> "Follow"
+        }
+
+        query(ADD_FOLLOW_FORMAT.format(tableName))
+                .supply(follower.id)
+                .supply(followee.id)
+                .executeOn(CONNECTION) {}
+    }
+
+    //
+    // Account Information
+    //
+
+    @Language("PostgreSQL")
+    private val GET_FOLLOWERS_FORMAT: String =
+            """
+            SELECT * FROM "%s" f
+            INNER JOIN "Account" a ON a.accountid = f.followerid
+            LEFT JOIN "Profile" prof ON prof.accountid = a.accountid
+            LEFT JOIN "Page" page ON page.accountid = a.accountid
+            WHERE f.followeeid = ?;
+            """
+
+    fun getFollowers(account: Account) = query(GET_FOLLOWERS_FORMAT.format("Follow"))
             .supply(account.id)
-            .supply(requests)
-            .executeOn(CONNECTION) {
-                it.map {
-                    getAccountById(it.getInt("FollowerId"))!!
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Account.fromRow(it)
                 }
             }
+
+    fun getFollowRequests(account: Account) = query(GET_FOLLOWERS_FORMAT.format("FollowRequest"))
+            .supply(account.id)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Account.fromRow(it)
+                }
+            }
+
+    @Language("PostgreSQL")
+    private val GET_FOLLOWING: String =
+            """
+            SELECT * FROM "Follow" f
+            INNER JOIN "Account" a ON a.accountid = f.followeeid
+            LEFT JOIN "Profile" prof ON prof.accountid = a.accountid
+            LEFT JOIN "Page" page ON page.accountid = a.accountid
+            WHERE f.followerid = ?;
+            """.trimIndent()
 
     /**
      * Gets a list of all accounts which this [account] is following.
      *
      * @see [getFollowers]
-     * @see [updateFollow]
      * @see [getAccountById]
      */
-    fun getFollowing(account: Account) = call("FindFollowing")
+    fun getFollowing(account: Account) = query(GET_FOLLOWING)
             .supply(account.id)
-            .executeOn(CONNECTION) {
-                it.map {
-                    getAccountById(it.getInt("FolloweeId"))!!
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Account.fromRow(it)
                 }
             }
 

@@ -10,6 +10,17 @@ import java.sql.Timestamp
  */
 open class Account : SqlEntity {
 
+    companion object {
+
+        fun fromRow(row: ResultSet): Account =
+                when {
+                    row.getString("FirstName") != null -> Profile().apply { fromRow(row) }
+                    row.getString("PageName") != null -> Page().apply { fromRow(row) }
+                    else -> throw IllegalStateException("Inconsistent database state: Account is neither a Profile nor a Page!")
+                }
+
+    }
+
     var id: Int = 0
 
     /** An (unverified) email account registered to this user. */
