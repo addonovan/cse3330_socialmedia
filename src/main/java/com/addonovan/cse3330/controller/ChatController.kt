@@ -31,6 +31,26 @@ open class ChatController {
         return "chat/create_chat"
     }
 
+    @PostMapping("/create")
+    @ResponseBody
+    fun createChat(
+            request: Request,
+            @RequestParam group: Group,
+            @RequestParam mediaFile: MultipartFile
+    ) {
+        val newGroup = DbEngine.createGroup(group.apply {
+            if (!mediaFile.isEmpty) {
+                pictureUrl = mediaFile.writeAs(UploadType.GroupImage)
+            }
+        })
+
+        for (i in 0..Int.MAX_VALUE) {
+            val profileId = request.getParameter("member$i")?.toInt() ?: break
+            val profile = Profile().apply{ id = profileId }
+            DbEngine.addGroupMember(newGroup, profile)
+        }
+    }
+
 
     //
     // API

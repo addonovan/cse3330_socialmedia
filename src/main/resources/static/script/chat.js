@@ -52,3 +52,32 @@ function selectGroup(groupId) {
         });
     });
 }
+
+function addFriend() {
+    $("#FriendSelector").clone()
+        .removeAttr("id")
+        .removeClass("hidden")
+        .appendTo(
+            $("#ChatInfo > div")
+        )
+}
+
+function removeFriend(button) {
+    $(button).parent().remove();
+}
+
+function createGroupChat() {
+    let data = {
+        name: $("#ChatInfo input[name='name']").value(),
+        description: $("#ChatInfo input[name='description']").value(),
+    };
+
+    $("#ChatInfo > div").find("select")
+        .each((i, it) => {
+            data["member" + i] = it.value;
+        });
+
+    $.post("/chat/createGroup", data, () => {
+        location.assign("/chat");
+    });
+}

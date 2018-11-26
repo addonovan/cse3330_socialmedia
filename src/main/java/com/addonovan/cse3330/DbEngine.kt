@@ -722,6 +722,40 @@ object DbEngine {
     //
 
     @Language("PostgreSQL")
+    private val CREATE_GROUP: String =
+            """
+            INSERT INTO "Group"(groupname, groupdesc, grouppictureurl)
+            VALUES (?, ?, ?)
+            RETURNING groupid;
+            """.trimIndent()
+
+    fun createGroup(group: Group) = query(CREATE_GROUP)
+            .supply(group.name)
+            .supply(group.description)
+            .supply(group.pictureUrl)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("Failed to create new Group!")
+
+                group.apply {
+                    id = it.getInt(1)
+                }
+            }
+
+
+    @Language("PostgreSQL")
+    private val ADD_GROUP_MEMBER: String =
+            """
+            INSERT INTO "GroupMember"(profileid, groupid)
+            VALUES (?, ?);
+            """.trimIndent()
+
+    fun addGroupMember(group: Group, user: Profile) = query(ADD_GROUP_MEMBER)
+            .supply(user.id)
+            .supply(group.id)
+            .executeOn(CONNECTION)
+
+    @Language("PostgreSQL")
     private val GET_GROUP_BY_ID: String =
             """
             SELECT * FROM "Group"

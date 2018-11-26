@@ -15,7 +15,8 @@ enum class UploadType(dirName: String) {
 
     ProfileImage("profiles"),
     HeaderImage("headers"),
-    PostAttachment("posts");
+    PostAttachment("posts"),
+    GroupImage("groups");
 
     /** The directory containing this type of media upload. */
     val directory = "$LOCAL_DIR/$dirName/".apply {
