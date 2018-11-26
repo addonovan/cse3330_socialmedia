@@ -13,6 +13,7 @@
                     <a href="/account/settings/{{page.id}}">{{page.fullName}}</a>
                 </li>
             {% endfor %}
+            <li>Or, create <a href="/register/page">a new page</a></li>
         </ul>
     {% endif %}
 
