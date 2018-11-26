@@ -786,4 +786,19 @@ object DbEngine {
                 }
             }
 
+    @Language("PostgreSQL")
+    private val ADD_NEW_GROUP_MESSAGE: String =
+            """
+            INSERT INTO "GroupMessage"(senderid, groupid, messagetext, mediaurl)
+            VALUES (?, ?, ?, ?);
+            """.trimIndent()
+
+    fun sendGroupMessage(sender: Profile, group: Group, message: GroupMessage) =
+            query(ADD_NEW_GROUP_MESSAGE)
+                    .supply(sender.id)
+                    .supply(group.id)
+                    .supply(message.message)
+                    .supply(message.mediaUrl)
+                    .executeOn(CONNECTION)
+
 }

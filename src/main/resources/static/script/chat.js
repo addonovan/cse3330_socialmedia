@@ -48,3 +48,10 @@ function selectGroup(groupId) {
         })
     });
 }
+
+function sendMessage() {
+    let input = $("#MessageHistory #InputField");
+
+    let text = input.value();
+    input.value("");
+}
