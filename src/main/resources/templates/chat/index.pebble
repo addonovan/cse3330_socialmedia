@@ -8,8 +8,8 @@
     <div class="flex-horizontal">
         <div id="ChatList" class="flex-vertical">
             <ul>
-                {% for group in groups %}
-                <li id="Group{{group.id}}">
+                {% for group in user.groups %}
+                <li id="Group{{group.id}}" onclick="selectGroup({{group.id}})">
                     <img class="profileImage small"
                          src="{{group.pictureUrl}}">
                     {{group.name}}<br>
@@ -21,6 +21,20 @@
 
         <div id="MessageHistory" class="flex-vertical">
 
+        </div>
+    </div>
+
+    <div id="Components" class="hidden">
+        <div id="GroupHeader" class="flex-vertical">
+            <img class="profileImage large" src="">
+            <p id="GroupName" class="important"></p>
+            <p id="GroupDescription"></p>
+        </div>
+
+        <div class="historyItem flex-horizontal">
+            <img class="profileImage small" src="">
+            <p class="senderName ui"></p>
+            <p class="messageText"></p>
         </div>
     </div>
 {% endblock %}

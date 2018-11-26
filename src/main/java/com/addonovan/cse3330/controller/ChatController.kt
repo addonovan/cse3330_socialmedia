@@ -2,6 +2,7 @@ package com.addonovan.cse3330.controller
 
 import com.addonovan.cse3330.DbEngine
 import com.addonovan.cse3330.Request
+import com.addonovan.cse3330.model.Group
 import com.addonovan.cse3330.model.GroupMessage
 import com.addonovan.cse3330.model.Profile
 import com.addonovan.cse3330.profile
@@ -24,6 +25,21 @@ open class ChatController {
     //
     // API
     //
+
+    @GetMapping("/api/group/{groupId:[0-9]+}")
+    fun getGroup(
+            request: Request,
+            @RequestParam groupId: Int
+    ): Group {
+        val user = request.profile!!
+        val group = DbEngine.getGroupById(groupId)!!
+
+        if (user !in group.members) {
+            throw RuntimeException("You don't have access to that group!")
+        }
+
+        return group
+    }
 
     @GetMapping("/api/messages/{groupId:[0-9]+}")
     fun listMessages(
