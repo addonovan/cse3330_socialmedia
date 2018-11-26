@@ -16,6 +16,10 @@ function showMessages(groupInfo, groupMembers, messages) {
         outline.find("#GroupHeader #GroupName").text(groupInfo.name);
         outline.find("#GroupHeader #GroupDescription").text(groupInfo.description);
 
+        outline.find("#GroupHeader #EditGroup").click(() => {
+            editGroup(groupInfo)
+        });
+
         let memberList = outline.find("#GroupMembers");
         Object.keys(groupMembers).forEach((id) => {
             let member = groupMembers[id];
@@ -74,6 +78,17 @@ function selectGroup(groupId) {
             });
         });
     });
+}
+
+function editGroup(groupInfo) {
+    let header = $("#MessageHistory #GroupHeader").empty();
+
+    let form = $("#Components #GroupUpdater").clone();
+    form.find("input[name='id']").val(groupInfo.id);
+    form.find("input[name='name']").val(groupInfo.name);
+    form.find("input[name='description']").val(groupInfo.description);
+
+    header.append(form);
 }
 
 function addFriend() {

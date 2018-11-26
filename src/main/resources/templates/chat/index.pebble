@@ -38,6 +38,7 @@
                 <img class="profileImage large" src="">
                 <p id="GroupName" class="important"></p>
                 <p id="GroupDescription"></p>
+                <button id="EditGroup">Edit Group</button>
                 <ul id="GroupMembers" class="no-items"></ul>
             </div>
 
@@ -79,6 +80,34 @@
                 <img class="messageImage profileImage large" src="" onclick="window.open(this.src);">
             </div>
         </div>
+
+        <form id="GroupUpdater"
+              method="post"
+              action="/chat/api/updateGroup"
+              enctype="multipart/form-data">
+
+            <input class="hidden"
+                   type="number"
+                   name="id"
+                   value="">
+
+            <label>
+                Group image:
+                <input type="file" name="groupImage">
+            </label>
+
+            <input type="text"
+                   name="name"
+                    placeholder="Enter a group name">
+
+            <input type="text"
+                   name="description"
+                   placeholder="Enter a group description">
+
+            <input type="submit" value="Update">
+
+        </form>
+
 
     </div>
 {% endblock %}
