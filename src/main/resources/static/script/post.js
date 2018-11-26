@@ -72,8 +72,10 @@ function addAnswer(button) {
     newAnswer.insertBefore(btn);
 }
 
-function postPoll() {
+function postPoll(wallId) {
     let data = {
+        wallId: wallId,
+        posterId: $("#PollForm select[name='posterId']").val() || 0,
         question: $("#PollForm input[name='question']").val(),
         endDate: $("#PollForm input[name='endDate']").val(),
         endTime: $("#PollForm input[name='endTime']").val()

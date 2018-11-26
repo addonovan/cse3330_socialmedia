@@ -66,6 +66,8 @@ open class PostController {
             request: Request,
             response: Response,
             model: Model,
+            @RequestParam posterId: Int,
+            @RequestParam wallId: Int,
             @RequestParam question: String,
             @RequestParam endDate: String,
             @RequestParam endTime: String
@@ -77,7 +79,23 @@ open class PostController {
 
         // create the poll post
         val post = DbEngine.createPost(Post().apply {
-            posterId = user.id
+
+            // default the post to be created by the current user, unless they
+            // got to select the posting account on their end. Then just check to
+            // make sure they're allowed to do that.
+            this.posterId = when {
+                posterId == 0 ->
+                    user.id
+
+                user.administeredPages.none { it.id == posterId } ->
+                    return errorPage(model, "You don't have permission to post from that account!")
+
+                else ->
+                    posterId
+            }
+
+            this.wallId = wallId
+
             poll = Post.PollBody(
                     question,
                     Timestamp.valueOf("$endDate $endTime:00")

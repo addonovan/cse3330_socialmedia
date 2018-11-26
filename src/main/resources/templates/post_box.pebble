@@ -83,7 +83,14 @@
                 <button onclick="addAnswer(this)">+</button>
             </div>
 
-            <button onclick="postPoll()">Post</button>
+
+            {% include "user_selector" with {
+                "dropdownName": "posterId",
+                "dropdownTitle": "Post as: ",
+                "user": user
+            } %}
+
+            <button onclick="postPoll({{wall.id}})">Post</button>
         </div>
     {% endif %}
 </div>
