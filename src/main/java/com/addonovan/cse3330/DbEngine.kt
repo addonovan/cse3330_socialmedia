@@ -127,6 +127,21 @@ object DbEngine {
                     Account.fromRow(it)
             }
 
+    @Language("PostgreSQL")
+    private val DELETE_ACCOUNT: String =
+            """
+            UPDATE "Account"
+            SET isactive = FALSE
+            WHERE accountid = ?;
+            """.trimIndent()
+
+    /**
+     * "Deletes" the [account].
+     */
+    fun deleteAccount(account: Account) = query(DELETE_ACCOUNT)
+            .supply(account.id)
+            .executeOn(CONNECTION)
+
     /**
      * Gets the [Profile][com.addonovan.cse3330.model.Profile] by the given `id`.
      *
