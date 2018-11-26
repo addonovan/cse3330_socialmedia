@@ -38,12 +38,14 @@ open class ChatController {
             @RequestParam name: String,
             @RequestParam description: String
     ) {
+        val user = request.profile!!
+
         val group = DbEngine.createGroup(Group().apply {
             this.name = name
             this.description = description
         })
 
-        DbEngine.addGroupMember(group, request.profile!!)
+        DbEngine.addGroupMember(group, user)
 
         for (i in 0..Int.MAX_VALUE) {
             val profileId = request.getParameter("member$i")?.toInt() ?: break
