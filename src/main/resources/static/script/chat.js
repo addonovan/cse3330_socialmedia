@@ -5,7 +5,7 @@ function fetchMessages(callback) {
     $.getJSON("/chat/api/messages/" + currentGroupInfo.id, (data) => callback(data))
 }
 
-function showMesssages(messages) {
+function showMessages(messages) {
     function buildGroupHeader(groupInfo) {
         let header = $("#Components #GroupHeader").clone();
         header.find("img.profileImage").src(groupInfo.imageUrl);
@@ -44,7 +44,7 @@ function selectGroup(groupId) {
         currentGroupInfo = groupInfo;
         $.getJSON("/chat/api/members" + groupId, (members) => {
             currentGroupMembers = members;
-            fetchMessages(showMesssages)
+            fetchMessages(showMessages)
         })
     });
 }
