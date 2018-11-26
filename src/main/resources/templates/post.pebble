@@ -39,7 +39,7 @@
 
             <p class="postBody">{{post.poll.question}}</p>
 
-            {% if post.pollVoters contains user %}
+            {% if (post.isPollExpired) or (post.pollVoters contains user) %}
                 <ul>
                     {% for entry in post.pollVotes %}
                         <li>{{entry.value}}x {{entry.key.text}}</li>

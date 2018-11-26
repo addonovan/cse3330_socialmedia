@@ -4,6 +4,8 @@ import com.addonovan.cse3330.DbEngine
 import java.lang.IllegalStateException
 import java.sql.ResultSet
 import java.sql.Timestamp
+import java.time.LocalDateTime
+import java.util.*
 
 /**
  * The class model representing the SQL `Post` entity.
@@ -37,6 +39,11 @@ class Post : SqlEntity {
     //
     // Derived Properties
     //
+
+    val isPollExpired: Boolean by lazy {
+        val endTime = poll?.endTime ?: return@lazy false
+        endTime.before(Calendar.getInstance().time)
+    }
 
     val pollAnswers: List<PollAnswer> by lazy {
         DbEngine.getPollAnswers(this)
