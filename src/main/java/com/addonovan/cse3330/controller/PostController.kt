@@ -3,6 +3,7 @@ package com.addonovan.cse3330.controller
 import com.addonovan.cse3330.*
 import com.addonovan.cse3330.model.Emotion
 import com.addonovan.cse3330.model.Event
+import com.addonovan.cse3330.model.PollAnswer
 import com.addonovan.cse3330.model.Post
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -109,6 +110,22 @@ open class PostController {
         }
 
         return errorPage(model, "You shouldn't really see this")
+    }
+
+    @PostMapping("/poll/vote")
+    fun pollVote(
+            request: Request,
+            response: Response,
+            @RequestParam postId: Int,
+            @RequestParam pollAnswerId: Int
+    ) {
+        response.redirectToReferrer(request)
+
+        val user = request.profile!!
+        val post = Post().apply { id = postId }
+        val pollAnswer = PollAnswer().apply { id = pollAnswerId }
+
+        DbEngine.voteInPoll(user, post, pollAnswer)
     }
 
     @PostMapping("/react")

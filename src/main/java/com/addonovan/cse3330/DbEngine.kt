@@ -515,6 +515,19 @@ object DbEngine {
             }
 
     @Language("PostgreSQL")
+    private val VOTE_IN_POLL: String =
+            """
+            INSERT INTO "PollVote"(pollid, pollanswerid, profileid)
+            VALUES (?, ?, ?);
+            """.trimIndent()
+
+    fun voteInPoll(voter: Profile, poll: Post, answer: PollAnswer) = query(VOTE_IN_POLL)
+            .supply(poll.id)
+            .supply(answer.id)
+            .supply(voter.id)
+            .executeOn(CONNECTION)
+
+    @Language("PostgreSQL")
     private val CREATE_EVENT: String =
             """
             INSERT INTO "Event"(hostid, eventname, eventdesc, starttime, endtime, location)

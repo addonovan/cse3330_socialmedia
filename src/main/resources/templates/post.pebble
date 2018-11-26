@@ -43,7 +43,7 @@
                 <form method="post" action="/post/poll/vote">
                     <input class="hidden"
                            type="number"
-                           name="pollId"
+                           name="postId"
                            value="{{post.id}}">
 
                     <input class="hidden"
