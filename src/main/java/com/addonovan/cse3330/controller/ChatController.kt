@@ -22,6 +22,16 @@ open class ChatController {
         return "chat/index"
     }
 
+    @GetMapping("/create")
+    fun createChat(request: Request, model: Model): String {
+        val user = request.profile
+                ?: errorPage(model, "You have to be logged in to do that!")
+
+        model.addAttribute("user", user)
+        return "chat/create_chat"
+    }
+
+
     //
     // API
     //
