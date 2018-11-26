@@ -1,6 +1,7 @@
 package com.addonovan.cse3330.model
 
 import com.addonovan.cse3330.DbEngine
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.lang.IllegalStateException
 import java.sql.ResultSet
 import java.sql.Timestamp
@@ -58,6 +59,7 @@ open class Account : SqlEntity {
      * Computes the display name for this account, if this account has that
      * information.
      */
+    @get:JsonIgnore
     val fullName: String by lazy {
         when (this) {
             is Profile -> "$firstName $lastName"
@@ -66,6 +68,7 @@ open class Account : SqlEntity {
         }
     }
 
+    @get:JsonIgnore
     val isProfile: Boolean by lazy {
         when (this) {
             is Profile -> true
@@ -75,16 +78,19 @@ open class Account : SqlEntity {
     }
 
     /** A list of accounts this one is currently following */
+    @get:JsonIgnore
     val following: List<Account> by lazy {
         DbEngine.getFollowing(this)
     }
 
     /** A list of accounts who are currently following this one. */
+    @get:JsonIgnore
     val followers: List<Account> by lazy {
         DbEngine.getFollowers(this)
     }
 
     /** A list of accounts who are requesting ot follow this one. */
+    @get:JsonIgnore
     val followRequests: List<Account> by lazy {
         DbEngine.getFollowRequests(this)
     }

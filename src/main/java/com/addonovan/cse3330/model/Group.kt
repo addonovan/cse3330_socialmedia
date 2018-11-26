@@ -1,6 +1,7 @@
 package com.addonovan.cse3330.model
 
 import com.addonovan.cse3330.DbEngine
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.sql.ResultSet
 
 class Group : SqlEntity {
@@ -17,10 +18,12 @@ class Group : SqlEntity {
     // Derived Properties
     //
 
+    @get:JsonIgnore
     val members: List<Profile> by lazy {
         DbEngine.getGroupMembers(this)
     }
 
+    @get:JsonIgnore
     val messages: List<GroupMessage> by lazy {
         DbEngine.getGroupMessageHistory(this)
     }

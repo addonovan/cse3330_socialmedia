@@ -1,6 +1,7 @@
 package com.addonovan.cse3330.model
 
 import com.addonovan.cse3330.DbEngine
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.lang.IllegalStateException
 import java.sql.ResultSet
 import java.sql.Timestamp
@@ -40,19 +41,23 @@ class Post : SqlEntity {
     // Derived Properties
     //
 
+    @get:JsonIgnore
     val isPollExpired: Boolean by lazy {
         val endTime = poll?.endTime ?: return@lazy false
         endTime.before(Calendar.getInstance().time)
     }
 
+    @get:JsonIgnore
     val pollAnswers: List<PollAnswer> by lazy {
         DbEngine.getPollAnswers(this)
     }
 
+    @get:JsonIgnore
     val pollVoters: List<Account> by lazy {
         DbEngine.getPollVoters(this)
     }
 
+    @get:JsonIgnore
     val pollVotes: Map<PollAnswer, Int> by lazy {
         val map = hashMapOf<PollAnswer, Int>()
 
@@ -63,28 +68,34 @@ class Post : SqlEntity {
         map
     }
 
+    @get:JsonIgnore
     val poster: Account by lazy {
         DbEngine.getAccountById(posterId)!!
     }
 
+    @get:JsonIgnore
     val wall: Account by lazy {
         DbEngine.getAccountById(wallId)!!
     }
 
+    @get:JsonIgnore
     val replies: List<Post> by lazy {
         DbEngine.getRepliesTo(this)
     }
 
+    @get:JsonIgnore
     val reactions: Map<Profile, Emotion> by lazy {
         DbEngine.getReactionsTo(this)
     }
 
+    @get:JsonIgnore
     val reactionCounts: Map<Emotion, Int> by lazy {
         reactions.toList()
                 .groupBy { (_, emotion) -> emotion }
                 .mapValues { it.value.size }
     }
 
+    @get:JsonIgnore
     val reacters: List<Profile> by lazy {
         reactions.keys.toList()
     }

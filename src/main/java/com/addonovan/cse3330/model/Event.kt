@@ -1,6 +1,7 @@
 package com.addonovan.cse3330.model
 
 import com.addonovan.cse3330.DbEngine
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.sql.ResultSet
 import java.sql.Timestamp
 
@@ -24,14 +25,17 @@ class Event : SqlEntity {
     // Derived Properties
     //
 
+    @get:JsonIgnore
     val host: Account by lazy {
         DbEngine.getAccountById(hostId)!!
     }
 
+    @get:JsonIgnore
     val attendees: List<Profile> by lazy {
         DbEngine.getAttendees(this)
     }
 
+    @get:JsonIgnore
     val prospectiveAttendees: List<Profile> by lazy {
         DbEngine.getProspectiveAttendees(this)
     }
