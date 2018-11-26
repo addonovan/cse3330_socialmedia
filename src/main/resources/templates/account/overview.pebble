@@ -33,7 +33,7 @@
     </div>
 
     {% if user != null %}
-        {% include "../post_box" with {"wall": account} %}
+        {% include "../post_box" with {"showPoll": "true", "wall": account} %}
     {% endif %}
 
     <div id="Overview">

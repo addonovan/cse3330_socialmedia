@@ -1,15 +1,19 @@
 <div class="flex-vertical">
-    {% if extendedOptions %}
+    {% if showPoll or showEvent %}
         <div id="PostTypeSelector" class="flex-horizontal">
             <label>
                 <input type="radio" name="postType" value="post"> Post
             </label>
-            <label>
-                <input type="radio" name="postType" value="event"> Event
-            </label>
-            <label>
-                <input type="radio" name="postType" value="poll"> Poll
-            </label>
+            {% if showEvent %}
+                <label>
+                    <input type="radio" name="postType" value="event"> Event
+                </label>
+            {% endif %}
+            {% if showPoll %}
+                <label>
+                    <input type="radio" name="postType" value="poll"> Poll
+                </label>
+            {% endif %}
         </div>
     {% endif %}
 
@@ -35,7 +39,7 @@
         <input type="submit" value="Send it o'er yonder">
     </form>
 
-    {% if extendedOptions %}
+    {% if showEvent %}
         <form id="EventForm"
               class="postbox"
               method="post"
@@ -64,7 +68,9 @@
 
             <input type="submit" value="Post">
         </form>
+    {% endif %}
 
+    {% if showPoll %}
         <div id="PollForm"
               class="postbox">
             <input name="question" type="text" placeholder="Question">
