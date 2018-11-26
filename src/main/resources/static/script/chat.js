@@ -8,13 +8,22 @@ const fetchMessages = (groupId, callback) =>
     $.getJSON("/chat/api/messages/" + groupId, callback);
 
 function showMessages(groupInfo, groupMembers, messages) {
-    function buildGroupOutline(groupInfo) {
+    function buildGroupOutline(groupInfo, groupMembers) {
         let outline = $("#Components #Outline").clone();
 
         // fill out the header
         outline.find("#GroupHeader img.profileImage").attr("src", groupInfo.pictureUrl);
         outline.find("#GroupHeader #GroupName").text(groupInfo.name);
         outline.find("#GroupHeader #GroupDescription").text(groupInfo.name);
+
+        let memberList = outline.find("#GroupMembers");
+        Object.keys(groupMembers).forEach((id) => {
+            let member = groupMembers[id];
+            let name = member.firstName + " " + member.lastName;
+            $("<li>")
+                .append($("<p>").text(name))
+                .appendTo(memberList);
+        });
 
         // fill out the form
         outline.find("#MessageComposer input[name='groupId']").val(groupInfo.id);
@@ -38,7 +47,7 @@ function showMessages(groupInfo, groupMembers, messages) {
     }
 
     let history = $("#MessageHistory").empty();
-    buildGroupOutline(groupInfo).appendTo(history);
+    buildGroupOutline(groupInfo, groupMembers).appendTo(history);
     addMessagesTo(history.find("#Messages"), groupMembers, messages);
 }
 

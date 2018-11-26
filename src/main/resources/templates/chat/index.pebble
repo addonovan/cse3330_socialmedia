@@ -37,6 +37,7 @@
                 <img class="profileImage large" src="">
                 <p id="GroupName" class="important"></p>
                 <p id="GroupDescription"></p>
+                <ul id="GroupMembers"></ul>
             </div>
 
             <div class="flex-vertical">
