@@ -154,7 +154,7 @@ CREATE TABLE "Follow" (
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA "public" TO "application";
 
 --
--- Insert Testing Data
+-- Insert Reference Data
 --
 
 INSERT INTO "RefEmotion"
