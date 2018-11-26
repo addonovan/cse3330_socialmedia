@@ -38,6 +38,10 @@ class Post : SqlEntity {
     // Derived Properties
     //
 
+    val pollAnswers: List<PollAnswer> by lazy {
+        DbEngine.getPollAnswers(this)
+    }
+
     val poster: Account by lazy {
         DbEngine.getAccountById(posterId)!!
     }

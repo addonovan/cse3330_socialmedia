@@ -500,6 +500,21 @@ object DbEngine {
             .executeOn(CONNECTION)
 
     @Language("PostgreSQL")
+    private val GET_POLL_ANSWERS: String =
+            """
+            SELECT * FROM "PollAnswer"
+            WHERE postid = ?;
+            """.trimIndent()
+
+    fun getPollAnswers(post: Post) = query(GET_POLL_ANSWERS)
+            .supply(post.id)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    PollAnswer().apply { fromRow(it) }
+                }
+            }
+
+    @Language("PostgreSQL")
     private val CREATE_EVENT: String =
             """
             INSERT INTO "Event"(hostid, eventname, eventdesc, starttime, endtime, location)

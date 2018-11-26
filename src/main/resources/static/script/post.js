@@ -86,10 +86,8 @@ function postPoll(wallId) {
             data["answer" + i] = it.value;
         });
 
-    debugger;
-
     $.post("/post/poll/submit", data, () => {
-        console.log("poll submitted!!");
+        location.reload(true);
     });
 }
 
