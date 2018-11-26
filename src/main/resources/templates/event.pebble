@@ -42,9 +42,9 @@
         {% endif %}
 
         {% if event.interested.size() > 0 %}
-            {{event.attendees.size()}}
-            {% if event.attendees.size() > 1 %}} are {% else %} is {% endif %}
-            attending
+            {{event.interested.size()}}
+            {% if event.interested.size() > 1 %} are {% else %} is {% endif %}
+            interested
         {% endif %}
     </p>
     <div class="buttons">
