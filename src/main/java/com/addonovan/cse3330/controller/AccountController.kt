@@ -68,6 +68,48 @@ open class AccountController {
         return "account/page_settings"
     }
 
+    private fun updateSettings(
+            request: Request,
+            oldSettings: Account,
+            newSettings: Account,
+            profileImage: MultipartFile,
+            headerImage: MultipartFile
+    ) {
+        newSettings.isPrivate = request.getParameter("isPrivate") == "on"
+        newSettings.isActive = request.getParameter("isActive") == "on"
+
+        // update images
+        newSettings.profileImageURL =
+                if (profileImage.isEmpty)
+                    oldSettings.profileImageURL
+                else
+                    profileImage.writeAs(UploadType.ProfileImage)
+
+        newSettings.headerImageURL =
+                if (profileImage.isEmpty)
+                    oldSettings.headerImageURL
+                else
+                    headerImage.writeAs(UploadType.HeaderImage)
+    }
+
+    @PostMapping("/updateSettings/{pageId:[0-9]+}")
+    fun updatePageSettings(
+            request: Request,
+            response: Response,
+            newSettings: Page,
+            @RequestParam pageId: Int,
+            @RequestParam profileImage: MultipartFile,
+            @RequestParam headerImage: MultipartFile
+    ) {
+        response.redirectToReferrer(request)
+        val user = request.profile!!
+        val page = user.administeredPages.first {
+            it.id == pageId
+        }
+        updateSettings(request, page, newSettings, profileImage, headerImage)
+        DbEngine.updatePage(page, newSettings)
+    }
+
     @PostMapping("/updateSettings")
     fun updateSettings(
             request: Request,
@@ -78,25 +120,7 @@ open class AccountController {
     ) {
         response.redirectToReferrer(request)
         val user = request.profile!!
-
-        // this is a bit stupid, but for some reason the checkbox's value
-        // isn't sent if it's off...
-        newSettings.isPrivate = request.getParameter("isPrivate") == "on"
-        newSettings.isActive = request.getParameter("isActive") == "on"
-
-        // update images
-        newSettings.profileImageURL =
-                if (profileImage.isEmpty)
-                    user.profileImageURL
-                else
-                    profileImage.writeAs(UploadType.ProfileImage)
-
-        newSettings.headerImageURL =
-                if (profileImage.isEmpty)
-                    user.headerImageURL
-                else
-                    headerImage.writeAs(UploadType.HeaderImage)
-
+        updateSettings(request, user, newSettings, profileImage, headerImage)
         DbEngine.updateProfile(user, newSettings)
     }
 

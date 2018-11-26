@@ -214,6 +214,14 @@ object DbEngine {
             WHERE accountid = ?;
             """.trimIndent()
 
+    @Language("PostgreSQL")
+    private val UPDATE_PAGE: String =
+            """
+            UPDATE "Page"
+            SET pagename = ?, pagedesc = ?
+            WHERE accountid = ?;
+            """.trimIndent()
+
     fun updateProfile(user: Profile, newSettings: Profile) {
         query(UPDATE_ACCOUNT)
                 .supply(newSettings.email)
@@ -231,6 +239,24 @@ object DbEngine {
                 .supply(newSettings.username)
                 .supply(newSettings.password)
                 .supply(user.id)
+                .executeOn(CONNECTION)
+    }
+
+    fun updatePage(page: Page, newSettings: Page) {
+        query(UPDATE_ACCOUNT)
+                .supply(newSettings.email)
+                .supply(newSettings.phoneNumber)
+                .supply(newSettings.profileImageURL)
+                .supply(newSettings.headerImageURL)
+                .supply(newSettings.isPrivate)
+                .supply(newSettings.isActive)
+                .supply(page.id)
+                .executeOn(CONNECTION)
+
+        query(UPDATE_PAGE)
+                .supply(newSettings.name)
+                .supply(newSettings.description)
+                .supply(page.id)
                 .executeOn(CONNECTION)
     }
 
