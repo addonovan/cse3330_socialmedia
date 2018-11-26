@@ -717,4 +717,57 @@ object DbEngine {
             .supply(emotion.id)
             .executeOn(CONNECTION)
 
+    //
+    // Groups
+    //
+
+    @Language("PostgreSQL")
+    private val GET_GROUP_BY_ID: String =
+            """
+            SELECT * FROM "Group"
+            WHERE groupid = ?;
+            """.trimIndent()
+
+    fun getGroupById(id: Int) = query(GET_GROUP_BY_ID)
+            .supply(id)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("No group by id: $id")
+
+                Group().apply { fromRow(it) }
+            }
+
+    @Language("PostgreSQL")
+    private val GET_GROUPS_FOR_USER: String =
+            """
+            SELECT * FROM "GroupMember" gmem
+            INNER JOIN "Group" g ON gg.groupid = mem.groupid
+            WHERE gmem.profileid = ?;
+            """.trimIndent()
+
+    fun getGroupsForUser(user: Profile) = query(GET_GROUPS_FOR_USER)
+            .supply(user.id)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Group().apply { fromRow(it) }
+                }
+            }
+
+    @Language("PostgreSQL")
+    private val GET_GROUP_MEMBERS: String =
+            """
+            SELECT * FROM "GroupMember" gmem
+            INNER JOIN "Account" a ON a.accountid = gmem.profileid
+            INNER JOIN "Profile" p ON p.accountid = a.accountid
+            WHERE gmem.groupid = ?;
+            """
+
+    fun getGroupMembers(group: Group) = query(GET_GROUP_MEMBERS)
+            .supply(group.id)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Profile().apply { fromRow(it) }
+                }
+            }
+
 }
