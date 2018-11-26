@@ -12,7 +12,7 @@ function showMessages(groupInfo, groupMembers, messages) {
         let outline = $("#Components #Outline").clone();
 
         // fill out the header
-        outline.find("#GroupHeader img.profileImage").src(groupInfo.imageUrl);
+        outline.find("#GroupHeader img.profileImage").attr('src', groupInfo.imageUrl);
         outline.find("#GroupHeader #GroupName").text(groupInfo.name);
         outline.find("#GroupHeader #GroupDescription").text(groupInfo.name);
 
@@ -39,10 +39,6 @@ function showMessages(groupInfo, groupMembers, messages) {
     let history = $("#MessageHistory").empty();
     buildGroupOutline(groupInfo).appendTo(history);
     addMessagesTo(history.find("#Messages"), groupMembers, messages);
-
-    debugger;
-
-    return history;
 }
 
 function selectGroup(groupId) {

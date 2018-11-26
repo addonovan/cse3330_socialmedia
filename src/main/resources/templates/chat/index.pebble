@@ -38,7 +38,8 @@
 
                 <form id="MessageComposer"
                       method="post"
-                      action="/chat/api/send">
+                      action="/chat/api/send"
+                      enctype="multipart/form-data">
 
                     <input class="hidden"
                            type="number"
