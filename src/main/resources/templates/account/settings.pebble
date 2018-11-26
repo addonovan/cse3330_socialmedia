@@ -40,10 +40,14 @@
             Private:
             <input name="isPrivate"
                    type="checkbox"
-                   {% if user.isPrivate %}
-                   checked
-                   {% endif %}
-            >
+                   {% if user.isPrivate %} checked {% endif %}>
+        </label>
+
+        <label>
+            Active:
+            <input name="isActive"
+                   type="checkbox"
+                   {% if user.isActive %} checked {% endif %}>
         </label>
 
         <button type="submit">Update</button>
