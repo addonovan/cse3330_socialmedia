@@ -698,6 +698,15 @@ object DbEngine {
                 }
             }
 
+    fun getInterestedPeople(event: Event) = query(GET_EVENT_ATTENDEES)
+            .supply(event.id)
+            .supply(false)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Profile().apply { fromRow(it) }
+                }
+            }
+
     @Language("PostgreSQL")
     private val GET_POST_REPLIES: String =
             """

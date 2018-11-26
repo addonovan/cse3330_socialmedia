@@ -33,6 +33,20 @@
     <div class="content">
         <p class="description">{{event.description}}</p>
     </div>
+    <p>
+        {% if event.attendees.size() > 0 %}
+            {{event.attendees.size()}}
+            {%if event.attendees.size() > 1 %} are {% else %} is {% endif %}
+            attending
+            <br/>
+        {% endif %}
+
+        {% if event.interested.size() > 0 %}
+            {{event.attendees.size()}}
+            {% if event.attendees.size() > 1 %}} are {% else %} is {% endif %}
+            attending
+        {% endif %}
+    </p>
     <div class="buttons">
         {% if event.hostId == user.id %}
             <button onclick="deleteEvent({{event.id}})">Cancel</button>
@@ -40,20 +54,19 @@
             <span class="ui">
                 You're going!
             </span>
-        {% elseif event.prospectiveAttendees contains user %}
-            <span class="ui">
-                You're considering going. Want to make it official?
-            </span>
-            <button onclick="markAttending({{event.id}}, false)">
-                I'm going!
-            </button>
         {% else %}
             <button onclick="markAttending({{event.id}}, false)">
                 I'm going!
             </button>
-            <button onclick="markAttending({{event.id}}, true)">
-                I'm interested
-            </button>
+            {% if event.prospectiveAttendees contains user %}
+                <span class="ui">
+                    You're considering going. Want to make it official?
+                </span>
+            {% else %}
+                <button onclick="markAttending({{event.id}}, true)">
+                    I'm interested
+                </button>
+            {% endif %}
         {% endif %}
     </div>
 </div>

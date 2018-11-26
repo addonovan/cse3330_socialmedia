@@ -36,6 +36,11 @@ class Event : SqlEntity {
     }
 
     @get:JsonIgnore
+    val interested: List<Profile> by lazy {
+        DbEngine.getInterestedPeople(this)
+    }
+
+    @get:JsonIgnore
     val prospectiveAttendees: List<Profile> by lazy {
         DbEngine.getProspectiveAttendees(this)
     }
