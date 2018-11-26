@@ -741,7 +741,7 @@ object DbEngine {
     private val GET_GROUPS_FOR_USER: String =
             """
             SELECT * FROM "GroupMember" gmem
-            INNER JOIN "Group" g ON gg.groupid = mem.groupid
+            INNER JOIN "Group" g ON g.groupid = mem.groupid
             WHERE gmem.profileid = ?;
             """.trimIndent()
 
