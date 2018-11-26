@@ -12,7 +12,7 @@ function showMessages(groupInfo, groupMembers, messages) {
         let outline = $("#Components #Outline").clone();
 
         // fill out the header
-        outline.find("#GroupHeader img.profileImage").attr("src", groupInfo.imageURL);
+        outline.find("#GroupHeader img.profileImage").attr("src", groupInfo.pictureUrl);
         outline.find("#GroupHeader #GroupName").text(groupInfo.name);
         outline.find("#GroupHeader #GroupDescription").text(groupInfo.name);
 
