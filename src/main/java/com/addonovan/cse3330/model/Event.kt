@@ -15,7 +15,7 @@ class Event : SqlEntity {
 
     lateinit var description: String
 
-    lateinit var location: String
+    var location: String? = null
 
     lateinit var startTime: Timestamp
 
