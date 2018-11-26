@@ -717,4 +717,121 @@ object DbEngine {
             .supply(emotion.id)
             .executeOn(CONNECTION)
 
+    //
+    // Groups
+    //
+
+    @Language("PostgreSQL")
+    private val CREATE_GROUP: String =
+            """
+            INSERT INTO "Group"(groupname, groupdesc)
+            VALUES (?, ?)
+            RETURNING groupid;
+            """.trimIndent()
+
+    fun createGroup(group: Group) = query(CREATE_GROUP)
+            .supply(group.name)
+            .supply(group.description)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("Failed to create new Group!")
+
+                group.apply {
+                    id = it.getInt(1)
+                }
+            }
+
+
+    @Language("PostgreSQL")
+    private val ADD_GROUP_MEMBER: String =
+            """
+            INSERT INTO "GroupMember"(profileid, groupid)
+            VALUES (?, ?);
+            """.trimIndent()
+
+    fun addGroupMember(group: Group, user: Profile) = query(ADD_GROUP_MEMBER)
+            .supply(user.id)
+            .supply(group.id)
+            .executeOn(CONNECTION)
+
+    @Language("PostgreSQL")
+    private val GET_GROUP_BY_ID: String =
+            """
+            SELECT * FROM "Group"
+            WHERE groupid = ?;
+            """.trimIndent()
+
+    fun getGroupById(id: Int) = query(GET_GROUP_BY_ID)
+            .supply(id)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    null
+                else
+                    Group().apply { fromRow(it) }
+            }
+
+    @Language("PostgreSQL")
+    private val GET_GROUPS_FOR_USER: String =
+            """
+            SELECT * FROM "GroupMember" gmem
+            INNER JOIN "Group" g ON g.groupid = gmem.groupid
+            WHERE gmem.profileid = ?;
+            """.trimIndent()
+
+    fun getGroupsForUser(user: Profile) = query(GET_GROUPS_FOR_USER)
+            .supply(user.id)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Group().apply { fromRow(it) }
+                }
+            }
+
+    @Language("PostgreSQL")
+    private val GET_GROUP_MEMBERS: String =
+            """
+            SELECT * FROM "GroupMember" gmem
+            INNER JOIN "Account" a ON a.accountid = gmem.profileid
+            INNER JOIN "Profile" p ON p.accountid = a.accountid
+            WHERE gmem.groupid = ?;
+            """
+
+    fun getGroupMembers(group: Group) = query(GET_GROUP_MEMBERS)
+            .supply(group.id)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Profile().apply { fromRow(it) }
+                }
+            }
+
+    @Language("PostgreSQL")
+    private val GET_GROUP_MESSAGE_HISTORY: String =
+            """
+            SELECT * FROM "GroupMessage" gm
+            WHERE gm.groupid = ?
+            ORDER BY gm.sendtime ASC;
+            """.trimIndent()
+
+    fun getGroupMessageHistory(group: Group) = query(GET_GROUP_MESSAGE_HISTORY)
+            .supply(group.id)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    GroupMessage().apply{ fromRow(it) }
+                }
+            }
+
+    @Language("PostgreSQL")
+    private val ADD_NEW_GROUP_MESSAGE: String =
+            """
+            INSERT INTO "GroupMessage"(senderid, groupid, messagetext, mediaurl)
+            VALUES (?, ?, ?, ?);
+            """.trimIndent()
+
+    fun sendGroupMessage(sender: Profile, group: Group, message: GroupMessage) =
+            query(ADD_NEW_GROUP_MESSAGE)
+                    .supply(sender.id)
+                    .supply(group.id)
+                    .supply(message.message)
+                    .supply(message.mediaUrl)
+                    .executeOn(CONNECTION)
+
 }

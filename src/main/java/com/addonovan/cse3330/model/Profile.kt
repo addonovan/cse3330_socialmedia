@@ -1,6 +1,7 @@
 package com.addonovan.cse3330.model
 
 import com.addonovan.cse3330.DbEngine
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.sql.ResultSet
 
 /**
@@ -29,8 +30,14 @@ class Profile : Account() {
     //
 
     /** A list of pages that this user is an admin for. */
+    @get:JsonIgnore
     val administeredPages: List<Page> by lazy {
         DbEngine.getPagesByAdmin(this)
+    }
+
+    @get:JsonIgnore
+    val groups: List<Group> by lazy {
+        DbEngine.getGroupsForUser(this)
     }
 
     //

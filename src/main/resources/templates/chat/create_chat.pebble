@@ -1,0 +1,25 @@
+{% extends "../base" %}
+
+{% block title %}
+    Create a new Chat | SocialMediaSite
+{% endblock %}
+
+{% block content %}
+    <div id="ChatInfo">
+        <input type="text" name="name" placeholder="Group Name">
+        <input type="text" name="description" placeholder="A short description">
+        <input type="file" name="mediaFile">
+        <div class="flex-vertical"></div>
+        <button onclick="addFriend()">Add another friend</button>
+        <button onclick="createGroupChat()">Create</button>
+    </div>
+
+    <div id="FriendSelector" class="hidden flex-horizontal">
+        <select>
+            {% for follower in user.followers %}
+            <option value="{{follower.id}}">{{follower.fullName}}</option>
+            {% endfor %}
+        </select>
+        <button onclick="removeFriend(this)">X</button>
+    </div>
+{% endblock %}
