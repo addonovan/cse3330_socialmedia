@@ -8,6 +8,12 @@
     <div class="flex-horizontal">
         <div id="ChatList" class="flex-vertical">
             <ul>
+                <li>
+                    <a href="/chat/create">
+                        Create a new Chat!
+                    </a>
+                </li>
+
                 {% for group in user.groups %}
                     <li id="Group{{group.id}}" onclick="selectGroup({{group.id}})">
                         <img class="profileImage small"
