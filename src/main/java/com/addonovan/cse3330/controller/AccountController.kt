@@ -97,7 +97,7 @@ open class AccountController {
             request: Request,
             response: Response,
             newSettings: Page,
-            @RequestParam pageId: Int,
+            @PathVariable pageId: Int,
             @RequestParam profileImage: MultipartFile,
             @RequestParam headerImage: MultipartFile
     ) {
