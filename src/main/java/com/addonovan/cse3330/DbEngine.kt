@@ -171,7 +171,7 @@ object DbEngine {
             """
             SELECT * FROM "Profile" prof
             LEFT JOIN "Account" a ON a.accountid = prof.accountid
-            WHERE prof.username = ?;
+            WHERE prof.username = ? AND a.isactive;
             """.trimIndent()
 
     /**
@@ -231,7 +231,7 @@ object DbEngine {
             SELECT * FROM "PageAdmin" pa
             INNER JOIN "Account" a ON a.accountid = pa.pageid
             INNER JOIN "Page" p ON p.accountid = a.accountid
-            WHERE pa.profileid = ?;
+            WHERE pa.profileid = ? AND a.isactive;
             """.trimIndent()
 
     fun getPagesByAdmin(admin: Profile) = query(GET_PAGES_BY_ADMIN)
@@ -298,7 +298,7 @@ object DbEngine {
             INNER JOIN "Account" a ON a.accountid = f.followerid
             LEFT JOIN "Profile" prof ON prof.accountid = a.accountid
             LEFT JOIN "Page" page ON page.accountid = a.accountid
-            WHERE f.followeeid = ?;
+            WHERE f.followeeid = ? AND a.isactive;
             """
 
     fun getFollowers(account: Account) = query(GET_FOLLOWERS_FORMAT.format("Follow"))
@@ -324,7 +324,7 @@ object DbEngine {
             INNER JOIN "Account" a ON a.accountid = f.followeeid
             LEFT JOIN "Profile" prof ON prof.accountid = a.accountid
             LEFT JOIN "Page" page ON page.accountid = a.accountid
-            WHERE f.followerid = ?;
+            WHERE f.followerid = ? AND a.isactive;
             """.trimIndent()
 
     /**
@@ -642,7 +642,7 @@ object DbEngine {
             SELECT * FROM "EventInterest" ei
             INNER JOIN "Account" a ON a.accountid = ei.profileid
             INNER JOIN "Profile" p ON p.accountid = a.accountid
-            WHERE ei.eventid = ? AND ei.isattending = ?;
+            WHERE ei.eventid = ? AND ei.isattending = ? AND a.isactive;
             """.trimIndent()
 
     fun getAttendees(event: Event) = query(GET_EVENT_ATTENDEES)
@@ -705,7 +705,7 @@ object DbEngine {
             INNER JOIN "Post" p ON p.postid = pr.postid
             INNER JOIN "Account" a ON a.accountid = pr.profileid
             INNER JOIN "Profile" prof ON prof.accountid = a.accountid
-            WHERE pr.postid = ?;
+            WHERE pr.postid = ? AND a.isactive;
             """.trimIndent()
 
     fun getReactionsTo(post: Post) = query(GET_REACTIONS_TO_POST)
@@ -807,7 +807,7 @@ object DbEngine {
             SELECT * FROM "GroupMember" gmem
             INNER JOIN "Account" a ON a.accountid = gmem.profileid
             INNER JOIN "Profile" p ON p.accountid = a.accountid
-            WHERE gmem.groupid = ?;
+            WHERE gmem.groupid = ? AND a.isactive;
             """
 
     fun getGroupMembers(group: Group) = query(GET_GROUP_MEMBERS)
