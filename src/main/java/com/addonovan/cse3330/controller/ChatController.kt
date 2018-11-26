@@ -54,7 +54,6 @@ open class ChatController {
         }
     }
 
-
     //
     // API
     //
@@ -137,6 +136,32 @@ open class ChatController {
         }
 
         DbEngine.sendGroupMessage(user, group, message)
+    }
+
+    @PostMapping("/api/updateGroup")
+    @ResponseBody
+    fun updateChatSettings(
+            request: Request,
+            newSettings: Group,
+            @RequestParam profileImage: MultipartFile
+    ): Group {
+        val user = request.profile!!
+        val group = DbEngine.getGroupById(newSettings.id)!!
+        if (user !in group.members) {
+            throw RuntimeException("You don't have access to that group!")
+        }
+
+        DbEngine.updateGroup(group.apply {
+            name = newSettings.name
+            description = newSettings.description
+            pictureUrl =
+                    if (profileImage.isEmpty)
+                        pictureUrl
+                    else
+                        profileImage.writeAs(UploadType.GroupImage)
+        })
+
+        return group
     }
 
 }

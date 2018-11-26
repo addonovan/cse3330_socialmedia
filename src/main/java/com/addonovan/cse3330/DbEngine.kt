@@ -893,4 +893,19 @@ object DbEngine {
                     .supply(message.mediaUrl)
                     .executeOn(CONNECTION)
 
+    @Language("PostgreSQL")
+    private val UPDATE_GROUP_SETTINGS: String =
+            """
+            UPDATE "Group"
+            SET groupname = ?, groupdesc = ?, grouppictureurl = ?
+            WHERE groupid = ?;
+            """.trimIndent()
+
+    fun updateGroup(group: Group) = query(UPDATE_GROUP_SETTINGS)
+            .supply(group.name)
+            .supply(group.description)
+            .supply(group.pictureUrl)
+            .supply(group.id)
+            .executeOn(CONNECTION)
+
 }
