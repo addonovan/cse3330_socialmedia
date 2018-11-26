@@ -1,4 +1,4 @@
-<div class="flex-vertical">
+<div class="flex-vertical postbox-container">
     {% if showPoll or showEvent %}
         <div id="PostTypeSelector" class="flex-horizontal">
             <label>

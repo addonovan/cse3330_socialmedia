@@ -52,12 +52,22 @@ div.post {
         font-size: 8pt;
     }
 
-.postbox {
-    align-self: center;
-    display: flex;
-    flex-direction: column;
-
+.postbox-container {
     max-width: 512px;
     width: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }
+
+    .postbox-container .postbox {
+        align-self: center;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .postbox-container #PostTypeSelector {
+        align-self: center;
+        width: 100%;
+    }
 
