@@ -46,7 +46,7 @@ function selectGroup(groupId) {
 
     $.getJSON("/chat/api/group/" + groupId, (groupInfo) => {
         currentGroupInfo = groupInfo;
-        $.getJSON("/chat/api/members" + groupId, (members) => {
+        $.getJSON("/chat/api/members/" + groupId, (members) => {
             currentGroupMembers = members;
             fetchMessages(showMessages)
         })
