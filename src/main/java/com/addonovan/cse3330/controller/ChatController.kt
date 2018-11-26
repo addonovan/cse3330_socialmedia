@@ -54,6 +54,35 @@ open class ChatController {
         }
     }
 
+    @PostMapping("/api/updateGroup")
+    fun updateChatSettings(
+            request: Request,
+            response: Response,
+            model: Model,
+            newSettings: Group,
+            @RequestParam groupImage: MultipartFile
+    ): String {
+        val user = request.profile
+                ?: return errorPage(model, "You have to be logged in to do that!")
+        val group = DbEngine.getGroupById(newSettings.id)
+                ?: return errorPage(model, "That group does not exist :/")
+
+        if (user !in group.members) {
+            return errorPage(model, "You don't have access to that group!")
+        }
+
+        DbEngine.updateGroup(group.apply {
+            name = newSettings.name
+            description = newSettings.description
+            pictureUrl =
+                    if (groupImage.isEmpty)
+                        pictureUrl
+                    else
+                        groupImage.writeAs(UploadType.GroupImage)
+        })
+        response.redirectToReferrer(request)
+        return errorPage(model, "You really shouldn't be seeing this")
+    }
 
     //
     // API
