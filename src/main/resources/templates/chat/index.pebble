@@ -16,10 +16,11 @@
 
                 {% for group in user.groups %}
                     <li id="Group{{group.id}}" onclick="selectGroup({{group.id}})">
-                        <img class="profileImage small"
-                             src="{{group.pictureUrl}}">
-                        {{group.name}}<br>
-                        {{group.description}}
+                        <div class="flex-horizontal">
+                            <img class="profileImage small"
+                                 src="{{group.pictureUrl}}">
+                            {{group.name}}
+                        </div>
                     </li>
                 {% endfor %}
             </ul>
@@ -37,11 +38,15 @@
                 <img class="profileImage large" src="">
                 <p id="GroupName" class="important"></p>
                 <p id="GroupDescription"></p>
-                <ul id="GroupMembers"></ul>
+                <ul id="GroupMembers" class="no-items"></ul>
             </div>
 
             <div class="flex-vertical flex-expand page">
-                <div id="Messages" class="flex-vertical flex-expand"></div>
+                <div id="Messages"
+                     class="flex-vertical flex-expand"
+                     style="overflow-y: scroll; margin-bottom: 1em;">
+
+                </div>
 
                 <form id="MessageComposer"
                       style="margin: 0;"
@@ -68,8 +73,11 @@
 
         <div class="historyItem flex-horizontal">
             <img class="profileImage small" src="">
-            <p class="senderName ui"></p>
-            <p class="messageText"></p>
+            <div class="flex-vertical">
+                <p class="senderName ui"></p>
+                <p class="messageText"></p>
+                <img class="messageImage profileImage large" src="" onclick="window.open(this.src);">
+            </div>
         </div>
 
     </div>

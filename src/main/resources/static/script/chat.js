@@ -14,7 +14,7 @@ function showMessages(groupInfo, groupMembers, messages) {
         // fill out the header
         outline.find("#GroupHeader img.profileImage").attr("src", groupInfo.pictureUrl);
         outline.find("#GroupHeader #GroupName").text(groupInfo.name);
-        outline.find("#GroupHeader #GroupDescription").text(groupInfo.name);
+        outline.find("#GroupHeader #GroupDescription").text(groupInfo.description);
 
         let memberList = outline.find("#GroupMembers");
         Object.keys(groupMembers).forEach((id) => {
@@ -36,7 +36,21 @@ function showMessages(groupInfo, groupMembers, messages) {
         let item = $("#Components .historyItem").clone();
         item.find("img.profileImage").prop("src", member.profileImageURL);
         item.find("p.senderName").text(member.firstName + " " + member.lastName);
-        item.find("p.messageText").text(message.message);
+
+        let messageExpands = message.mediaUrl === null ? "" : "flex-expand";
+
+        if (message.message != null) {
+            item.find("p.messageText")
+                .text(message.message)
+                .addClass(messageExpands);
+        }
+
+        if (message.mediaUrl != null) {
+            item.find("img.messageImage")
+                .prop("src", message.mediaUrl)
+                .addClass("flex-expand");
+        }
+
         return item;
     }
 
