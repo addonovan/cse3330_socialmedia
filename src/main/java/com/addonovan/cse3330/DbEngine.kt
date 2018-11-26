@@ -406,7 +406,7 @@ object DbEngine {
     private val WALL_OVERVIEW_FOR: String =
             """
             SELECT * FROM "Post" p
-            WHERE p.wallid = ?
+            WHERE p.wallid = ? AND p.parentpostid IS NULL
             ORDER BY p.createdtime DESC;
             """.trimIndent()
 

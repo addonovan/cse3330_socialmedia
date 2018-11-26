@@ -31,16 +31,14 @@ open class PostController {
      */
     @PostMapping("/submit")
     fun submitPost(
-            request: HttpServletRequest,
-            response: HttpServletResponse,
+            request: Request,
+            response: Response,
             model: Model,
             @RequestParam mediaFile: MultipartFile,
             @ModelAttribute post: Post
     ): String {
         val user = request.profile
                 ?: return errorPage(model, "You must be logged in to do that")
-
-        response.sendRedirect(request.getHeader("referer"))
 
         // if we have a file, then we'll save it and add it to the post here
         if (!mediaFile.isEmpty) {
@@ -51,14 +49,14 @@ open class PostController {
         // default the post to be created by the current user, unless they
         // got to select the posting account on their end. Then just check to
         // make sure they're allowed to do that.
-        if (post.posterId == 0) {
+        if (post.posterId == 0 || post.posterId == user.id) {
             post.posterId = user.id
         } else if (user.administeredPages.none { it.id == post.posterId }) {
             return errorPage(model, "You don't have permission to post from that account!")
         }
 
+        response.redirectToReferrer(request)
         DbEngine.createPost(post)
-
         return errorPage(model, "You shouldn't really see this")
     }
 
