@@ -35,6 +35,36 @@
                  onclick="window.open(this.src)"/>
         {% endif %}
 
+        {% if post.poll != null %}
+
+            <p class="postBody">{{post.poll.question}}</p>
+
+            {% if (post.isPollExpired) or (post.pollVoters contains user) %}
+                <ul>
+                    {% for entry in post.pollVotes %}
+                        <li>{{entry.value}}x {{entry.key.text}}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                {% for answer in post.pollAnswers %}
+                    <form method="post" action="/post/poll/vote">
+                        <input class="hidden"
+                               type="number"
+                               name="postId"
+                               value="{{post.id}}">
+
+                        <input class="hidden"
+                               type="number"
+                               name="pollAnswerId"
+                               value="{{answer.id}}">
+
+                        <input type="submit" value="{{answer.text}}">
+                    </form>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+
+
         <div class="reactions">
             {% for entry in post.reactionCounts %}
                 <img class="emotion" src="{{entry.key.imageUrl}}">
@@ -53,10 +83,6 @@
                 </div>
             {% endif %}
         </div>
-
-        {% if post.poll != null %}
-            <p class="pollPost">Hello, I'm just a placeholder!</p>
-        {% endif %}
 
         <p class="postTime"> {{post.createTime}} </p>
 

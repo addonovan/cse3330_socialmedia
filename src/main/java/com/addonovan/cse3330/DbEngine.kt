@@ -488,6 +488,63 @@ object DbEngine {
             }
 
     @Language("PostgreSQL")
+    private val ADD_POLL_ANSWER: String =
+            """
+            INSERT INTO "PollAnswer"(postid, pollanswertext)
+            VALUES (?, ?);
+            """.trimIndent()
+
+    fun addPollAnswer(post: Post, answer: String) = query(ADD_POLL_ANSWER)
+            .supply(post.id)
+            .supply(answer)
+            .executeOn(CONNECTION)
+
+    @Language("PostgreSQL")
+    private val GET_POLL_ANSWERS: String =
+            """
+            SELECT * FROM "PollAnswer"
+            WHERE postid = ?;
+            """.trimIndent()
+
+    fun getPollAnswers(post: Post) = query(GET_POLL_ANSWERS)
+            .supply(post.id)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    PollAnswer().apply { fromRow(it) }
+                }
+            }
+
+    @Language("PostgreSQL")
+    private val VOTE_IN_POLL: String =
+            """
+            INSERT INTO "PollVote"(pollid, pollanswerid, profileid)
+            VALUES (?, ?, ?);
+            """.trimIndent()
+
+    fun voteInPoll(voter: Profile, poll: Post, answer: PollAnswer) = query(VOTE_IN_POLL)
+            .supply(poll.id)
+            .supply(answer.id)
+            .supply(voter.id)
+            .executeOn(CONNECTION)
+
+    @Language("PostgreSQL")
+    private val GET_POLL_VOTERS: String =
+            """
+            SELECT * FROM "PollVote" pv
+            INNER JOIN "Account" a ON a.accountid = pv.profileid
+            INNER JOIN "Profile" p ON p.accountid = a.accountid
+            WHERE pv.pollid = ?;
+            """.trimIndent()
+
+    fun getPollVoters(poll: Post) = query(GET_POLL_VOTERS)
+            .supply(poll.id)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Profile().apply { fromRow(it) }
+                }
+            }
+
+    @Language("PostgreSQL")
     private val CREATE_EVENT: String =
             """
             INSERT INTO "Event"(hostid, eventname, eventdesc, starttime, endtime, location)

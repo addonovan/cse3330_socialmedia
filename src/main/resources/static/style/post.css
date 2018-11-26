@@ -52,7 +52,7 @@ div.post {
         font-size: 8pt;
     }
 
-form.post {
+.postbox {
     align-self: center;
     display: flex;
     flex-direction: column;
