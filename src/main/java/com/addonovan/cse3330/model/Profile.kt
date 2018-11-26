@@ -33,6 +33,10 @@ class Profile : Account() {
         DbEngine.getPagesByAdmin(this)
     }
 
+    val groups: List<Group> by lazy {
+        DbEngine.getGroupsForUser(this)
+    }
+
     //
     // Functions
     //

@@ -732,9 +732,9 @@ object DbEngine {
             .supply(id)
             .executeOn(CONNECTION) {
                 if (!it.next())
-                    throw RuntimeException("No group by id: $id")
-
-                Group().apply { fromRow(it) }
+                    null
+                else
+                    Group().apply { fromRow(it) }
             }
 
     @Language("PostgreSQL")
@@ -767,6 +767,22 @@ object DbEngine {
             .executeOn(CONNECTION) { set ->
                 set.map {
                     Profile().apply { fromRow(it) }
+                }
+            }
+
+    @Language("PostgreSQL")
+    private val GET_GROUP_MESSAGE_HISTORY: String =
+            """
+            SELECT * FROM "GroupMessage" gm
+            WHERE gm.groupid = ?
+            ORDER BY gm.sendtime DESC;
+            """.trimIndent()
+
+    fun getGroupMessageHistory(group: Group) = query(GET_GROUP_MESSAGE_HISTORY)
+            .supply(group.id)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    GroupMessage().apply{ fromRow(it) }
                 }
             }
 

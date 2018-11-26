@@ -1,5 +1,6 @@
 package com.addonovan.cse3330.model
 
+import com.addonovan.cse3330.DbEngine
 import java.sql.ResultSet
 
 class Group : SqlEntity {
@@ -11,6 +12,18 @@ class Group : SqlEntity {
     lateinit var description: String
 
     lateinit var pictureUrl: String
+
+    //
+    // Derived Properties
+    //
+
+    val members: List<Profile> by lazy {
+        DbEngine.getGroupMembers(this)
+    }
+
+    val messages: List<GroupMessage> by lazy {
+        DbEngine.getGroupMessageHistory(this)
+    }
 
     //
     // Functions
