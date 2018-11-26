@@ -5,6 +5,17 @@
 {% endblock %}
 
 {% block content %}
+    {% if user.administeredPages.size() > 0 %}
+        Update one of your pages instead:
+        <ul>
+            {% for page in user.administeredPages %}
+                <li>
+                    <a href="/account/settings/{{page.id}}">{{page.fullName}}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     <form method="post"
           action="/account/updateSettings"
           enctype="multipart/form-data">

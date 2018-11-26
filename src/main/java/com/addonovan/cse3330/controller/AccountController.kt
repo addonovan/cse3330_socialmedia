@@ -50,6 +50,24 @@ open class AccountController {
         return "account/settings"
     }
 
+    @GetMapping("/settings/{pageId:[0-9]+}")
+    fun pageSettings(
+            request: Request,
+            model: Model,
+            @PathVariable pageId: Int
+    ): String {
+        val user = request.profile
+                ?: return errorPage(model, "You have to be logged in to do that")
+
+        val page = user.administeredPages.firstOrNull {
+            it.id == pageId
+        } ?: return errorPage(model, "You don't have access to that page!")
+
+        model.addAttribute("user", user)
+        model.addAttribute("page", page)
+        return "account/page_settings"
+    }
+
     @PostMapping("/updateSettings")
     fun updateSettings(
             request: Request,

@@ -1,0 +1,57 @@
+{% extends "../base" %}
+
+{% block title %}
+    Page Settings | SocialMediaSite
+{% endblock %}
+
+{% block content %}
+    <form method="post"
+          action="/account/updateSettings/{{post.id}}"
+          enctype="multipart/form-data">
+        <label>
+            Profile Image:
+            <input name="profileImage" type="file">
+        </label>
+
+        <label>
+            Header Image:
+            <input name="headerImage" type="file">
+        </label>
+
+        <label>
+            Page Name:
+            <input name="name" type="text" value="{{page.name}}">
+        </label>
+
+        <label>
+            Email:
+            <input name="email" type="text" value="{{page.email}}">
+        </label>
+
+        <label>
+            Phone number:
+            <input name="phoneNumber" type="text" value="{{page.phoneNumber}}">
+        </label>
+
+        <label>
+            Description:
+            <input name="description" type="text" value="{{page.description}}">
+        </label>
+
+        <label>
+            Private:
+            <input name="isPrivate"
+                   type="checkbox"
+                   {% if page.isPrivate %} checked {% endif %}>
+        </label>
+
+        <label>
+            Active:
+            <input name="isActive"
+                   type="checkbox"
+                   {% if page.isActive %} checked {% endif %}>
+        </label>
+
+        <button type="submit">Update</button>
+    </form>
+{% endblock %}
