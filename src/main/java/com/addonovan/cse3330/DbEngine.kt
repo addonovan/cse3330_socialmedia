@@ -808,7 +808,7 @@ object DbEngine {
             """
             SELECT * FROM "GroupMessage" gm
             WHERE gm.groupid = ?
-            ORDER BY gm.sendtime DESC;
+            ORDER BY gm.sendtime ASC;
             """.trimIndent()
 
     fun getGroupMessageHistory(group: Group) = query(GET_GROUP_MESSAGE_HISTORY)
