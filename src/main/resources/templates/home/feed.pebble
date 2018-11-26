@@ -27,7 +27,7 @@
 
     {% include "../post_box" with {"showEvent": "true", "showPoll": "true", "wall": user} %}
 
-    <div id="Overview">
+    <div class="centered page">
         {% for post in overview %}
             {% include "../post" with {"wall": user} %}
         {% endfor %}
