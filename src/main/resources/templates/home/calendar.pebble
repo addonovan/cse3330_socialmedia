@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <div id="Overview">
+    <div class="centered page">
         {% for event in calendar %}
             {% include "../event" with {"event": event} %}
         {% endfor %}
