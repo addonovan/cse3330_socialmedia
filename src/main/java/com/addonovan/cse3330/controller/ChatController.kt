@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile
 @RequestMapping("/chat")
 open class ChatController {
 
-    @GetMapping("/")
+    @GetMapping
     fun index(request: Request, model: Model): String {
         val user = request.profile
                 ?: errorPage(model, "You have to be logged in to do that!")
