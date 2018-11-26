@@ -6,7 +6,7 @@
 
 {% block content %}
     <form method="post"
-          action="/account/updateSettings/{{post.id}}"
+          action="/account/updateSettings/{{pagpagee.id}}"
           enctype="multipart/form-data">
         <label>
             Profile Image:
