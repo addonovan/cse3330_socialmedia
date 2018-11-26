@@ -27,6 +27,7 @@ open class ChatController {
     //
 
     @GetMapping("/api/group/{groupId:[0-9]+}")
+    @ResponseBody
     fun getGroup(
             request: Request,
             @PathVariable groupId: Int
@@ -42,6 +43,7 @@ open class ChatController {
     }
 
     @GetMapping("/api/messages/{groupId:[0-9]+}")
+    @ResponseBody
     fun listMessages(
             request: Request,
             @PathVariable groupId: Int
@@ -57,6 +59,7 @@ open class ChatController {
     }
 
     @GetMapping("/api/members/{groupId:[0-9]+}")
+    @ResponseBody
     fun listMembers(
             request: Request,
             @PathVariable groupId: Int
@@ -74,6 +77,7 @@ open class ChatController {
     }
 
     @PostMapping("/api/send")
+    @ResponseBody
     fun sendMessage(
             request: Request,
             response: Response,
