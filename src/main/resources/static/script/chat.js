@@ -27,7 +27,8 @@ function showMessages(groupInfo, groupMembers, messages) {
         let item = $("#Components .historyItem").clone();
         item.find("img.profileImage").src(member.profileImageUrl);
         item.find("p.senderName").text(member.name);
-        item.find("p.messageText").text(message.message)
+        item.find("p.messageText").text(message.message);
+        return item;
     }
 
     function addMessagesTo(container, groupMembers, messages) {
