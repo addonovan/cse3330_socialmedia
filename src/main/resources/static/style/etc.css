@@ -12,10 +12,23 @@ button.link {
 
 .flex-vertical { display: flex; flex-direction: column; }
 .flex-horizontal { display: flex; flex-direction: row; }
+.flex-expand { flex-grow: 1; }
 
 .ui { color: rgba(0, 0, 0, 0.60)}
 .important { color: black; font-weight: bold; }
 
 #Outline {
     flex-direction: row-reverse;
+}
+
+.align-right { text-align: right; }
+
+/* Form prettification */
+div#Main form {
+    display: flex;
+    flex-direction: column;
+}
+
+div#Main form > label {
+    padding: 0.5em 0 0.5em 0;
 }

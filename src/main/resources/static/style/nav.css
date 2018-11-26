@@ -4,20 +4,21 @@ nav {
     padding: 1.5em 0 0.5em 0;
 }
 
-nav > ul {
-    list-style: none;
-}
-
-nav > ul > li {
-    display: inline;
+nav h4 {
+    font-size: 24pt;
+    color: white;
+    padding-left: 0.5em;
+    margin: 0;
 }
 
 nav a,
-nav .link,
-nav li {
+nav .link {
     color: rgba(255, 255, 255, 0.90) !important;
     font-weight: bold;
     text-decoration: none !important;
+
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 
 nav a:hover,

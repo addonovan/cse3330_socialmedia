@@ -20,23 +20,21 @@
     <body>
 
         <nav>
-            <ul>
+            {% if user != null %}
+                <h4> Howdy, {{user.firstName}}! </h4>
+            {% endif %}
+            <div class="flex-horizontal">
+                <a href="/">Home</a>
                 {% if user != null %}
-                    <li> Howdy, {{user.firstName}}! </li>
+                    <a href="/calendar">Your Calendar</a>
+                    <a href="/account/settings"> Your Account </a>
+                    <form method="post" action="/signout" class="inline flex-expand align-right">
+                        <button type="submit" class="link">
+                            Log out
+                        </button>
+                    </form>
                 {% endif %}
-                <li> <a href="/">Home</a> </li>
-                {% if user != null %}
-                    <li> <a href="/calendar">Your Calendar</a> </li>
-                    <li> <a href="/account/settings"> Your Account </a> </li>
-                    <li>
-                        <form method="post" action="/signout" class="inline">
-                            <button type="submit" class="link">
-                                Log out
-                            </button>
-                        </form>
-                    </li>
-                {% endif %}
-            </ul>
+            </div>
         </nav>
 
         <div id="Main">
