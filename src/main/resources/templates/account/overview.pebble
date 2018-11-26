@@ -17,10 +17,19 @@
                 <span class="username">
                     ({{account.username}})
                 </span>
+            {% else %}
+                <span class="viewCount">
+                    ({{account.viewCount}} {% if account.viewCount != 1 %} views) {% else %} view) {% endif %}
+                </span>
             {% endif %}
+
             <span class="followerCount">{{account.followers.size()}} Followers</span>
-            <span class="followingCount">{{account.following.size()}} Following</span>
-            {% if account.followers contains user %}
+            {% if account.isProfile %}
+                <span class="followingCount">{{account.following.size()}} Following</span>
+            {% endif %}
+
+            {% if (account.id == user.id) or (user.administeredPages contains account) %}
+            {% elseif account.followers contains user %}
                 <form method="post" action="/account/{{account.id}}/unfollow">
                     <button type="submit">Unfollow</button>
                 </form>
