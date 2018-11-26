@@ -128,17 +128,23 @@ object DbEngine {
             }
 
     @Language("PostgreSQL")
-    private val DELETE_ACCOUNT: String =
+    private val TOGGLE_ACCOUNT: String =
             """
             UPDATE "Account"
-            SET isactive = FALSE
+            SET isactive = ?
             WHERE accountid = ?;
             """.trimIndent()
 
     /**
      * "Deletes" the [account].
      */
-    fun deleteAccount(account: Account) = query(DELETE_ACCOUNT)
+    fun deactivateAccount(account: Account) = query(TOGGLE_ACCOUNT)
+            .supply(false)
+            .supply(account.id)
+            .executeOn(CONNECTION)
+
+    fun activateAccount(account: Account) = query(TOGGLE_ACCOUNT)
+            .supply(true)
             .supply(account.id)
             .executeOn(CONNECTION)
 
@@ -196,7 +202,7 @@ object DbEngine {
     private val UPDATE_ACCOUNT: String =
             """
             UPDATE "Account"
-            SET email = ?, phonenumber = ?, isprivate = ?
+            SET email = ?, phonenumber = ?, isprivate = ?, isactive = ?
             WHERE accountid = ?;
             """.trimIndent()
 
@@ -213,6 +219,7 @@ object DbEngine {
                 .supply(newSettings.email)
                 .supply(newSettings.phoneNumber)
                 .supply(newSettings.isPrivate)
+                .supply(newSettings.isActive)
                 .supply(user.id)
                 .executeOn(CONNECTION)
 

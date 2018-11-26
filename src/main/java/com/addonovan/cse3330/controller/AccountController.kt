@@ -61,6 +61,7 @@ open class AccountController {
         // this is a bit stupid, but for some reason the checkbox's value
         // isn't sent if it's off...
         newSettings.isPrivate = request.getParameter("isPrivate") == "on"
+        newSettings.isActive = request.getParameter("isActive") == "on"
 
         DbEngine.updateProfile(user, newSettings)
     }
