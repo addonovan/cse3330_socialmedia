@@ -8,6 +8,7 @@ import com.addonovan.cse3330.model.Profile
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 /**
  * The controller for general account activities, such as creation and deletion
@@ -53,7 +54,9 @@ open class AccountController {
     fun updateSettings(
             request: Request,
             response: Response,
-            newSettings: Profile
+            newSettings: Profile,
+            @RequestParam profileImage: MultipartFile,
+            @RequestParam headerImage: MultipartFile
     ) {
         response.redirectToReferrer(request)
         val user = request.profile!!
@@ -62,6 +65,19 @@ open class AccountController {
         // isn't sent if it's off...
         newSettings.isPrivate = request.getParameter("isPrivate") == "on"
         newSettings.isActive = request.getParameter("isActive") == "on"
+
+        // update images
+        newSettings.profileImageURL =
+                if (profileImage.isEmpty)
+                    user.profileImageURL
+                else
+                    profileImage.writeAs(UploadType.ProfileImage)
+
+        newSettings.headerImageURL =
+                if (profileImage.isEmpty)
+                    user.headerImageURL
+                else
+                    headerImage.writeAs(UploadType.HeaderImage)
 
         DbEngine.updateProfile(user, newSettings)
     }

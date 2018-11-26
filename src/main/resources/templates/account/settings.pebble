@@ -5,7 +5,19 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post" action="/account/updateSettings">
+    <form method="post"
+          action="/account/updateSettings"
+          enctype="multipart/form-data">
+        <label>
+            Profile Image:
+            <input name="profileImage" type="file">
+        </label>
+
+        <label>
+            Header Image:
+            <input name="headerImage" type="file">
+        </label>
+
         <label>
             Username:
             <input name="username" type="text" value="{{user.username}}">

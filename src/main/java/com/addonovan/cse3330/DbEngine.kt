@@ -202,7 +202,7 @@ object DbEngine {
     private val UPDATE_ACCOUNT: String =
             """
             UPDATE "Account"
-            SET email = ?, phonenumber = ?, isprivate = ?, isactive = ?
+            SET email = ?, phonenumber = ?, profileimageurl = ?, headerimageurl = ?, isprivate = ?, isactive = ?
             WHERE accountid = ?;
             """.trimIndent()
 
@@ -218,6 +218,8 @@ object DbEngine {
         query(UPDATE_ACCOUNT)
                 .supply(newSettings.email)
                 .supply(newSettings.phoneNumber)
+                .supply(newSettings.profileImageURL)
+                .supply(newSettings.headerImageURL)
                 .supply(newSettings.isPrivate)
                 .supply(newSettings.isActive)
                 .supply(user.id)
