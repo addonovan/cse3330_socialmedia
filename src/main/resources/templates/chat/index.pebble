@@ -25,10 +25,36 @@
     </div>
 
     <div id="Components" class="hidden">
-        <div id="GroupHeader" class="flex-vertical">
-            <img class="profileImage large" src="">
-            <p id="GroupName" class="important"></p>
-            <p id="GroupDescription"></p>
+
+        <div id="Outline" class="flex-horizontal">
+            <div id="GroupHeader" class="flex-vertical">
+                <img class="profileImage large" src="">
+                <p id="GroupName" class="important"></p>
+                <p id="GroupDescription"></p>
+            </div>
+
+            <div class="flex-vertical">
+                <div id="Messages" class="flex-vertical"></div>
+
+                <form id="MessageComposer"
+                      method="post"
+                      action="/chat/api/send">
+
+                    <input class="hidden"
+                           type="number"
+                           name="groupId"
+                           value="">
+
+                    <input type="text"
+                           name="messageText"
+                           placeholder="Compose your message...">
+
+                    <input type="file"
+                           name="mediaFile">
+
+                    <input type="submit" value="Send">
+                </form>
+            </div>
         </div>
 
         <div class="historyItem flex-horizontal">
@@ -36,5 +62,6 @@
             <p class="senderName ui"></p>
             <p class="messageText"></p>
         </div>
+
     </div>
 {% endblock %}

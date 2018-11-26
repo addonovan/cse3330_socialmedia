@@ -6,12 +6,18 @@ function fetchMessages(callback) {
 }
 
 function showMessages(messages) {
-    function buildGroupHeader(groupInfo) {
-        let header = $("#Components #GroupHeader").clone();
-        header.find("img.profileImage").src(groupInfo.imageUrl);
-        header.find("#GroupName").text(groupInfo.name);
-        header.find("#GroupDescription").text(groupInfo.name);
-        return header;
+    function buildGroupOutline(groupInfo) {
+        let outline = $("#Components #Outline").clone();
+
+        // fill out the header
+        outline.find("#GroupHeader img.profileImage").src(groupInfo.imageUrl);
+        outline.find("#GroupHeader #GroupName").text(groupInfo.name);
+        outline.find("#GroupHeader #GroupDescription").text(groupInfo.name);
+
+        // fill out the form
+        outline.find("#MessageComposer input[name='groupId']").val(groupInfo.id);
+
+        return outline;
     }
 
     function buildMessageEntry(groupMembers, message) {
@@ -22,17 +28,15 @@ function showMessages(messages) {
         item.find("p.messageText").text(message.message)
     }
 
-    function buildMessageHistory(groupMembers, messages) {
-        let container = $("<div>");
+    function addMessagesTo(container, groupMembers, messages) {
         for (let i = 0; i < messages.length; i++) {
             buildMessageEntry(groupMembers, messages[i]).appendTo(container);
         }
-        return container;
     }
 
     let history = $("#MessageHistory").empty();
-    buildMessageHistory(currentGroupMembers, messages).appendTo(history);
-    buildGroupHeader(currentGroupInfo).appendTo(history);
+    buildGroupOutline(currentGroupInfo).appendTo(history);
+    addMessagesTo(history.find("#Messages"), currentGroupMembers, messages);
     return history;
 }
 
@@ -47,11 +51,4 @@ function selectGroup(groupId) {
             fetchMessages(showMessages)
         })
     });
-}
-
-function sendMessage() {
-    let input = $("#MessageHistory #InputField");
-
-    let text = input.value();
-    input.value("");
 }
