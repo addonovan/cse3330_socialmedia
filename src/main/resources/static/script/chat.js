@@ -1,11 +1,13 @@
-let currentGroupInfo = null;
-let currentGroupMembers = null;
+const fetchGroupInfo = (groupId, callback) =>
+    $.getJSON("/chat/api/group/" + groupId, callback);
 
-function fetchMessages(callback) {
-    $.getJSON("/chat/api/messages/" + currentGroupInfo.id, (data) => callback(data))
-}
+const fetchGroupMembers = (groupId, callback) =>
+    $.getJSON("/chat/api/group/" + groupId, callback);
 
-function showMessages(messages) {
+const fetchMessages = (groupId, callback) =>
+    $.getJSON("/chat/api/group/" + groupId, callback);
+
+function showMessages(groupInfo, groupMembers, messages) {
     function buildGroupOutline(groupInfo) {
         let outline = $("#Components #Outline").clone();
 
@@ -35,20 +37,21 @@ function showMessages(messages) {
     }
 
     let history = $("#MessageHistory").empty();
-    buildGroupOutline(currentGroupInfo).appendTo(history);
-    addMessagesTo(history.find("#Messages"), currentGroupMembers, messages);
+    buildGroupOutline(groupInfo).appendTo(history);
+    addMessagesTo(history.find("#Messages"), groupMembers, messages);
+
+    debugger;
+
     return history;
 }
 
 function selectGroup(groupId) {
-    currentGroupInfo = null;
-    currentGroupMembers = null;
-
-    $.getJSON("/chat/api/group/" + groupId, (groupInfo) => {
-        currentGroupInfo = groupInfo;
-        $.getJSON("/chat/api/members/" + groupId, (members) => {
-            currentGroupMembers = members;
-            fetchMessages(showMessages)
-        })
+    // oh yeah, now THAT's hot
+    fetchGroupInfo(groupId, (groupInfo) => {
+        fetchGroupMembers(groupId, (groupMembers) => {
+            fetchMessages(groupId, (messages) => {
+                showMessages(groupInfo, groupMembers, messages);
+            });
+        });
     });
 }
