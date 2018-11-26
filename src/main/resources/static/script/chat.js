@@ -68,8 +68,8 @@ function removeFriend(button) {
 
 function createGroupChat() {
     let data = {
-        name: $("#ChatInfo input[name='name']").value(),
-        description: $("#ChatInfo input[name='description']").value(),
+        name: $("#ChatInfo input[name='name']").val(),
+        description: $("#ChatInfo input[name='description']").val(),
     };
 
     $("#ChatInfo > div").find("select")
@@ -77,7 +77,7 @@ function createGroupChat() {
             data["member" + i] = it.value;
         });
 
-    $.post("/chat/createGroup", data, () => {
+    $.post("/chat/create", data, () => {
         location.assign("/chat");
     });
 }

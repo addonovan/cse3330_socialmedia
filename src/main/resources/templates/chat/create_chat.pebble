@@ -14,8 +14,8 @@
         <button onclick="createGroupChat()">Create</button>
     </div>
 
-    <div id="FriendSelector" class="flex-horizontal">
-        <select id="Friends" class="hidden">
+    <div id="FriendSelector" class="hidden flex-horizontal">
+        <select>
             {% for follower in user.followers %}
             <option value="{{follower.id}}">{{follower.fullName}}</option>
             {% endfor %}

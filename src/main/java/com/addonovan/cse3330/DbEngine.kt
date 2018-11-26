@@ -724,15 +724,14 @@ object DbEngine {
     @Language("PostgreSQL")
     private val CREATE_GROUP: String =
             """
-            INSERT INTO "Group"(groupname, groupdesc, grouppictureurl)
-            VALUES (?, ?, ?)
+            INSERT INTO "Group"(groupname, groupdesc)
+            VALUES (?, ?)
             RETURNING groupid;
             """.trimIndent()
 
     fun createGroup(group: Group) = query(CREATE_GROUP)
             .supply(group.name)
             .supply(group.description)
-            .supply(group.pictureUrl)
             .executeOn(CONNECTION) {
                 if (!it.next())
                     throw RuntimeException("Failed to create new Group!")
