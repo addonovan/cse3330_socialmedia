@@ -127,6 +127,27 @@ object DbEngine {
                     Account.fromRow(it)
             }
 
+    @Language("PostgreSQL")
+    private val TOGGLE_ACCOUNT: String =
+            """
+            UPDATE "Account"
+            SET isactive = ?
+            WHERE accountid = ?;
+            """.trimIndent()
+
+    /**
+     * "Deletes" the [account].
+     */
+    fun deactivateAccount(account: Account) = query(TOGGLE_ACCOUNT)
+            .supply(false)
+            .supply(account.id)
+            .executeOn(CONNECTION)
+
+    fun activateAccount(account: Account) = query(TOGGLE_ACCOUNT)
+            .supply(true)
+            .supply(account.id)
+            .executeOn(CONNECTION)
+
     /**
      * Gets the [Profile][com.addonovan.cse3330.model.Profile] by the given `id`.
      *
@@ -156,7 +177,7 @@ object DbEngine {
             """
             SELECT * FROM "Profile" prof
             LEFT JOIN "Account" a ON a.accountid = prof.accountid
-            WHERE prof.username = ?;
+            WHERE prof.username = ? AND a.isactive;
             """.trimIndent()
 
     /**
@@ -181,7 +202,7 @@ object DbEngine {
     private val UPDATE_ACCOUNT: String =
             """
             UPDATE "Account"
-            SET email = ?, phonenumber = ?, isprivate = ?
+            SET email = ?, phonenumber = ?, profileimageurl = ?, headerimageurl = ?, isprivate = ?, isactive = ?
             WHERE accountid = ?;
             """.trimIndent()
 
@@ -193,11 +214,22 @@ object DbEngine {
             WHERE accountid = ?;
             """.trimIndent()
 
+    @Language("PostgreSQL")
+    private val UPDATE_PAGE: String =
+            """
+            UPDATE "Page"
+            SET pagename = ?, pagedesc = ?
+            WHERE accountid = ?;
+            """.trimIndent()
+
     fun updateProfile(user: Profile, newSettings: Profile) {
         query(UPDATE_ACCOUNT)
                 .supply(newSettings.email)
                 .supply(newSettings.phoneNumber)
+                .supply(newSettings.profileImageURL)
+                .supply(newSettings.headerImageURL)
                 .supply(newSettings.isPrivate)
+                .supply(newSettings.isActive)
                 .supply(user.id)
                 .executeOn(CONNECTION)
 
@@ -210,13 +242,31 @@ object DbEngine {
                 .executeOn(CONNECTION)
     }
 
+    fun updatePage(page: Page, newSettings: Page) {
+        query(UPDATE_ACCOUNT)
+                .supply(newSettings.email)
+                .supply(newSettings.phoneNumber)
+                .supply(newSettings.profileImageURL)
+                .supply(newSettings.headerImageURL)
+                .supply(newSettings.isPrivate)
+                .supply(newSettings.isActive)
+                .supply(page.id)
+                .executeOn(CONNECTION)
+
+        query(UPDATE_PAGE)
+                .supply(newSettings.name)
+                .supply(newSettings.description)
+                .supply(page.id)
+                .executeOn(CONNECTION)
+    }
+
     @Language("PostgreSQL")
     private val GET_PAGES_BY_ADMIN: String =
             """
             SELECT * FROM "PageAdmin" pa
             INNER JOIN "Account" a ON a.accountid = pa.pageid
             INNER JOIN "Page" p ON p.accountid = a.accountid
-            WHERE pa.profileid = ?;
+            WHERE pa.profileid = ? AND a.isactive;
             """.trimIndent()
 
     fun getPagesByAdmin(admin: Profile) = query(GET_PAGES_BY_ADMIN)
@@ -283,7 +333,7 @@ object DbEngine {
             INNER JOIN "Account" a ON a.accountid = f.followerid
             LEFT JOIN "Profile" prof ON prof.accountid = a.accountid
             LEFT JOIN "Page" page ON page.accountid = a.accountid
-            WHERE f.followeeid = ?;
+            WHERE f.followeeid = ? AND a.isactive;
             """
 
     fun getFollowers(account: Account) = query(GET_FOLLOWERS_FORMAT.format("Follow"))
@@ -309,7 +359,7 @@ object DbEngine {
             INNER JOIN "Account" a ON a.accountid = f.followeeid
             LEFT JOIN "Profile" prof ON prof.accountid = a.accountid
             LEFT JOIN "Page" page ON page.accountid = a.accountid
-            WHERE f.followerid = ?;
+            WHERE f.followerid = ? AND a.isactive;
             """.trimIndent()
 
     /**
@@ -402,14 +452,14 @@ object DbEngine {
     private val GET_ACCOUNT_FEED: String =
             """
             SELECT * FROM "Post" p
-            WHERE p.wallid = ?
-               OR (
-                    p.parentpostid IS NULL AND
+            WHERE p.parentpostid IS NULL AND
+                (
+                    p.wallid = ? OR
                     p.posterid IN (
                         SELECT followeeid FROM "Follow" f
                         WHERE f.followerid = ?
                     )
-               )
+                )
             ORDER BY p.createdtime DESC;
             """.trimIndent()
 
@@ -627,7 +677,7 @@ object DbEngine {
             SELECT * FROM "EventInterest" ei
             INNER JOIN "Account" a ON a.accountid = ei.profileid
             INNER JOIN "Profile" p ON p.accountid = a.accountid
-            WHERE ei.eventid = ? AND ei.isattending = ?;
+            WHERE ei.eventid = ? AND ei.isattending = ? AND a.isactive;
             """.trimIndent()
 
     fun getAttendees(event: Event) = query(GET_EVENT_ATTENDEES)
@@ -690,7 +740,7 @@ object DbEngine {
             INNER JOIN "Post" p ON p.postid = pr.postid
             INNER JOIN "Account" a ON a.accountid = pr.profileid
             INNER JOIN "Profile" prof ON prof.accountid = a.accountid
-            WHERE pr.postid = ?;
+            WHERE pr.postid = ? AND a.isactive;
             """.trimIndent()
 
     fun getReactionsTo(post: Post) = query(GET_REACTIONS_TO_POST)
@@ -792,7 +842,7 @@ object DbEngine {
             SELECT * FROM "GroupMember" gmem
             INNER JOIN "Account" a ON a.accountid = gmem.profileid
             INNER JOIN "Profile" p ON p.accountid = a.accountid
-            WHERE gmem.groupid = ?;
+            WHERE gmem.groupid = ? AND a.isactive;
             """
 
     fun getGroupMembers(group: Group) = query(GET_GROUP_MEMBERS)

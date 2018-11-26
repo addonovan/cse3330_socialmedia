@@ -5,7 +5,31 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post" action="/account/updateSettings">
+    {% if user.administeredPages.size() > 0 %}
+        Update one of your pages instead:
+        <ul>
+            {% for page in user.administeredPages %}
+                <li>
+                    <a href="/account/settings/{{page.id}}">{{page.fullName}}</a>
+                </li>
+            {% endfor %}
+            <li>Or, create <a href="/register/page">a new page</a></li>
+        </ul>
+    {% endif %}
+
+    <form method="post"
+          action="/account/updateSettings"
+          enctype="multipart/form-data">
+        <label>
+            Profile Image:
+            <input name="profileImage" type="file">
+        </label>
+
+        <label>
+            Header Image:
+            <input name="headerImage" type="file">
+        </label>
+
         <label>
             Username:
             <input name="username" type="text" value="{{user.username}}">
@@ -40,10 +64,14 @@
             Private:
             <input name="isPrivate"
                    type="checkbox"
-                   {% if user.isPrivate %}
-                   checked
-                   {% endif %}
-            >
+                   {% if user.isPrivate %} checked {% endif %}>
+        </label>
+
+        <label>
+            Active:
+            <input name="isActive"
+                   type="checkbox"
+                   {% if user.isActive %} checked {% endif %}>
         </label>
 
         <button type="submit">Update</button>
