@@ -39,21 +39,29 @@
 
             <p class="postBody">{{post.poll.question}}</p>
 
-            {% for answer in post.pollAnswers %}
-                <form method="post" action="/post/poll/vote">
-                    <input class="hidden"
-                           type="number"
-                           name="postId"
-                           value="{{post.id}}">
+            {% if post.pollVoters contains user %}
+                <ul>
+                    {% for entry in post.pollVotes %}
+                        <li>{{entry.value}}x {{entry.key.text}}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                {% for answer in post.pollAnswers %}
+                    <form method="post" action="/post/poll/vote">
+                        <input class="hidden"
+                               type="number"
+                               name="postId"
+                               value="{{post.id}}">
 
-                    <input class="hidden"
-                           type="number"
-                           name="pollAnswerId"
-                           value="{{answer.id}}">
+                        <input class="hidden"
+                               type="number"
+                               name="pollAnswerId"
+                               value="{{answer.id}}">
 
-                    <input type="submit" value="{{answer.text}}">
-                </form>
-            {% endfor %}
+                        <input type="submit" value="{{answer.text}}">
+                    </form>
+                {% endfor %}
+            {% endif %}
         {% endif %}
 
 

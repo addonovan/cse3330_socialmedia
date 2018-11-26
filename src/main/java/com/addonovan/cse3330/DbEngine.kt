@@ -528,6 +528,23 @@ object DbEngine {
             .executeOn(CONNECTION)
 
     @Language("PostgreSQL")
+    private val GET_POLL_VOTERS: String =
+            """
+            SELECT * FROM "PollVote" pv
+            INNER JOIN "Account" a ON a.accountid = pv.profileid
+            INNER JOIN "Profile" p ON p.accountid = a.accountid
+            WHERE pv.pollid = ?;
+            """.trimIndent()
+
+    fun getPollVoters(poll: Post) = query(GET_POLL_VOTERS)
+            .supply(poll.id)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Profile().apply { fromRow(it) }
+                }
+            }
+
+    @Language("PostgreSQL")
     private val CREATE_EVENT: String =
             """
             INSERT INTO "Event"(hostid, eventname, eventdesc, starttime, endtime, location)

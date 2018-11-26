@@ -42,6 +42,20 @@ class Post : SqlEntity {
         DbEngine.getPollAnswers(this)
     }
 
+    val pollVoters: List<Account> by lazy {
+        DbEngine.getPollVoters(this)
+    }
+
+    val pollVotes: Map<PollAnswer, Int> by lazy {
+        val map = hashMapOf<PollAnswer, Int>()
+
+        for (pollAnswer in pollAnswers) {
+            map[pollAnswer] = (map[pollAnswer] ?: 0) + 1
+        }
+
+        map
+    }
+
     val poster: Account by lazy {
         DbEngine.getAccountById(posterId)!!
     }
