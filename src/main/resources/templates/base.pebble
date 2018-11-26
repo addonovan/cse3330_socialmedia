@@ -28,6 +28,7 @@
                 {% if user != null %}
                     <a href="/calendar">Your Calendar</a>
                     <a href="/account/settings"> Your Account </a>
+                    <a href="/chat"> Chats </a>
                     <form method="post" action="/signout" class="inline flex-expand align-right">
                         <button type="submit" class="link">
                             Log out
