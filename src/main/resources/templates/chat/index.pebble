@@ -9,12 +9,12 @@
         <div id="ChatList" class="flex-vertical">
             <ul>
                 {% for group in user.groups %}
-                <li id="Group{{group.id}}" onclick="selectGroup({{group.id}})">
-                    <img class="profileImage small"
-                         src="{{group.pictureUrl}}">
-                    {{group.name}}<br>
-                    {{group.description}}
-                </li>
+                    <li id="Group{{group.id}}" onclick="selectGroup({{group.id}})">
+                        <img class="profileImage small"
+                             src="{{group.pictureUrl}}">
+                        {{group.name}}<br>
+                        {{group.description}}
+                    </li>
                 {% endfor %}
             </ul>
         </div>

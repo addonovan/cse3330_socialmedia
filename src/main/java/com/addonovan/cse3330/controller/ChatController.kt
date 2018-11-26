@@ -18,6 +18,7 @@ open class ChatController {
         val user = request.profile
                 ?: errorPage(model, "You have to be logged in to do that!")
 
+        model.addAttribute("user", user)
         return "chat/index"
     }
 
