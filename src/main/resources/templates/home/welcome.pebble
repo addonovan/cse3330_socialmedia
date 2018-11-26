@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<div>
+<div class="centered page">
     <h3>Already have an account?</h3>
     <h4>Sign In</h4>
     <form method="post" action="/signin">

@@ -6,8 +6,8 @@
 
 {% block content %}
     <div class="flex-horizontal">
-        <div id="ChatList" class="flex-vertical">
-            <ul>
+        <div id="ChatList" class="flex-vertical page">
+            <ul class="no-items">
                 <li>
                     <a href="/chat/create">
                         Create a new Chat!
@@ -25,25 +25,26 @@
             </ul>
         </div>
 
-        <div id="MessageHistory" class="flex-vertical">
+        <div id="MessageHistory" class="flex-vertical flex-expand">
 
         </div>
     </div>
 
     <div id="Components" class="hidden">
 
-        <div id="Outline" class="flex-horizontal">
-            <div id="GroupHeader" class="flex-vertical">
+        <div id="Outline" class="flex-horizontal flex-expand">
+            <div id="GroupHeader" class="flex-vertical page">
                 <img class="profileImage large" src="">
                 <p id="GroupName" class="important"></p>
                 <p id="GroupDescription"></p>
                 <ul id="GroupMembers"></ul>
             </div>
 
-            <div class="flex-vertical">
-                <div id="Messages" class="flex-vertical"></div>
+            <div class="flex-vertical flex-expand page">
+                <div id="Messages" class="flex-vertical flex-expand"></div>
 
                 <form id="MessageComposer"
+                      style="margin: 0;"
                       method="post"
                       action="/chat/api/send"
                       enctype="multipart/form-data">

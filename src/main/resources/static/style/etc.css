@@ -10,9 +10,26 @@ button.link {
     font-family: serif;
 }
 
+ul.no-items { list-style: none; margin: 0; padding: 0; }
+
 .flex-vertical { display: flex; flex-direction: column; }
 .flex-horizontal { display: flex; flex-direction: row; }
 .flex-expand { flex-grow: 1; }
+
+.page {
+    background: white;
+    padding: 2em;
+    box-shadow: 1px 1px rgba(0, 0, 0, 0.22), 1px 1px rgba(0, 0, 0, 0.22) inset;
+}
+
+.centered,
+div#Main form,
+div#Main .form-like {
+    max-width: 796px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
 
 .ui { color: rgba(0, 0, 0, 0.60)}
 .important { color: black; font-weight: bold; }
@@ -24,15 +41,13 @@ button.link {
 .align-right { text-align: right; }
 
 /* Form prettification */
-div#Main form {
+div#Main form,
+div#Main .form-like {
     display: flex;
     flex-direction: column;
-    max-width: 512px;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
 }
 
-div#Main form > label {
+div#Main form > label,
+div#Main .form-like > label {
     padding: 0.5em 0 0.5em 0;
 }

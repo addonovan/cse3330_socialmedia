@@ -3,16 +3,8 @@ div.post {
     align-self: center;
     flex-direction: row;
     align-content: space-between;
-
-    background: white;
-    border: 1px solid black;
-    box-shadow: 1px 1px inset rgba(0, 0, 0, 0.30),
-                2px 2px rgba(0, 0, 0, 0.20);
     margin-bottom: 0.5em;
     margin-top: 0.5em;
-
-    width: 100%;
-    max-width: 512px;
 }
 
     .post p {
@@ -52,22 +44,15 @@ div.post {
         font-size: 8pt;
     }
 
-.postbox-container {
-    max-width: 512px;
+.postbox {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    margin-left: auto;
-    margin-right: auto;
 }
 
-    .postbox-container .postbox {
-        align-self: center;
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .postbox-container #PostTypeSelector {
-        align-self: center;
-        width: 100%;
-    }
+#PostTypeSelector {
+    align-self: center;
+    width: 100%;
+}
 

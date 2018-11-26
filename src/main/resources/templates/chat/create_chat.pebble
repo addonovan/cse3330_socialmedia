@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <div id="ChatInfo">
+    <div id="ChatInfo" class="page form-like">
         <input type="text" name="name" placeholder="Group Name">
         <input type="text" name="description" placeholder="A short description">
         <input type="file" name="mediaFile">
