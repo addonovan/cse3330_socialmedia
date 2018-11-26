@@ -402,14 +402,14 @@ object DbEngine {
     private val GET_ACCOUNT_FEED: String =
             """
             SELECT * FROM "Post" p
-            WHERE p.wallid = ?
-               OR (
-                    p.parentpostid IS NULL AND
+            WHERE p.parentpostid IS NULL AND
+                (
+                    p.wallid = ? OR
                     p.posterid IN (
                         SELECT followeeid FROM "Follow" f
                         WHERE f.followerid = ?
                     )
-               )
+                )
             ORDER BY p.createdtime DESC;
             """.trimIndent()
 
