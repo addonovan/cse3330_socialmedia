@@ -61,7 +61,19 @@ VALUES
 
 INSERT INTO "Post"(postid, posterid, wallid, postmessage, postmediaurl, pollquestion, pollendtime, parentpostid)
 VALUES
-    (1, 1, 1, 'Hey guys!', NULL, NULL, NULL, NULL);
+    (1, 1, 1, 'Hey guys!', NULL, NULL, NULL, NULL),
+    (2, 1, 1, NULL, NULL, 'What''s y''all''s favorite color?', '2019-05-01 00:00:00', NULL);
+
+INSERT INTO "PollAnswer"(pollanswerid, postid, pollanswertext)
+VALUES
+    (1, 2, 'Red like the Texan Flag'),
+    (2, 2, 'Blue like the Texan Flag'),
+    (3, 2, 'White like the Texan Flag'),
+    (4, 2, 'White like the Lone Star');
+
+INSERT INTO "PollVote"(pollid, pollanswerid, profileid)
+VALUES
+    (2, 1, 1), (2, 2, 2), (2, 3, 3), (2, 4, 4);
 
 INSERT INTO "PostReaction"(postid, profileid, emotionid)
 VALUES
@@ -77,3 +89,16 @@ VALUES
     (1, 1, TRUE), (1, 2, TRUE), (1, 3, TRUE), (1, 4, TRUE), (1, 5, TRUE),
     (1, 15, TRUE), (1, 16, FALSE), (1, 17, TRUE), (1, 18, TRUE), (1, 19, TRUE),
     (1, 20, FALSE);
+
+INSERT INTO "Group"(groupid, groupname, groupdesc)
+VALUES
+    (1, '.ustin Donovan''s Spot', 'A spot for anyone whose name matches /.ustin Donovan/');
+
+INSERT INTO "GroupMember"(groupid, profileid)
+VALUES
+    (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 15), (1, 16), (1, 17), (1, 18),
+    (1, 19), (1, 20);
+
+INSERT INTO "GroupMessage"(senderid, groupid, messagetext, mediaurl)
+VALUES
+    (1, 1, 'Hey guys!', NULL), (2, 1, 'Wow, this is so cool!', NULL);
