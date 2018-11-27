@@ -192,7 +192,9 @@ object DbEngine {
         println("-- Poll Votes ----------------------------------------------")
         getPosts.printResults { row ->
             val post = Post().apply { fromRow(row) }
-            mapOf(post.id to post.pollVotes)
+            mapOf(post.id to post.pollVotes.map { (answer, count) ->
+                mapOf(answer.text to count)
+            })
         }
         println("------------------------------------------------------------")
     }
