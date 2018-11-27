@@ -7,6 +7,7 @@ import com.addonovan.cse3330.sql.query
 import org.intellij.lang.annotations.Language
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.ResultSet
 import java.sql.SQLException
 import java.util.*
 
@@ -51,6 +52,69 @@ object DbEngine {
                 throw RuntimeException("Failed to close database connection!", e)
             }
         })
+
+        printData()
+    }
+
+    //
+    // Startup-only Actions
+    //
+
+    /**
+     * This was a project requirement.
+     */
+    private fun printData() {
+        fun <T> String.printResults(action: (ResultSet) -> T) {
+            query(this).executeOn(CONNECTION) { set ->
+                set.map {
+                    action(it)
+                }
+            }.forEach { println(it) }
+        }
+
+        println("-- Profiles ------------------------------------------------")
+        @Language("PostgreSQL")
+        val getProfiles = """
+            SELECT * FROM "Profile" p
+            INNER JOIN "Account" a ON a.accountid = p.accountid
+            ORDER BY p.accountid ASC;
+        """.trimIndent()
+        getProfiles.printResults { Profile().apply{ fromRow(it) } }
+        println("------------------------------------------------------------")
+
+        println("-- Pages ---------------------------------------------------")
+        @Language("PostgreSQL")
+        val getPages = """
+            SELECT * FROM "Page" p
+            INNER JOIN "Account" a ON a.accountid = p.accountid
+            ORDER BY p.accountid ASC;
+        """.trimIndent()
+        getPages.printResults { Page().apply { fromRow(it) } }
+        println("------------------------------------------------------------")
+
+        println("-- Groups --------------------------------------------------")
+        @Language("PostgreSQL")
+        val getGroups = """
+            SELECT * FROM "Group" g
+        """.trimIndent()
+        getGroups.printResults { Group().apply { fromRow(it) } }
+        println("------------------------------------------------------------")
+
+        println("-- Events --------------------------------------------------")
+        @Language("PostgreSQL")
+        val getEvents = """
+            SELECT * FROM "Event" e
+        """.trimIndent()
+        getEvents.printResults { Event().apply { fromRow(it) } }
+        println("------------------------------------------------------------")
+
+        println("-- Posts ---------------------------------------------------")
+        @Language("PostgreSQL")
+        val getPosts = """
+            SELECT * FROM "Post" p
+        """.trimIndent()
+        getPosts.printResults { Post().apply { fromRow(it) } }
+        println("------------------------------------------------------------")
     }
 
     //
