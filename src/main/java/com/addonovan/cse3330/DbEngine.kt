@@ -57,18 +57,20 @@ object DbEngine {
                 throw RuntimeException("Failed to close database connection!", e)
             }
         })
+    }
 
-        File("output.log").bufferedWriter().use { bw ->
+    //
+    // Startup-only Actions
+    //
+
+    fun dumpData(outputFile: String) {
+        File(outputFile).bufferedWriter().use { bw ->
             printData { text ->
                 bw.write(text)
                 bw.newLine()
             }
         }
     }
-
-    //
-    // Startup-only Actions
-    //
 
     /**
      * This was a project requirement.
