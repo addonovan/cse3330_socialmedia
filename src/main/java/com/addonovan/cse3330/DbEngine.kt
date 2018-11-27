@@ -4,9 +4,15 @@ import com.addonovan.cse3330.model.*
 import com.addonovan.cse3330.sql.call
 import com.addonovan.cse3330.sql.map
 import com.addonovan.cse3330.sql.query
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.intellij.lang.annotations.Language
+import org.springframework.http.codec.json.Jackson2CodecSupport
+import org.springframework.http.codec.json.Jackson2JsonEncoder
+import java.io.BufferedWriter
+import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.ResultSet
 import java.sql.SQLException
 import java.util.*
 
@@ -51,6 +57,146 @@ object DbEngine {
                 throw RuntimeException("Failed to close database connection!", e)
             }
         })
+    }
+
+    //
+    // Startup-only Actions
+    //
+
+    fun dumpData(outputFile: String) {
+        File(outputFile).bufferedWriter().use { bw ->
+            printData { text ->
+                bw.write(text)
+                bw.newLine()
+            }
+        }
+    }
+
+    /**
+     * This was a project requirement.
+     */
+    private fun printData(println: (String) -> Unit) {
+        val json = ObjectMapper().writerWithDefaultPrettyPrinter()
+
+        fun <T> String.printResults(action: (ResultSet) -> T) {
+            query(this).executeOn(CONNECTION) { set ->
+                set.map {
+                    action(it)
+                }
+            }.forEach {
+                println(json.writeValueAsString(it))
+            }
+        }
+
+        println("-- Profiles ------------------------------------------------")
+        @Language("PostgreSQL")
+        val getProfiles = """
+            SELECT * FROM "Profile" p
+            INNER JOIN "Account" a ON a.accountid = p.accountid
+            ORDER BY p.accountid ASC;
+        """.trimIndent()
+        getProfiles.printResults { Profile().apply{ fromRow(it) } }
+        println("------------------------------------------------------------")
+
+        println("-- Pages ---------------------------------------------------")
+        @Language("PostgreSQL")
+        val getPages = """
+            SELECT * FROM "Page" p
+            INNER JOIN "Account" a ON a.accountid = p.accountid
+            ORDER BY p.accountid ASC;
+        """.trimIndent()
+        getPages.printResults { Page().apply { fromRow(it) } }
+        println("------------------------------------------------------------")
+
+        println("-- Pages Administered --------------------------------------")
+        getProfiles.printResults { row ->
+            val profile = Profile().apply{ fromRow(row) }
+            mapOf(profile.fullName to profile.administeredPages.map { it.name })
+        }
+        println("------------------------------------------------------------")
+
+        println("-- Following -----------------------------------------------")
+        getProfiles.printResults { row ->
+            val profile = Profile().apply { fromRow(row) }
+            mapOf(profile.fullName to profile.following.map { it.fullName })
+        }
+        println("------------------------------------------------------------")
+
+        println("-- Follow Requests -----------------------------------------")
+        getProfiles.printResults { row ->
+            val profile = Profile().apply { fromRow(row) }
+            mapOf(profile.fullName to profile.followRequests.map { it.fullName })
+        }
+        println("------------------------------------------------------------")
+
+        println("-- Groups --------------------------------------------------")
+        @Language("PostgreSQL")
+        val getGroups = """
+            SELECT * FROM "Group"
+        """.trimIndent()
+        getGroups.printResults { Group().apply { fromRow(it) } }
+        println("------------------------------------------------------------")
+
+        println("-- Group Members -------------------------------------------")
+        getGroups.printResults { row ->
+            val group = Group().apply { fromRow(row) }
+            mapOf(group.name to group.members.map { it.fullName })
+        }
+        println("------------------------------------------------------------")
+
+        println("-- Group Messages ------------------------------------------")
+        getGroups.printResults { row ->
+            val group = Group().apply { fromRow(row) }
+            mapOf(group.name to group.messages)
+        }
+        println("------------------------------------------------------------")
+
+        println("-- Events --------------------------------------------------")
+        @Language("PostgreSQL")
+        val getEvents = """
+            SELECT * FROM "Event"
+        """.trimIndent()
+        getEvents.printResults { Event().apply { fromRow(it) } }
+        println("------------------------------------------------------------")
+
+        println("-- Event Attendees -----------------------------------------")
+        getEvents.printResults { row ->
+            val event = Event().apply { fromRow(row) }
+            val attending = event.attendees.map { it.fullName }
+            val interested = event.interested.map { it.fullName }
+
+            mapOf(event.name to arrayOf(
+                    mapOf("attending" to attending),
+                    mapOf("interested" to interested)
+            ))
+        }
+        println("------------------------------------------------------------")
+
+        println("-- Posts ---------------------------------------------------")
+        @Language("PostgreSQL")
+        val getPosts = """
+            SELECT * FROM "Post"
+        """.trimIndent()
+        getPosts.printResults { Post().apply { fromRow(it) } }
+        println("------------------------------------------------------------")
+
+        println("-- Post Reactions ------------------------------------------")
+        getPosts.printResults { row ->
+            val post = Post().apply { fromRow(row) }
+            mapOf(post.id to post.reactions.map { (who, how) ->
+                mapOf(who.fullName to how.name)
+            })
+        }
+        println("------------------------------------------------------------")
+
+        println("-- Poll Votes ----------------------------------------------")
+        getPosts.printResults { row ->
+            val post = Post().apply { fromRow(row) }
+            mapOf(post.id to post.pollVotes.map { (answer, count) ->
+                mapOf(answer.text to count)
+            })
+        }
+        println("------------------------------------------------------------")
     }
 
     //
