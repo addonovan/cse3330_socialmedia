@@ -57,9 +57,9 @@ BEGIN
     RETURNING AccountId INTO account_id;
 
     INSERT INTO "Profile"
-        (accountid, firstname, lastname, username, Password, languageid)
+        (accountid, firstname, lastname, username, Password)
     VALUES
-        (account_id, FirstName, LastName, Username, Password, 1);
+        (account_id, FirstName, LastName, Username, Password);
 
     RETURN account_id;
 

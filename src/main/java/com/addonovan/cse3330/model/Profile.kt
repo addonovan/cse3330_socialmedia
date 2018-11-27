@@ -22,9 +22,6 @@ class Profile : Account() {
     /** This user's password (which will probably be hashed in the future) */
     lateinit var password: String
 
-    /** The primary language of this user. */
-    var languageId: Int = 0
-
     //
     // Derived Properties
     //
@@ -50,6 +47,5 @@ class Profile : Account() {
         lastName = row.getString("LastName")
         username = row.getString("Username")
         password = row.getString("Password")
-        languageId = row.getInt("LanguageId")
     }
 }

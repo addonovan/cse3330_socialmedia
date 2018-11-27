@@ -21,19 +21,19 @@ VALUES
        (19, 'austin@addonovan.com', '8177299079', FALSE),
        (20, 'austin@addonovan.com', '8177299079', FALSE);
 
-INSERT INTO "Profile"(accountid, firstname, lastname, username, password, languageid)
+INSERT INTO "Profile"(accountid, firstname, lastname, username, password)
 VALUES
-       (1, 'Austin', 'Donovan', 'addonovan', '', 1),
-       (2, 'Bustin', 'Donovan', 'bddonovan', '', 1),
-       (3, 'Custin', 'Donovan', 'cddonovan', '', 1),
-       (4, 'Dustin', 'Donovan', 'dddonovan', '', 1),
-       (5, 'Eustin', 'Donovan', 'eddonovan', '', 1),
-       (15, 'Pustin', 'Donovan', 'pddonovan', '', 1),
-       (16, 'Qustin', 'Donovan', 'qddonovan', '', 1),
-       (17, 'Rustin', 'Donovan', 'rddonovan', '', 1),
-       (18, 'Tustin', 'Donovan', 'tddonovan', '', 1),
-       (19, 'Uustin', 'Donovan', 'uddonovan', '', 1),
-       (20, 'Vustin', 'Donovan', 'vddonovan', '', 1);
+       (1, 'Austin', 'Donovan', 'addonovan', ''),
+       (2, 'Bustin', 'Donovan', 'bddonovan', ''),
+       (3, 'Custin', 'Donovan', 'cddonovan', ''),
+       (4, 'Dustin', 'Donovan', 'dddonovan', ''),
+       (5, 'Eustin', 'Donovan', 'eddonovan', ''),
+       (15, 'Pustin', 'Donovan', 'pddonovan', ''),
+       (16, 'Qustin', 'Donovan', 'qddonovan', ''),
+       (17, 'Rustin', 'Donovan', 'rddonovan', ''),
+       (18, 'Tustin', 'Donovan', 'tddonovan', ''),
+       (19, 'Uustin', 'Donovan', 'uddonovan', ''),
+       (20, 'Vustin', 'Donovan', 'vddonovan', '');
 
 INSERT INTO "Page"(accountid, pagename, pagedesc)
 VALUES
