@@ -111,21 +111,21 @@ object DbEngine {
         println("-- Pages Administered --------------------------------------")
         getProfiles.printResults { row ->
             val profile = Profile().apply{ fromRow(row) }
-            profile.fullName to profile.administeredPages.map { it.name }
+            mapOf(profile.fullName to profile.administeredPages.map { it.name })
         }
         println("------------------------------------------------------------")
 
         println("-- Following -----------------------------------------------")
         getProfiles.printResults { row ->
             val profile = Profile().apply { fromRow(row) }
-            profile.fullName to profile.following.map { it.fullName }
+            mapOf(profile.fullName to profile.following.map { it.fullName })
         }
         println("------------------------------------------------------------")
 
         println("-- Follow Requests -----------------------------------------")
         getProfiles.printResults { row ->
             val profile = Profile().apply { fromRow(row) }
-            profile.fullName to profile.followRequests.map { it.fullName }
+            mapOf(profile.fullName to profile.followRequests.map { it.fullName })
         }
         println("------------------------------------------------------------")
 
@@ -140,14 +140,14 @@ object DbEngine {
         println("-- Group Members -------------------------------------------")
         getGroups.printResults { row ->
             val group = Group().apply { fromRow(row) }
-            group.name to group.members.map { it.fullName }
+            mapOf(group.name to group.members.map { it.fullName })
         }
         println("------------------------------------------------------------")
 
         println("-- Group Messages ------------------------------------------")
         getGroups.printResults { row ->
             val group = Group().apply { fromRow(row) }
-            group.name to group.messages
+            mapOf(group.name to group.messages)
         }
         println("------------------------------------------------------------")
 
@@ -165,10 +165,10 @@ object DbEngine {
             val attending = event.attendees.map { it.fullName }
             val interested = event.interested.map { it.fullName }
 
-            event.name to arrayOf(
-                    "attending" to attending,
-                    "interested" to interested
-            )
+            mapOf(event.name to arrayOf(
+                    mapOf("attending" to attending),
+                    mapOf("interested" to interested)
+            ))
         }
         println("------------------------------------------------------------")
 
@@ -183,14 +183,16 @@ object DbEngine {
         println("-- Post Reactions ------------------------------------------")
         getPosts.printResults { row ->
             val post = Post().apply { fromRow(row) }
-            post.id to post.reactions.map { (who, how) -> who.fullName to how.name }
+            mapOf(post.id to post.reactions.map { (who, how) ->
+                mapOf(who.fullName to how.name)
+            })
         }
         println("------------------------------------------------------------")
 
         println("-- Poll Votes ----------------------------------------------")
         getPosts.printResults { row ->
             val post = Post().apply { fromRow(row) }
-            post.id to post.pollVotes
+            mapOf(post.id to post.pollVotes)
         }
         println("------------------------------------------------------------")
     }
