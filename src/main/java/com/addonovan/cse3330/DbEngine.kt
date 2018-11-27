@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.intellij.lang.annotations.Language
 import org.springframework.http.codec.json.Jackson2CodecSupport
 import org.springframework.http.codec.json.Jackson2JsonEncoder
+import java.io.BufferedWriter
+import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
@@ -56,7 +58,12 @@ object DbEngine {
             }
         })
 
-        printData()
+        File("output.log").bufferedWriter().use { bw ->
+            printData { text ->
+                bw.write(text)
+                bw.newLine()
+            }
+        }
     }
 
     //
@@ -66,8 +73,8 @@ object DbEngine {
     /**
      * This was a project requirement.
      */
-    private fun printData() {
-        val json = ObjectMapper()
+    private fun printData(println: (String) -> Unit) {
+        val json = ObjectMapper().writerWithDefaultPrettyPrinter()
 
         fun <T> String.printResults(action: (ResultSet) -> T) {
             query(this).executeOn(CONNECTION) { set ->
