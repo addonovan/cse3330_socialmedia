@@ -4,7 +4,10 @@ import com.addonovan.cse3330.model.*
 import com.addonovan.cse3330.sql.call
 import com.addonovan.cse3330.sql.map
 import com.addonovan.cse3330.sql.query
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.intellij.lang.annotations.Language
+import org.springframework.http.codec.json.Jackson2CodecSupport
+import org.springframework.http.codec.json.Jackson2JsonEncoder
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
@@ -64,12 +67,16 @@ object DbEngine {
      * This was a project requirement.
      */
     private fun printData() {
+        val json = ObjectMapper()
+
         fun <T> String.printResults(action: (ResultSet) -> T) {
             query(this).executeOn(CONNECTION) { set ->
                 set.map {
                     action(it)
                 }
-            }.forEach { println(it) }
+            }.forEach {
+                println(json.writeValueAsString(it))
+            }
         }
 
         println("-- Profiles ------------------------------------------------")
