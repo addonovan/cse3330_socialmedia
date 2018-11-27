@@ -1,18 +1,4 @@
 -- Reference Tables
-CREATE TABLE "RefLanguage" (
-    LanguageId      SERIAL          PRIMARY KEY,
-    LocaleCode      VARCHAR(16)     NOT NULL UNIQUE,
-    LanguageName    VARCHAR(64)     NOT NULL UNIQUE
-);
-
-CREATE TABLE "RefInterfaceText" (
-    LanguageId      INTEGER         NOT NULL REFERENCES "RefLanguage"(languageid),
-    "Key"           VARCHAR(64)     NOT NULL,
-    Format          VARCHAR(2048)   NOT NULL,
-
-    PRIMARY KEY (LanguageId, "Key")
-);
-
 CREATE TABLE "RefEmotion" (
     EmotionId       SERIAL          PRIMARY KEY,
     EmotionName     VARCHAR(64)     NOT NULL,
@@ -36,8 +22,7 @@ CREATE TABLE "Profile" (
     FirstName       VARCHAR(32)     NOT NULL,
     LastName        VARCHAR(32)     NOT NULL,
     Username        VARCHAR(32)     NOT NULL UNIQUE,
-    Password        VARCHAR(32)     NOT NULL,
-    LanguageId      INTEGER         NOT NULL REFERENCES "RefLanguage"(languageid)
+    Password        VARCHAR(32)     NOT NULL
 );
 
 CREATE TABLE "Page" (
@@ -164,11 +149,3 @@ VALUES
        ('Anger', '/media/reactions/anger.png'),
        ('Dislike', '/media/reactions/dislike.png'),
        ('Love', '/media/reactions/love.png');
-
-INSERT INTO "RefLanguage"
-    (LocaleCode, LanguageName)
-VALUES
-       ('en_us', 'English (United States)'),
-       ('de_de', 'Deutsch (Deutschland)'),
-       ('en_tx', 'English (Texas)');
-
