@@ -106,28 +106,90 @@ object DbEngine {
         getPages.printResults { Page().apply { fromRow(it) } }
         println("------------------------------------------------------------")
 
+        println("-- Pages Administered --------------------------------------")
+        getProfiles.printResults { row ->
+            val profile = Profile().apply{ fromRow(row) }
+            profile.fullName to profile.administeredPages.map { it.name }
+        }
+        println("------------------------------------------------------------")
+
+        println("-- Following -----------------------------------------------")
+        getProfiles.printResults { row ->
+            val profile = Profile().apply { fromRow(row) }
+            profile.fullName to profile.following.map { it.fullName }
+        }
+        println("------------------------------------------------------------")
+
+        println("-- Follow Requests -----------------------------------------")
+        getProfiles.printResults { row ->
+            val profile = Profile().apply { fromRow(row) }
+            profile.fullName to profile.followRequests.map { it.fullName }
+        }
+        println("------------------------------------------------------------")
+
         println("-- Groups --------------------------------------------------")
         @Language("PostgreSQL")
         val getGroups = """
-            SELECT * FROM "Group" g
+            SELECT * FROM "Group"
         """.trimIndent()
         getGroups.printResults { Group().apply { fromRow(it) } }
+        println("------------------------------------------------------------")
+
+        println("-- Group Members -------------------------------------------")
+        getGroups.printResults { row ->
+            val group = Group().apply { fromRow(row) }
+            group.name to group.members.map { it.fullName }
+        }
+        println("------------------------------------------------------------")
+
+        println("-- Group Messages ------------------------------------------")
+        getGroups.printResults { row ->
+            val group = Group().apply { fromRow(row) }
+            group.name to group.messages
+        }
         println("------------------------------------------------------------")
 
         println("-- Events --------------------------------------------------")
         @Language("PostgreSQL")
         val getEvents = """
-            SELECT * FROM "Event" e
+            SELECT * FROM "Event"
         """.trimIndent()
         getEvents.printResults { Event().apply { fromRow(it) } }
+        println("------------------------------------------------------------")
+
+        println("-- Event Attendees -----------------------------------------")
+        getEvents.printResults { row ->
+            val event = Event().apply { fromRow(row) }
+            val attending = event.attendees.map { it.fullName }
+            val interested = event.interested.map { it.fullName }
+
+            event.name to arrayOf(
+                    "attending" to attending,
+                    "interested" to interested
+            )
+        }
         println("------------------------------------------------------------")
 
         println("-- Posts ---------------------------------------------------")
         @Language("PostgreSQL")
         val getPosts = """
-            SELECT * FROM "Post" p
+            SELECT * FROM "Post"
         """.trimIndent()
         getPosts.printResults { Post().apply { fromRow(it) } }
+        println("------------------------------------------------------------")
+
+        println("-- Post Reactions ------------------------------------------")
+        getPosts.printResults { row ->
+            val post = Post().apply { fromRow(row) }
+            post.id to post.reactions.map { (who, how) -> who.fullName to how.name }
+        }
+        println("------------------------------------------------------------")
+
+        println("-- Poll Votes ----------------------------------------------")
+        getPosts.printResults { row ->
+            val post = Post().apply { fromRow(row) }
+            post.id to post.pollVotes
+        }
         println("------------------------------------------------------------")
     }
 
