@@ -72,7 +72,7 @@
         <h1>Account Activity</h1>
         <hr>
         {% for post in accountActivity %}
-            {% include "../post" with {"wall": account, "showChildren": "false"} %}
+            {% include "../post" with {"wall": account} %}
         {% endfor %}
         {% if accountActivity.size() == 0 %}
             <span class="ui">It doesn't seem like anything's here</span>
