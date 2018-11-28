@@ -92,6 +92,7 @@ function postPoll(wallId) {
 }
 
 $(() => {
+    console.log("Post box component loaded!");
     attachEventTypeListener();
     selectPostDefault();
 });

@@ -19,6 +19,7 @@
         <script src="/script/post.js"></script>
         <script src="/script/event.js"></script>
         <script src="/script/chat.js"></script>
+        <script src="/script/search.js"></script>
     </head>
 
     <body>
