@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
-import java.text.NumberFormat
 
 /**
  * The controller for general account activities, such as creation and deletion
@@ -192,13 +191,13 @@ open class AccountController {
         else -> {
             val user = request.profile
 
-            val overview = when {
+            val (wallActivity, accountActivity) = when {
                 !account.isPrivate
                 || user == account
                 || (user as Account?) in account.followers
-                    -> DbEngine.wallOverview(account)
+                    -> DbEngine.wallOverview(account) to DbEngine.accountOverview(account)
 
-                else -> listOf()
+                else -> listOf<Account>() to listOf<Account>()
             }
 
             if (account is Page) {
@@ -206,7 +205,8 @@ open class AccountController {
             }
 
             model.addAttribute("account", account)
-            model.addAttribute("overview", overview)
+            model.addAttribute("wallActivity", wallActivity)
+            model.addAttribute("accountActivity", accountActivity)
             model.addAttribute("user", user)
             model.addAttribute("emotions", Emotion.values)
             "account/overview"

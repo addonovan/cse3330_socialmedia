@@ -589,6 +589,23 @@ object DbEngine {
             }
 
     @Language("PostgreSQL")
+    private val ACCOUNT_OVERVIEW_FOR: String =
+            """
+            SELECT * FROM "Post" p
+            WHERE p.posterid = ?
+            ORDER BY p.createdtime DESC;
+            """.trimIndent()
+
+    fun accountOverview(account: Account) = query(ACCOUNT_OVERVIEW_FOR)
+            .supply(account.id)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Post().apply { fromRow(it) }
+                }
+            }
+
+
+    @Language("PostgreSQL")
     private val VIEW_PAGE: String =
             """
             UPDATE "Page" p
