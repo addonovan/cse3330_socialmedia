@@ -245,6 +245,21 @@ object DbEngine {
             }
 
     @Language("PostgreSQL")
+    private val GET_ALL_ACCOUNTS: String =
+            """
+            SELECT * FROM "Account" a
+            LEFT JOIN "Profile" prof ON PROF.accountid = a.accountid
+            LEFT JOIN "Page" page ON page.accountid = a.accountid
+            """.trimIndent()
+
+    fun getAllAccounts() = query(GET_ALL_ACCOUNTS)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Account.fromRow(it)
+                }
+            }
+
+    @Language("PostgreSQL")
     private val FIND_ACCOUNT_BY_ID: String =
             """
             SELECT * FROM "Account" a

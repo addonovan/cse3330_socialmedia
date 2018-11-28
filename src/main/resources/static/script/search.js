@@ -1,5 +1,5 @@
 const fetchSearchResults = (text, callback) =>
-    $.getJSON("/account/search", { text: text }, callback);
+    $.getJSON("/account/api/search", { text: text }, callback);
 
 function showSearchResults(list, results) {
     list.empty();

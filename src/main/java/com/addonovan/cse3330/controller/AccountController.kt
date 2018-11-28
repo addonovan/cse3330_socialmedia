@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
+import java.text.NumberFormat
 
 /**
  * The controller for general account activities, such as creation and deletion
@@ -212,5 +213,19 @@ open class AccountController {
         }
     }
 
+    //
+    // API Stuff
+    //
+
+    @GetMapping("/api/search")
+    @ResponseBody
+    fun searchAccounts(@RequestParam text: String): List<Account> =
+            DbEngine.getAllAccounts()
+                    .filter {
+                        val regex = ".*$text.*".toRegex()
+
+                        if (it.fullName.matches(regex)) true
+                        else it is Profile && it.username.matches(regex)
+                    }
 
 }

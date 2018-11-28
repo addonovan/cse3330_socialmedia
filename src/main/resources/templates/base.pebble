@@ -35,13 +35,14 @@
                     <a href="/account/settings"> Your Account </a>
                     <a href="/chat"> Chats </a>
 
-                    <span class="searchbar">
+                    <span class="searchbar dropdown">
                         <input name="searchParam"
                                placeholder="Search for an account">
                         <i class="fas fa-search"
                            style="color: white;"
                            onclick="search(this)">
                         </i>
+                        <ul class="dropdown-content"></ul>
                     </span>
 
                     <form method="post" action="/signout" class="inline flex-expand align-right">
