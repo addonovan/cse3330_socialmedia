@@ -5,23 +5,25 @@
 {% endblock %}
 
 {% block content %}
-    {% if errorReason %}
-    <p class="error">
-        {{errorReason}}
-    </p>
-    {% endif %}
+    <div class="centered page">
+        {% if errorReason %}
+            <p class="error">
+                {{errorReason}}
+            </p>
+        {% endif %}
 
-    <form method="post" action="/signin">
-        <label>
-            Username:
-            <input name="username" type="text">
-        </label><br/>
+        <form method="post" action="/signin">
+            <label>
+                Username:
+                <input name="username" type="text">
+            </label><br/>
 
-        <label>
-            Password
-            <input name="password" type="password">
-        </label><br/>
+            <label>
+                Password
+                <input name="password" type="password">
+            </label><br/>
 
-        <input type="submit" value="Login">
-    </form>
+            <input type="submit" value="Login">
+        </form>
+    </div>
 {% endblock %}

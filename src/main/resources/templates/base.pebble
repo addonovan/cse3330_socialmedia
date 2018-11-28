@@ -3,6 +3,10 @@
     <head>
         <title>{% block title %} CSE3330 {% endblock %}</title>
 
+        <link rel="stylesheet"
+              href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+              integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+              crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="/style/main.css">
         <link rel="stylesheet" type="text/css" href="/style/nav.css">
         <link rel="stylesheet" type="text/css" href="/style/post.css">
@@ -15,6 +19,8 @@
         <script src="/script/post.js"></script>
         <script src="/script/event.js"></script>
         <script src="/script/chat.js"></script>
+        <script src="/script/search.js"></script>
+        <script src="/script/account.js"></script>
     </head>
 
     <body>
@@ -23,12 +29,23 @@
             {% if user != null %}
                 <h4> Howdy, {{user.firstName}}! </h4>
             {% endif %}
-            <div class="flex-horizontal">
+            <div class="flex-horizontal align-center">
                 <a href="/">Home</a>
                 {% if user != null %}
                     <a href="/calendar">Your Calendar</a>
                     <a href="/account/settings"> Your Account </a>
                     <a href="/chat"> Chats </a>
+
+                    <span class="searchbar dropdown">
+                        <input name="searchParam"
+                               placeholder="Search for an account">
+                        <i class="fas fa-search"
+                           style="color: white;"
+                           onclick="search(this)">
+                        </i>
+                        <ul class="dropdown-content no-items"></ul>
+                    </span>
+
                     <form method="post" action="/signout" class="inline flex-expand align-right">
                         <button type="submit" class="link">
                             Log out

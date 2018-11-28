@@ -13,8 +13,35 @@ button.link {
 ul.no-items { list-style: none; margin: 0; padding: 0; }
 
 .flex-vertical { display: flex; flex-direction: column; }
+.align-center > * { align-self: center; }
 .flex-horizontal { display: flex; flex-direction: row; }
 .flex-expand { flex-grow: 1; }
+
+.searchbar > i.fa-search:hover { cursor: pointer; }
+.searchbar > input { width: 0; transition: width 0.2s ease-in; }
+.searchbar:hover > input,
+.searchbar > input:focus { width: 200px !important; }
+
+.dropdown { position: relative; display: inline-block; }
+.dropdown-content {
+    display: none;
+    min-width: 200px;
+    position: absolute;
+    background-color: #fafafa;
+    border: 1px solid black;
+    box-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+.dropdown:hover .dropdown-content { display: block; }
+
+.accountName {
+    color: rgba(0, 0, 0, 0.70) !important;
+    font-weight: normal !important;
+}
+a.accountName:hover {
+    color: rgba(0, 0, 0, 0.80) !important;
+    transition: color 0.1s ease;
+}
 
 .page {
     background: white;

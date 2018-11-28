@@ -38,6 +38,27 @@
                     <button type="submit">Follow</button>
                 </form>
             {% endif %}
+
+            <div class="flex-vertical">
+                {% if account.isProfile %}
+                    <span class="username">{{account.username}}</span>
+                {% endif %}
+
+                <span class="email">Email: {{account.email}}</span>
+                {% if account.phoneNumber %}
+                    <span class="phone">Phone: {{account.phoneNumber}}</span>
+                {% endif %}
+                <span class="joinYear">Member since: {{account.joinYear}}</span>
+
+                <div class="flex-horizontal">
+                    <label>
+                        Posts on
+                        <input type="date">
+                    </label>
+                    <button onclick="findPostsOnDate({{account.id}}, this);">Go</button>
+                    <span class="ui"></span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -46,8 +67,24 @@
     {% endif %}
 
     <div class="centered page">
-        {% for post in overview %}
+        <h1>Wall Activity</h1>
+        <hr>
+        {% for post in wallActivity %}
+            {% include "../post" with {"wall": account, "showChildren": "true"} %}
+        {% endfor %}
+        {% if wallActivity.size() == 0 %}
+            <span class="ui">It doesn't seem like anything's here</span>
+        {% endif %}
+    </div>
+
+    <div class="centered page">
+        <h1>Account Activity</h1>
+        <hr>
+        {% for post in accountActivity %}
             {% include "../post" with {"wall": account} %}
         {% endfor %}
+        {% if accountActivity.size() == 0 %}
+            <span class="ui">It doesn't seem like anything's here</span>
+        {% endif %}
     </div>
 {% endblock %}

@@ -63,13 +63,13 @@ ORDER BY p.createdtime DESC;
 
 -- 3.5 (JDBC) Show a profile's activity --------------------
 SELECT * FROM "Post" p
-WHERE p.posterid = ? AND p.parentpostid IS NULL
+WHERE p.posterid = ?
 ORDER BY p.createdtime DESC;
 ------------------------------------------------------------
 
--- 3.6 (JDBC) Show all post activity on given date ---------
-SELECT COUNT(p.postid) AS PostCount FROM "Post" p
-WHERE p.wallid = ? AND p.createdtime = ?;
+-- 3.6 (JDBC) Count posts on a given wall on a date -------
+SELECT COUNT(postid) FROM "Post"
+WHERE wallid = ? AND createdtime::date = ?
 ------------------------------------------------------------
 
 -- 3.7a (JDBC) Update account information ------------------

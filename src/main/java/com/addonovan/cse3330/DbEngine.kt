@@ -6,9 +6,6 @@ import com.addonovan.cse3330.sql.map
 import com.addonovan.cse3330.sql.query
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.intellij.lang.annotations.Language
-import org.springframework.http.codec.json.Jackson2CodecSupport
-import org.springframework.http.codec.json.Jackson2JsonEncoder
-import java.io.BufferedWriter
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
@@ -241,6 +238,21 @@ object DbEngine {
 
                 page.apply {
                     it.getInt(1)
+                }
+            }
+
+    @Language("PostgreSQL")
+    private val GET_ALL_ACCOUNTS: String =
+            """
+            SELECT * FROM "Account" a
+            LEFT JOIN "Profile" prof ON PROF.accountid = a.accountid
+            LEFT JOIN "Page" page ON page.accountid = a.accountid
+            """.trimIndent()
+
+    fun getAllAccounts() = query(GET_ALL_ACCOUNTS)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Account.fromRow(it)
                 }
             }
 
@@ -574,6 +586,23 @@ object DbEngine {
             }
 
     @Language("PostgreSQL")
+    private val ACCOUNT_OVERVIEW_FOR: String =
+            """
+            SELECT * FROM "Post" p
+            WHERE p.posterid = ?
+            ORDER BY p.createdtime DESC;
+            """.trimIndent()
+
+    fun accountOverview(account: Account) = query(ACCOUNT_OVERVIEW_FOR)
+            .supply(account.id)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    Post().apply { fromRow(it) }
+                }
+            }
+
+
+    @Language("PostgreSQL")
     private val VIEW_PAGE: String =
             """
             UPDATE "Page" p
@@ -694,6 +723,24 @@ object DbEngine {
             .supply(post.id)
             .supply(answer)
             .executeOn(CONNECTION)
+
+
+    @Language("PostgreSQL")
+    private val GET_POST_COUNT_BY_DATE: String =
+            """
+            SELECT COUNT(postid) FROM "Post"
+            WHERE wallid = ? AND createdtime::date = ?
+            """.trimIndent()
+
+    fun getPostCountByDate(wall: Account, date: Date) = query(GET_POST_COUNT_BY_DATE)
+            .supply(wall.id)
+            .supply(date)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("No value returned from query!")
+
+                it.getInt(1)
+            }
 
     @Language("PostgreSQL")
     private val GET_POLL_ANSWERS: String =

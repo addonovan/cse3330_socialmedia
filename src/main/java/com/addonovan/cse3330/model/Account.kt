@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import java.lang.IllegalStateException
 import java.sql.ResultSet
 import java.sql.Timestamp
+import java.time.Instant
 
 /**
  * The class model for the SQL `Account` entity.
@@ -95,19 +96,34 @@ open class Account : SqlEntity {
         DbEngine.getFollowRequests(this)
     }
 
+    @get:JsonIgnore
+    val joinYear: Int by lazy {
+        createdTime.toLocalDateTime().year
+    }
+
     //
     // Functions
     //
 
     override fun fromRow(row: ResultSet) {
-        id = row.getInt("AccountId")
-        email = row.getString("Email")
-        phoneNumber = row.getString("PhoneNumber")
-        profileImageURL = row.getString("ProfileImageURL")
-        headerImageURL = row.getString("HeaderImageURL")
-        isPrivate = row.getBoolean("IsPrivate")
         isActive = row.getBoolean("IsActive")
-        createdTime = row.getTimestamp("CreatedTime")
+        id = row.getInt("AccountId")
+
+        if (isActive) {
+            email = row.getString("Email")
+            phoneNumber = row.getString("PhoneNumber")
+            profileImageURL = row.getString("ProfileImageURL")
+            headerImageURL = row.getString("HeaderImageURL")
+            isPrivate = row.getBoolean("IsPrivate")
+            createdTime = row.getTimestamp("CreatedTime")
+        } else {
+            email = "[deleted]"
+            phoneNumber = "[deleted]"
+            profileImageURL = "/media/profiles/default.png"
+            headerImageURL = "/media/headers/default.png"
+            isPrivate = false
+            createdTime = Timestamp.from(Instant.now())
+        }
     }
 
     override fun equals(other: Any?): Boolean =

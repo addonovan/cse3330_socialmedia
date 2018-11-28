@@ -29,7 +29,7 @@
 
     <div class="centered page">
         {% for post in overview %}
-            {% include "../post" with {"wall": user} %}
+            {% include "../post" with {"wall": user, "showChildren": "true"} %}
         {% endfor %}
     </div>
 {% endblock %}

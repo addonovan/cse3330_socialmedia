@@ -43,9 +43,15 @@ class Profile : Account() {
 
     override fun fromRow(row: ResultSet) {
         super.fromRow(row)
-        firstName = row.getString("FirstName")
-        lastName = row.getString("LastName")
-        username = row.getString("Username")
-        password = row.getString("Password")
+        if (isActive) {
+            firstName = row.getString("FirstName")
+            lastName = row.getString("LastName")
+            username = row.getString("Username")
+            password = row.getString("Password")
+        } else {
+            firstName = "[deleted]"
+            lastName = "[deleted]"
+            username = "[deleted]"
+        }
     }
 }
