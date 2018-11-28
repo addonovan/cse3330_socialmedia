@@ -87,7 +87,7 @@ open class AccountController {
                     profileImage.writeAs(UploadType.ProfileImage)
 
         newSettings.headerImageURL =
-                if (profileImage.isEmpty)
+                if (headerImage.isEmpty)
                     oldSettings.headerImageURL
                 else
                     headerImage.writeAs(UploadType.HeaderImage)
