@@ -6,9 +6,6 @@ import com.addonovan.cse3330.sql.map
 import com.addonovan.cse3330.sql.query
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.intellij.lang.annotations.Language
-import org.springframework.http.codec.json.Jackson2CodecSupport
-import org.springframework.http.codec.json.Jackson2JsonEncoder
-import java.io.BufferedWriter
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
@@ -726,6 +723,24 @@ object DbEngine {
             .supply(post.id)
             .supply(answer)
             .executeOn(CONNECTION)
+
+
+    @Language("PostgreSQL")
+    private val GET_POST_COUNT_BY_DATE: String =
+            """
+            SELECT COUNT(id) FROM "Post"
+            WHERE wallid = ? AND createdtime::date = date ?
+            """.trimIndent()
+
+    fun getPostCountByDate(wall: Account, date: String) = query(GET_POST_COUNT_BY_DATE)
+            .supply(wall.id)
+            .supply(date)
+            .executeOn(CONNECTION) {
+                if (!it.next())
+                    throw RuntimeException("No value returned from query!")
+
+                it.getInt(1)
+            }
 
     @Language("PostgreSQL")
     private val GET_POLL_ANSWERS: String =

@@ -228,4 +228,11 @@ open class AccountController {
                         else it is Profile && it.username.matches(regex)
                     }
 
+    @GetMapping("/api/postCountByDate")
+    @ResponseBody
+    fun getPostCountByDate(
+            @RequestParam wallId: Int,
+            @RequestParam date: String
+    ): Int = DbEngine.getPostCountByDate(Account().apply { id = wallId }, date)
+
 }
