@@ -55,10 +55,11 @@ VALUES (?, ?, ?, ?, ?, ?, ?)
     RETURNING postid;
 ------------------------------------------------------------
 
--- 3.4 (JDBC) Show an overview for a Page ------------------
-SELECT * FROM "Post" p
-WHERE p.wallid = ? AND p.parentpostid IS NULL
-ORDER BY p.createdtime DESC;
+-- 3.4 (JDBC) Show page details ----------------------------
+SELECT * FROM "Account" a
+LEFT JOIN "Profile" prof ON PROF.accountid = a.accountid
+LEFT JOIN "Page" page ON page.accountid = a.accountid
+WHERE a.accountid = ?;
 ------------------------------------------------------------
 
 -- 3.5 (JDBC) Show a profile's activity --------------------
