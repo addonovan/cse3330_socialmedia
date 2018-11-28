@@ -42,7 +42,7 @@
                            style="color: white;"
                            onclick="search(this)">
                         </i>
-                        <ul class="dropdown-content"></ul>
+                        <ul class="dropdown-content no-items"></ul>
                     </span>
 
                     <form method="post" action="/signout" class="inline flex-expand align-right">

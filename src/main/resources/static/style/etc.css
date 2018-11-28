@@ -31,9 +31,17 @@ ul.no-items { list-style: none; margin: 0; padding: 0; }
     border: 1px solid black;
     box-shadow: 2px 2px rgba(0, 0, 0, 0.2);
     z-index: 1;
-    top: 0.75em;
 }
 .dropdown:hover .dropdown-content { display: block; }
+
+.accountName {
+    color: rgba(0, 0, 0, 0.70) !important;
+    font-weight: normal !important;
+}
+a.accountName:hover {
+    color: rgba(0, 0, 0, 0.80) !important;
+    transition: color 0.1s ease;
+}
 
 .page {
     background: white;
