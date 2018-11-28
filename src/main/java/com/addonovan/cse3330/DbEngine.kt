@@ -237,7 +237,7 @@ object DbEngine {
                     throw RuntimeException("No result from CreatePage call!")
 
                 page.apply {
-                    it.getInt(1)
+                    id = it.getInt(1)
                 }
             }
 
