@@ -96,6 +96,11 @@ open class Account : SqlEntity {
         DbEngine.getFollowRequests(this)
     }
 
+    @get:JsonIgnore
+    val joinYear: Int by lazy {
+        createdTime.toLocalDateTime().year
+    }
+
     //
     // Functions
     //

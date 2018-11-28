@@ -38,6 +38,18 @@
                     <button type="submit">Follow</button>
                 </form>
             {% endif %}
+
+            <div class="flex-vertical">
+                {% if account.isProfile %}
+                    <span class="username">{{account.username}}</span>
+                {% endif %}
+
+                <span class="email">Email: {{account.email}}</span>
+                {% if account.phoneNumber %}
+                    <span class="phone">Phone: {{account.phoneNumber}}</span>
+                {% endif %}
+                <span class="joinYear">Member since: {{account.joinYear}}</span>
+            </div>
         </div>
     </div>
 
