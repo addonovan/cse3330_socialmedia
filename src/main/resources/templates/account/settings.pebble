@@ -5,75 +5,79 @@
 {% endblock %}
 
 {% block content %}
-    {% if user.administeredPages.size() > 0 %}
-        Update one of your pages instead:
-        <ul>
-            {% for page in user.administeredPages %}
-                <li>
-                    <a href="/account/settings/{{page.id}}">{{page.fullName}}</a>
-                </li>
-            {% endfor %}
-            <li>Or, create <a href="/register/page">a new page</a></li>
-        </ul>
-    {% endif %}
+    <div class="centered page">
+        {% if user.administeredPages.size() > 0 %}
+            Update one of your pages instead:
+            <ul>
+                {% for page in user.administeredPages %}
+                    <li>
+                        <a href="/account/settings/{{page.id}}">{{page.fullName}}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <span class="ui">
+            Create <a href="/register/page">a new page</a>
+        </span>
 
-    <form method="post"
-          action="/account/updateSettings"
-          enctype="multipart/form-data">
-        <label>
-            Profile Image:
-            <input name="profileImage" type="file">
-        </label>
+        <form method="post"
+              action="/account/updateSettings"
+              enctype="multipart/form-data">
+            <label>
+                Profile Image:
+                <input name="profileImage" type="file">
+            </label>
 
-        <label>
-            Header Image:
-            <input name="headerImage" type="file">
-        </label>
+            <label>
+                Header Image:
+                <input name="headerImage" type="file">
+            </label>
 
-        <label>
-            Username:
-            <input name="username" type="text" value="{{user.username}}">
-        </label>
+            <label>
+                Username:
+                <input name="username" type="text" value="{{user.username}}">
+            </label>
 
-        <label>
-            Email:
-            <input name="email" type="text" value="{{user.email}}">
-        </label>
+            <label>
+                Email:
+                <input name="email" type="text" value="{{user.email}}">
+            </label>
 
-        <label>
-            Phone number:
-            <input name="phoneNumber" type="text" value="{{user.phoneNumber}}">
-        </label>
+            <label>
+                Phone number:
+                <input name="phoneNumber" type="text" value="{{user.phoneNumber}}">
+            </label>
 
-        <label>
-            First name:
-            <input name="firstName" type="text" value="{{user.firstName}}">
-        </label>
+            <label>
+                First name:
+                <input name="firstName" type="text" value="{{user.firstName}}">
+            </label>
 
-        <label>
-            Last name:
-            <input name="lastName" type="text" value="{{user.lastName}}">
-        </label>
+            <label>
+                Last name:
+                <input name="lastName" type="text" value="{{user.lastName}}">
+            </label>
 
-        <label>
-            Password:
-            <input name="password" type="password" value="{{user.password}}">
-        </label>
+            <label>
+                Password:
+                <input name="password" type="password" value="{{user.password}}">
+            </label>
 
-        <label>
-            Private:
-            <input name="isPrivate"
-                   type="checkbox"
-                   {% if user.isPrivate %} checked {% endif %}>
-        </label>
+            <label>
+                Private:
+                <input name="isPrivate"
+                       type="checkbox"
+                       {% if user.isPrivate %} checked {% endif %}>
+            </label>
 
-        <label>
-            Active:
-            <input name="isActive"
-                   type="checkbox"
-                   {% if user.isActive %} checked {% endif %}>
-        </label>
+            <label>
+                Active:
+                <input name="isActive"
+                       type="checkbox"
+                       {% if user.isActive %} checked {% endif %}>
+            </label>
 
-        <button type="submit">Update</button>
-    </form>
+            <button type="submit">Update</button>
+        </form>
+    </div>
 {% endblock %}
