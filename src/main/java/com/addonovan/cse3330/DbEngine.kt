@@ -788,6 +788,26 @@ object DbEngine {
             }
 
     @Language("PostgreSQL")
+    private val GET_POLL_VOTES: String = """
+        SELECT pa.*, COUNT(pv.profileid) AS VoteCount
+        FROM "PollVote" pv
+        INNER JOIN "PollAnswer" pa ON pa.pollanswerid = pv.pollanswerid
+        WHERE pv.pollid = ?
+        GROUP BY pa.pollanswerid
+    """.trimIndent()
+
+    fun getPollVotes(poll: Post) = query(GET_POLL_VOTES)
+            .supply(poll.id)
+            .executeOn(CONNECTION) { set ->
+                set.map {
+                    val answer = PollAnswer().apply { fromRow(it) }
+                    val count = it.getInt("VoteCount")
+                    answer to count
+                }.toMap()
+            }
+
+
+    @Language("PostgreSQL")
     private val CREATE_EVENT: String =
             """
             INSERT INTO "Event"(hostid, eventname, eventdesc, starttime, endtime, location)
