@@ -52,6 +52,7 @@ class Profile : Account() {
             firstName = "[deleted]"
             lastName = "[deleted]"
             username = "[deleted]"
+            password = "[deleted]"
         }
     }
 }
