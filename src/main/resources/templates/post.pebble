@@ -2,30 +2,26 @@
     <img class="profileImage small" src="{{post.poster.profileImageURL}}"/>
     <div class="content">
         <p>
-            {% if post.poster.isActive %}
+            <span class="postName">
+                              {% if post.posterId != wall.id %}
+                              <a href="/account/{{post.posterId}}">
+                              {{post.poster.fullName}}</a>
+                              {% else %}
+                              {{wall.fullName}}
+                              {% endif %}
+                              </span>
+
+            {% if post.posterId != post.wallId %}
+                >
+
                 <span class="postName">
-                    {% if post.posterId != wall.id %}
-                        <a href="/account/{{post.posterId}}">
-                            {{post.poster.fullName}}</a>
-                    {% else %}
-                        {{wall.fullName}}
-                    {% endif %}
-                </span>
-
-                {% if post.posterId != post.wallId %}
-                    >
-
-                    <span class="postName">
-                        {% if post.wallId != wall.id %}
-                            <a href="/account/{{post.wallId}}">
-                                {{post.wall.fullName}}</a>
-                        {% else %}
-                            {{wall.fullName}}
-                        {% endif %}
-                    </span>
-                {% endif %}
-            {% else %}
-                <span class="postName">[deleted]</span>
+                                  {% if post.wallId != wall.id %}
+                                  <a href="/account/{{post.wallId}}">
+                                  {{post.wall.fullName}}</a>
+                                  {% else %}
+                                  {{wall.fullName}}
+                                  {% endif %}
+                                  </span>
             {% endif %}
         </p>
 
