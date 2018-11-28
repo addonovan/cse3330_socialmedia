@@ -12,6 +12,7 @@ fun <T> PreparedStatement.set(index: Int, value: T) {
         is String -> setString(index, value)
         is Boolean -> setBoolean(index, value)
         is Timestamp -> setTimestamp(index, value)
+        is Date -> setDate(index, value)
         else -> throw RuntimeException("Unsupported type!")
     }
 }

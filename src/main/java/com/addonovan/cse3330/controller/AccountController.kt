@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
+import java.sql.Date
 
 /**
  * The controller for general account activities, such as creation and deletion
@@ -233,6 +234,9 @@ open class AccountController {
     fun getPostCountByDate(
             @RequestParam wallId: Int,
             @RequestParam date: String
-    ): Int = DbEngine.getPostCountByDate(Account().apply { id = wallId }, date)
+    ): Int {
+        val wall = Account().apply { id = wallId }
+        return DbEngine.getPostCountByDate(wall, Date.valueOf(date))
+    }
 
 }

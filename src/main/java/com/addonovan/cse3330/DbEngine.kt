@@ -728,11 +728,11 @@ object DbEngine {
     @Language("PostgreSQL")
     private val GET_POST_COUNT_BY_DATE: String =
             """
-            SELECT COUNT(id) FROM "Post"
-            WHERE wallid = ? AND createdtime::date = date ?
+            SELECT COUNT(postid) FROM "Post"
+            WHERE wallid = ? AND createdtime::date = ?
             """.trimIndent()
 
-    fun getPostCountByDate(wall: Account, date: String) = query(GET_POST_COUNT_BY_DATE)
+    fun getPostCountByDate(wall: Account, date: Date) = query(GET_POST_COUNT_BY_DATE)
             .supply(wall.id)
             .supply(date)
             .executeOn(CONNECTION) {

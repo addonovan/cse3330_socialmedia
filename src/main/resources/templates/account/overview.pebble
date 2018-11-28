@@ -49,6 +49,15 @@
                     <span class="phone">Phone: {{account.phoneNumber}}</span>
                 {% endif %}
                 <span class="joinYear">Member since: {{account.joinYear}}</span>
+
+                <div class="flex-horizontal">
+                    <label>
+                        Posts on
+                        <input type="date">
+                    </label>
+                    <button onclick="findPostsOnDate({{account.id}}, this);">Go</button>
+                    <span class="ui"></span>
+                </div>
             </div>
         </div>
     </div>
