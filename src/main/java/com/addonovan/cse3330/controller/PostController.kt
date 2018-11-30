@@ -74,8 +74,6 @@ open class PostController {
         val user = request.profile
                 ?: return errorPage(model, "You must be logged in to do that")
 
-        response.redirectToReferrer(request)
-
         // create the poll post
         val post = DbEngine.createPost(Post().apply {
 
@@ -83,7 +81,7 @@ open class PostController {
             // got to select the posting account on their end. Then just check to
             // make sure they're allowed to do that.
             this.posterId = when {
-                posterId == 0 ->
+                posterId == 0 || posterId == user.id ->
                     user.id
 
                 user.administeredPages.none { it.id == posterId } ->
@@ -107,6 +105,7 @@ open class PostController {
             DbEngine.addPollAnswer(post, value)
         }
 
+        response.redirectToReferrer(request)
         return errorPage(model, "You shouldn't really see this")
     }
 

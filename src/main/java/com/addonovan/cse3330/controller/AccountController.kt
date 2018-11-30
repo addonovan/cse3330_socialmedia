@@ -206,8 +206,8 @@ open class AccountController {
             }
 
             model.addAttribute("account", account)
-            model.addAttribute("wallActivity", wallActivity)
-            model.addAttribute("accountActivity", accountActivity)
+            model.addAttribute("wallActivity", wallActivity.reversed())
+            model.addAttribute("accountActivity", accountActivity.reversed())
             model.addAttribute("user", user)
             model.addAttribute("emotions", Emotion.values)
             "account/overview"
